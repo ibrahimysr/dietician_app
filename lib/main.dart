@@ -1,4 +1,4 @@
-import 'package:dietician_app/screens/auth/login.dart';
+import 'package:dietician_app/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

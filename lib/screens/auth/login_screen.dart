@@ -2,6 +2,7 @@ import 'package:dietician_app/components/auth/login_textfield.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
+import 'package:dietician_app/screens/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -164,7 +165,9 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen(),));
+                        },
                         child:  Text(
                           "Kayıt Ol",
                           style: TextStyle(
