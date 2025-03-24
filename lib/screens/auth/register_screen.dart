@@ -3,7 +3,9 @@ import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/generated/asset.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
+import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/screens/auth/user_information_screen.dart';
+import 'package:dietician_app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -21,6 +23,14 @@ class _RegisterScreenState extends State<RegisterScreen>
   late Animation<Offset> _slideAnimation;
 
   bool _isButtonPressed = false;
+  bool _isLoading = false;
+
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final _authService = AuthService();
 
   @override
   void initState() {
@@ -49,7 +59,54 @@ class _RegisterScreenState extends State<RegisterScreen>
   @override
   void dispose() {
     _controller.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _register() async {
+    setState(() {
+      _isLoading = true;
+      _isButtonPressed = true;
+    });
+
+    try {
+      final response = await _authService.register(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        phone: _phoneController.text.trim(),
+      );
+
+      if (response.success) {
+        await AuthStorage.saveToken(response.data.token); 
+        final userId = response.data.user.id;
+
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => UserInfoScreen(userId: userId,)),
+          );
+        }
+      } else {
+        throw Exception(response.message);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Kayıt başarısız: $e")),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _isButtonPressed = false;
+        });
+      }
+    }
   }
 
   @override
@@ -69,7 +126,6 @@ class _RegisterScreenState extends State<RegisterScreen>
                   opacity: _fadeAnimation,
                   child: Lottie.asset(
                     AppAssets.loginAnimation,
-                   
                     height: context.getDynamicHeight(20),
                     fit: BoxFit.cover,
                   ),
@@ -77,8 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 SizedBox(height: context.getDynamicHeight(2)),
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child:
-                      const Text("Hoş Geldiniz", style: AppTextStyles.heading1),
+                  child: const Text("Hoş Geldiniz", style: AppTextStyles.heading1),
                 ),
                 SizedBox(height: context.getDynamicHeight(1)),
                 FadeTransition(
@@ -96,6 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                   child: buildTextField(
                     hintText: "Ad Soyad",
                     icon: Icons.person,
+                    controller: _nameController,
                   ),
                 ),
                 SizedBox(height: context.getDynamicHeight(2)),
@@ -104,6 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                   child: buildTextField(
                     hintText: "E-posta",
                     icon: Icons.email,
+                    controller: _emailController,
                   ),
                 ),
                 SizedBox(height: context.getDynamicHeight(2)),
@@ -112,9 +169,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                   child: buildTextField(
                     hintText: "Telefon Numarası",
                     icon: Icons.phone,
+                    controller: _phoneController,
+                    keyboardType: TextInputType.phone,
                   ),
                 ),
-                SizedBox(height: context.getDynamicHeight(1)),
                 SizedBox(height: context.getDynamicHeight(2)),
                 SlideTransition(
                   position: _slideAnimation,
@@ -122,15 +180,14 @@ class _RegisterScreenState extends State<RegisterScreen>
                     hintText: "Şifre",
                     icon: Icons.lock,
                     obscureText: true,
+                    controller: _passwordController,
                   ),
                 ),
-               
                 SizedBox(height: context.getDynamicHeight(2)),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  transform: Matrix4.identity()
-                    ..scale(_isButtonPressed ? 0.95 : 1.0),
+                  transform: Matrix4.identity()..scale(_isButtonPressed ? 0.95 : 1.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.primary,
@@ -140,26 +197,15 @@ class _RegisterScreenState extends State<RegisterScreen>
                       ),
                       elevation: 5,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _isButtonPressed = true;
-                      });
-                      Future.delayed(const Duration(milliseconds: 200), () {
-                        setState(() {
-                          _isButtonPressed = false;
-                          Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const UserInfoScreen()),
-      );
-                        });
-                      });
-                    },
-                    child: Text(
-                      "Kayıt Ol",
-                      style: AppTextStyles.buttonText.copyWith(
-                        color: AppColor.white,
-                      ),
-                    ),
+                    onPressed: _isLoading ? null : _register,
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: AppColor.white)
+                        : Text(
+                            "Kayıt Ol",
+                            style: AppTextStyles.buttonText.copyWith(
+                              color: AppColor.white,
+                            ),
+                          ),
                   ),
                 ),
                 SizedBox(height: context.getDynamicHeight(2)),

@@ -16,9 +16,9 @@ class GoalSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const List<Map<String, String>> goalOptions = [
-      {"title": "Kilo Vermek", "value": "lose_weight"},
-      {"title": "Kilo Almak", "value": "gain_weight"},
-      {"title": "Formda Kalmak", "value": "maintain_weight"},
+      {"title": "Kilo Vermek", },
+      {"title": "Kilo Almak", },
+      {"title": "Formda Kalmak", },
     ];
 
     return Padding(
@@ -34,10 +34,10 @@ class GoalSelector extends StatelessWidget {
            SizedBox(height: context.getDynamicHeight(2)),
           Column(
             children: goalOptions.map((option) {
-              final isSelected = goal == option["value"];
+              final isSelected = goal == option["title"];
               return GestureDetector(
                 onTap: () {
-                  onGoalSelected(option["value"]);
+                  onGoalSelected(option["title"]);
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),

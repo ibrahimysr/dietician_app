@@ -3,7 +3,10 @@ import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/generated/asset.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
+import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/screens/auth/register_screen.dart';
+import 'package:dietician_app/screens/main/main_screen.dart';
+import 'package:dietician_app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -21,6 +24,12 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<Offset> _slideAnimation;
 
   bool _isButtonPressed = false;
+  bool _isLoading = false;
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final _authService = AuthService();
 
   @override
   void initState() {
@@ -43,13 +52,58 @@ class _LoginScreenState extends State<LoginScreen>
       curve: Curves.easeOut,
     ));
 
-    _controller.forward(); 
+    _controller.forward();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+      _isButtonPressed = true;
+    });
+
+    try {
+      final response = await _authService.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      if (response.success) {
+        await AuthStorage.saveToken(response.data.token);
+
+
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainScreen(),
+            ),
+          );
+        }
+      } else {
+        throw Exception(response.message);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Giriş başarısız: $e")),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _isButtonPressed = false;
+        });
+      }
+    }
   }
 
   @override
@@ -67,54 +121,55 @@ class _LoginScreenState extends State<LoginScreen>
                 SizedBox(height: context.getDynamicHeight(5)),
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child:  Lottie.asset(
+                  child: Lottie.asset(
                     AppAssets.loginAnimation,
-                   
                     height: context.getDynamicHeight(20),
                     fit: BoxFit.cover,
                   ),
                 ),
-                 SizedBox(height: context.getDynamicHeight(2)),
+                SizedBox(height: context.getDynamicHeight(2)),
                 FadeTransition(
                   opacity: _fadeAnimation,
                   child: const Text(
                     "Hoş Geldiniz",
-                    style: AppTextStyles.heading1
+                    style: AppTextStyles.heading1,
                   ),
                 ),
-                 SizedBox(height: context.getDynamicHeight(1)),
+                SizedBox(height: context.getDynamicHeight(1)),
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child:  Text(
+                  child: Text(
                     "Sizi Gördüğümüze Sevindik",
                     style: AppTextStyles.body1Regular.copyWith(
                       color: Colors.grey,
                     ),
                   ),
                 ),
-                 SizedBox(height: context.getDynamicHeight(5)),
+                SizedBox(height: context.getDynamicHeight(5)),
                 SlideTransition(
                   position: _slideAnimation,
                   child: buildTextField(
                     hintText: "E-posta",
                     icon: Icons.email,
+                    controller: _emailController,
                   ),
                 ),
-                 SizedBox(height: context.getDynamicHeight(2)),
+                SizedBox(height: context.getDynamicHeight(2)),
                 SlideTransition(
                   position: _slideAnimation,
                   child: buildTextField(
                     hintText: "Şifre",
                     icon: Icons.lock,
                     obscureText: true,
+                    controller: _passwordController,
                   ),
                 ),
-                 SizedBox(height: context.getDynamicHeight(1)),
+                SizedBox(height: context.getDynamicHeight(1)),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {},
-                    child:  Text(
+                    child: Text(
                       "Şifremi Unuttum",
                       style: TextStyle(
                         color: AppColor.primary,
@@ -123,12 +178,11 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                   ),
                 ),
-                 SizedBox(height: context.getDynamicHeight(2)),
+                SizedBox(height: context.getDynamicHeight(2)),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  transform: Matrix4.identity()
-                    ..scale(_isButtonPressed ? 0.95 : 1.0),
+                  transform: Matrix4.identity()..scale(_isButtonPressed ? 0.95 : 1.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.primary,
@@ -138,40 +192,39 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                       elevation: 5,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _isButtonPressed = true;
-                      });
-                      Future.delayed(const Duration(milliseconds: 200), () {
-                        setState(() {
-                          _isButtonPressed = false;
-                        });
-                      });
-                    },
-                    child:  Text(
-                      "Giriş Yap",
-                      style: AppTextStyles.buttonText.copyWith( 
-                        color: AppColor.white,
-                      ),
+                    onPressed: _isLoading ? null : _login,
+                    child: _isLoading
+                        ?  CircularProgressIndicator(color: AppColor.white)
+                        : Text(
+                            "Giriş Yap",
+                            style: AppTextStyles.buttonText.copyWith(
+                              color: AppColor.white,
+                            ),
+                          ),
                   ),
-                ),),
-                 SizedBox(height: context.getDynamicHeight(2)),
+                ),
+                SizedBox(height: context.getDynamicHeight(2)),
                 FadeTransition(
                   opacity: _fadeAnimation,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                       Text(
+                      Text(
                         "Hesabınız Yok mu? ",
-                        style:AppTextStyles.body1Regular.copyWith(
-                      color: Colors.grey,
-                    ),
+                        style: AppTextStyles.body1Regular.copyWith(
+                          color: Colors.grey,
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen(),));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterScreen(),
+                            ),
+                          );
                         },
-                        child:  Text(
+                        child: Text(
                           "Kayıt Ol",
                           style: TextStyle(
                             fontSize: 16,
@@ -191,6 +244,4 @@ class _LoginScreenState extends State<LoginScreen>
       ),
     );
   }
-
-
 }

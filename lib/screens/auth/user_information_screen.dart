@@ -9,10 +9,15 @@ import 'package:dietician_app/components/user_information/weight_page.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
+import 'package:dietician_app/core/utils/auth_storage.dart';
+import 'package:dietician_app/screens/auth/login_screen.dart';
+import 'package:dietician_app/services/auth/client_service.dart';
 import 'package:flutter/material.dart';
 
 class UserInfoScreen extends StatefulWidget {
-  const UserInfoScreen({super.key});
+  final int userId; 
+
+  const UserInfoScreen({super.key, required this.userId});
 
   @override
   State<UserInfoScreen> createState() => _UserInfoScreenState();
@@ -33,6 +38,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   String? medicalConditions;
 
   final _steps = 9;
+  bool _isLoading = false;
+
+  final _clientService = ClientService();
 
   @override
   void dispose() {
@@ -66,21 +74,66 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     }
   }
 
-  void _submitData() {
-    print({
-      "birth_date": birthDate,
-      "gender": gender,
-      "height": height,
-      "weight": weight,
-      "activity_level": activityLevel,
-      "goal": goal,
-      "allergies": allergies,
-      "preferences": preferences,
-      "medical_conditions": medicalConditions,
+  Future<void> _submitData() async {
+    setState(() {
+      _isLoading = true;
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Bilgiler Kaydedildi!")),
-    );
+
+    try {
+      final token = await AuthStorage.getToken();
+      if (token == null) {
+        throw Exception("Token bulunamadı, lütfen tekrar giriş yapın.");
+      }
+
+      if (birthDate == null ||
+          gender == null ||
+          activityLevel == null ||
+          goal == null ||
+          allergies == null ||
+          preferences == null ||
+          medicalConditions == null) {
+        throw Exception("Lütfen tüm bilgileri doldurun.");
+      }
+
+      final response = await _clientService.addClient(
+        userId: widget.userId, 
+        dietitianId: null,
+        birthDate: birthDate!,
+        gender: gender!,
+        height: height,
+        weight: weight,
+        activityLevel: activityLevel!,
+        goal: goal!,
+        allergies: allergies!,
+        preferences: preferences!,
+        medicalConditions: medicalConditions!,
+        token: token,
+      );
+
+      if (response.success) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response.message)),
+          );
+         
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        }
+      } else {
+        throw Exception(response.message);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Bilgiler kaydedilemedi: $e")),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -128,7 +181,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               children: [
                 if (_currentPage > 0)
                   ElevatedButton(
-                    onPressed: _previousPage,
+                    onPressed: _isLoading ? null : _previousPage,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.grey,
                       shape: RoundedRectangleBorder(
@@ -144,18 +197,20 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 else
                   const SizedBox(),
                 ElevatedButton(
-                  onPressed: _nextPage,
+                  onPressed: _isLoading ? null : _nextPage,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColor.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Text(
-                    _currentPage == _steps - 1 ? "Kaydet" : "İleri",
-                    style: AppTextStyles.body1Medium
-                        .copyWith(color: AppColor.white),
-                  ),
+                  child: _isLoading
+                      ?  CircularProgressIndicator(color: AppColor.white)
+                      : Text(
+                          _currentPage == _steps - 1 ? "Kaydet" : "İleri",
+                          style: AppTextStyles.body1Medium
+                              .copyWith(color: AppColor.white),
+                        ),
                 ),
               ],
             ),

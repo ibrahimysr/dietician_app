@@ -116,7 +116,7 @@ class HeightPicker extends StatelessWidget {
             child: Container(
               height: selectedIndicatorHeight,
               decoration: BoxDecoration(
-                color: AppColor.secondary.withOpacity(0.2),
+                color: AppColor.secondary.withValues(alpha:0.2),
                 border: Border(
                   top: BorderSide(
                     color: AppColor.secondary,
@@ -193,7 +193,7 @@ class HeightPicker extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.white,
-                    Colors.white.withOpacity(0),
+                    Colors.white.withValues(alpha:0),
                   ],
                 ),
               ),
@@ -211,7 +211,7 @@ class HeightPicker extends StatelessWidget {
                   end: Alignment.topCenter,
                   colors: [
                     Colors.white,
-                    Colors.white.withOpacity(0),
+                    Colors.white.withValues(alpha:0),
                   ],
                 ),
               ),

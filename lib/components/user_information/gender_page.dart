@@ -29,19 +29,24 @@ class GenderPicker extends StatelessWidget {
             children: [
               _buildGenderCard(
                 title: "Erkek",
+                apiValue: "male",
                 icon: Icons.male,
                 color: AppColor.secondary,
-                isSelected: gender == "erkek",
-                onTap: () => onGenderSelected("erkek"),
+                isSelected: gender == "male",
+                onTap: () => onGenderSelected("male"),
+                context: context
               ),
-              SizedBox(width: context.getDynamicHeight(4)),
+              SizedBox(width: context.getDynamicHeight(2)),
               _buildGenderCard(
                 title: "Kadın",
+                apiValue: "female", 
                 icon: Icons.female,
                 color: AppColor.secondary,
-                isSelected: gender == "kadın",
-                onTap: () => onGenderSelected("kadın"),
+                isSelected: gender == "female",
+                onTap: () => onGenderSelected("female"),
+                context:context
               ),
+             
             ],
           ),
         ],
@@ -51,21 +56,23 @@ class GenderPicker extends StatelessWidget {
 
   Widget _buildGenderCard({
     required String title,
+    required String apiValue, 
     required IconData icon,
     required Color color,
     required bool isSelected,
     required VoidCallback onTap,
+    required BuildContext context,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        width: 150,
-        height: 180,
+        duration: const Duration(milliseconds: 300),
+        width: context.getDynamicWidth(40), 
+        height: context.getDynamicHeight(20),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: isSelected
-                ? [color, color.withOpacity(0.7)]
+                ? [color, color.withValues(alpha:0.7)]
                 : [Colors.white, Colors.white],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -74,14 +81,14 @@ class GenderPicker extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: isSelected
-                  ? color.withOpacity(0.4)
-                  : Colors.grey.withOpacity(0.2),
+                  ? color.withValues(alpha:0.4)
+                  : Colors.grey.withValues(alpha:0.2),
               blurRadius: 10,
-              offset: Offset(0, 5),
+              offset: const Offset(0, 5),
             ),
           ],
           border: Border.all(
-            color: isSelected ? color : Colors.grey.withOpacity(0.2),
+            color: isSelected ? color : Colors.grey.withValues(alpha:0.2),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -90,8 +97,8 @@ class GenderPicker extends StatelessWidget {
           children: [
             if (isSelected)
               Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
@@ -107,7 +114,7 @@ class GenderPicker extends StatelessWidget {
               size: 60,
               color: isSelected ? Colors.white : color,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               title,
               style: TextStyle(
