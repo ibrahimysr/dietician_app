@@ -36,8 +36,8 @@ Flutter Diyetisyen Uygulaması, diyetisyenlerin müşterilerine daha iyi hizmet 
 ### Adımlar
 1. Repo'yu klonlayın:
 ```bash
-git clone https://github.com/kullanici-adi/flutter_diyetisyen_app
-cd flutter_diyetisyen_app
+git clone https://github.com/ibrahimysr/dietician_app
+cd dietician_app
 ```
 
 2. Bağımlılıkları yükleyin:
