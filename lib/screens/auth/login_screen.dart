@@ -1,9 +1,11 @@
 import 'package:dietician_app/components/auth/login_textfield.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
+import 'package:dietician_app/core/generated/asset.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
 import 'package:dietician_app/screens/auth/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -62,13 +64,14 @@ class _LoginScreenState extends State<LoginScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: context.getDynamicHeight(12)),
+                SizedBox(height: context.getDynamicHeight(5)),
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child:  Icon(
-                    Icons.favorite,
-                    size: 80,
-                    color: AppColor.primary,
+                  child:  Lottie.asset(
+                    AppAssets.loginAnimation,
+                   
+                    height: context.getDynamicHeight(20),
+                    fit: BoxFit.cover,
                   ),
                 ),
                  SizedBox(height: context.getDynamicHeight(2)),
