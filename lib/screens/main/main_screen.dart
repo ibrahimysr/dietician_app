@@ -1,9 +1,12 @@
 import 'package:dietician_app/core/theme/color.dart';
+import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/screens/home/home_screen.dart';
+import 'package:dietician_app/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+
+  const MainScreen({super.key, });
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -12,12 +15,13 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   late AnimationController _animationController;
+  int id = 0;
   
   final List<Widget> _screens = [
     HomeScreen(),
     Center(child: Text("Tarifler")),
     Center(child: Text("Planlama")),
-    Center(child: Text("Profil")),
+    ProfileScreen()
   ];
 
   final List<BottomNavItem> items = [
@@ -27,9 +31,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
     BottomNavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: "Profil"),
   ];
 
+   Future getClientId() async {
+    id = await AuthStorage.getId() ?? 0;
+   }
+
   @override
   void initState() {
     super.initState();
+    getClientId();
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),

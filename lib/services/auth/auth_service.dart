@@ -34,7 +34,7 @@ class AuthService {
       "password": password,
     };
 
-    final response = await _apiClient.post('auth/login', body: body);
+    final response = await _apiClient.post('auth/login', body: body); 
 
     return AuthResponse.fromJson(response);
   }

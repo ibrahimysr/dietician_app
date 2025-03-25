@@ -7,6 +7,7 @@ import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/screens/auth/register_screen.dart';
 import 'package:dietician_app/screens/main/main_screen.dart';
 import 'package:dietician_app/services/auth/auth_service.dart';
+import 'package:dietician_app/services/auth/client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -29,8 +30,8 @@ class _LoginScreenState extends State<LoginScreen>
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final _authService = AuthService();
-
+  final _authService = AuthService(); 
+    final _clientService = ClientService();
   @override
   void initState() {
     super.initState();
@@ -76,7 +77,13 @@ class _LoginScreenState extends State<LoginScreen>
       );
 
       if (response.success) {
-        await AuthStorage.saveToken(response.data.token);
+      final userId = response.data.user.id; 
+
+        await AuthStorage.saveToken(response.data.token); 
+     
+
+        _clientService.getUserClient(userId: userId, token: response.data.token);
+        
 
 
         if (mounted) {

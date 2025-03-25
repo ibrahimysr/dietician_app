@@ -110,15 +110,23 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
         token: token,
       );
 
-      if (response.success) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(response.message)),
-          );
-         
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-        }
-      } else {
+     if (response.success) { 
+  final userId = response.data.userId;
+
+  await AuthStorage.saveId(userId);
+
+  if (mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(response.message)),
+    );
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
+}
+else {
         throw Exception(response.message);
       }
     } catch (e) {

@@ -1,3 +1,4 @@
+import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/models/Client.dart';
 import 'package:dietician_app/services/api/api_client.dart';
 
@@ -38,5 +39,17 @@ class ClientService {
     final response = await _apiClient.post('clients-add', body: body, token: token);
 
     return ClientResponse.fromJson(response);
+  }
+
+  Future<ClientResponse> getClient({required int userId, String? token}) async {
+    final response = await _apiClient.get('clients-get/$userId', token: token);
+
+    return ClientResponse.fromJson(response);
+  } 
+  Future<void> getUserClient({required int userId, String? token}) async {
+    final response = await _apiClient.get('users/$userId/client', token: token);
+     final data =  ClientResponse.fromJson(response); 
+      await AuthStorage.saveId(data.data.userId);
+      print(data.data.userId);
   }
 }
