@@ -1,6 +1,7 @@
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/screens/home/home_screen.dart';
+import 'package:dietician_app/screens/recipes/recipes_screen.dart';
 import 'package:dietician_app/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   
   final List<Widget> _screens = [
     HomeScreen(),
-    Center(child: Text("Tarifler")),
+    RecipesPage(),
     Center(child: Text("Planlama")),
     ProfileScreen()
   ];
