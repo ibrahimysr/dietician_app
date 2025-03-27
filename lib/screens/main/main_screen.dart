@@ -1,5 +1,6 @@
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/utils/auth_storage.dart';
+import 'package:dietician_app/screens/dietitian/dietitian_screen.dart';
 import 'package:dietician_app/screens/home/home_screen.dart';
 import 'package:dietician_app/screens/recipes/recipes_screen.dart';
 import 'package:dietician_app/screens/setting/setting.dart';
@@ -21,14 +22,14 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   final List<Widget> _screens = [
     HomeScreen(),
     RecipesPage(),
-    Center(child: Text("Planlama")),
+    DietitianListScreen(),
     ProfileScreen()
   ];
 
   final List<BottomNavItem> items = [
     BottomNavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: "Ana Sayfa"),
     BottomNavItem(icon: Icons.restaurant_menu_outlined, activeIcon: Icons.restaurant_menu, label: "Tarifler"),
-    BottomNavItem(icon: Icons.calendar_today_outlined, activeIcon: Icons.calendar_today, label: "Planlama"),
+    BottomNavItem(icon: Icons.person, activeIcon: Icons.calendar_today, label: "Diyetisyenler"),
     BottomNavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: "Profil"),
   ];
 

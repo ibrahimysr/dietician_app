@@ -5,11 +5,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/color.dart';
 import '../../core/theme/textstyle.dart';
 
-class ProfileErrorWidget extends StatelessWidget {
+class MyErrorWidget extends StatelessWidget {
   final String errorMessage;
   final VoidCallback onRetry;
 
-  const ProfileErrorWidget({
+  const MyErrorWidget({
     super.key,
     required this.errorMessage,
     required this.onRetry,

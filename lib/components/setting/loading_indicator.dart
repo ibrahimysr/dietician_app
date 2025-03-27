@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../core/theme/color.dart';
 
-class ProfileLoadingIndicator extends StatelessWidget {
-  const ProfileLoadingIndicator({super.key});
+class LoadingIndicator extends StatelessWidget {
+  const LoadingIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {

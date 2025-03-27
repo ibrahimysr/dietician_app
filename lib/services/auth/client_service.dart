@@ -50,6 +50,5 @@ class ClientService {
     final response = await _apiClient.get('users/$userId/client', token: token);
      final data =  ClientResponse.fromJson(response); 
       await AuthStorage.saveId(data.data.userId);
-      print(data.data.userId);
   }
 }

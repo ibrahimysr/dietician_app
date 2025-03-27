@@ -4,7 +4,7 @@ import 'package:dietician_app/components/setting/profile_app_bar.dart';
 import 'package:dietician_app/components/setting/profile_error_widget.dart';
 import 'package:dietician_app/components/setting/profile_info_card.dart';
 import 'package:dietician_app/components/setting/profile_info_tile.dart';
-import 'package:dietician_app/components/setting/profile_loading_indicator.dart';
+import 'package:dietician_app/components/setting/loading_indicator.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -73,9 +73,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         future: _clientFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const ProfileLoadingIndicator();
+            return const LoadingIndicator();
           } else if (snapshot.hasError) {
-            return ProfileErrorWidget(
+            return MyErrorWidget(
               errorMessage: snapshot.error.toString(),
               onRetry: () => setState(() {
                 _clientFuture = _fetchClientData();
@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             final clientData = snapshot.data!.data;
             return _buildProfileContent(context, clientData);
           }
-          return ProfileErrorWidget(
+          return MyErrorWidget(
             errorMessage: "Profil bilgileri alınamadı.",
             onRetry: () => setState(() {
               _clientFuture = _fetchClientData();
