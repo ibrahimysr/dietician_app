@@ -1,5 +1,5 @@
 import 'package:dietician_app/core/utils/auth_storage.dart';
-import 'package:dietician_app/models/Client.dart';
+import 'package:dietician_app/models/client_model.dart';
 import 'package:dietician_app/services/api/api_client.dart';
 
 

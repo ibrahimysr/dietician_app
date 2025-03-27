@@ -1,5 +1,5 @@
 
-import 'package:dietician_app/models/Recipes.dart';
+import 'package:dietician_app/models/recipes_model.dart';
 import 'package:dietician_app/services/api/api_client.dart';
 
 class RecipesService { 

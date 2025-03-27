@@ -1,4 +1,4 @@
-import 'package:dietician_app/models/User.dart';
+import 'package:dietician_app/models/user_model.dart';
 
 class Dietitian {
   final int id;
@@ -11,7 +11,7 @@ class Dietitian {
   final String createdAt;
   final String updatedAt;
   final String? deletedAt;
-  final User? user; // User opsiyonel olarak tanımlanıyor
+  final User? user; 
 
   Dietitian({
     required this.id,
@@ -24,7 +24,7 @@ class Dietitian {
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
-    this.user, // Varsayılan olarak null olabilir
+    this.user, 
   });
 
   factory Dietitian.fromJson(Map<String, dynamic> json) {
@@ -39,7 +39,7 @@ class Dietitian {
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
       deletedAt: json['deleted_at'],
-      user: json['user'] != null ? User.fromJson(json['user']) : null, // Null kontrolü
+      user: json['user'] != null ? User.fromJson(json['user']) : null, 
     );
   }
 
@@ -55,7 +55,7 @@ class Dietitian {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'deleted_at': deletedAt,
-      'user': user?.toJson(), // User null ise null döner
+      'user': user?.toJson(), 
     };
   }
 }

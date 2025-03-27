@@ -5,7 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../core/theme/color.dart';
 import '../../core/theme/textstyle.dart';
-import '../../models/Client.dart';
+import '../../models/client_model.dart';
 
 class ProfileAppBar extends StatelessWidget {
   final ClientData clientData;
@@ -57,7 +57,7 @@ class ProfileAppBar extends StatelessWidget {
               end: Alignment.bottomRight,
               colors: [
                 AppColor.primary,
-                AppColor.primary.withOpacity(0.7),
+                AppColor.primary.withValues(alpha:0.7),
               ],
             ),
           ),
@@ -68,7 +68,7 @@ class ProfileAppBar extends StatelessWidget {
                 SizedBox(height: kToolbarHeight / 2),
                 CircleAvatar(
                   radius: 55,
-                  backgroundColor: AppColor.white.withOpacity(0.9),
+                  backgroundColor: AppColor.white.withValues(alpha:0.9),
                   child: CircleAvatar(
                     radius: 52,
                     backgroundColor: AppColor.greyLight,
@@ -80,7 +80,7 @@ class ProfileAppBar extends StatelessWidget {
                         ? Icon(
                             Icons.person_outline,
                             size: 60,
-                            color: AppColor.primary.withOpacity(0.8),
+                            color: AppColor.primary.withValues(alpha:0.8),
                           )
                         : null,
                   ),
@@ -98,7 +98,7 @@ class ProfileAppBar extends StatelessWidget {
                   Text(
                     displayEmail,
                     style: AppTextStyles.body1Medium.copyWith(
-                        color: AppColor.white.withOpacity(0.85),
+                        color: AppColor.white.withValues(alpha:0.85),
                         shadows: [
                           Shadow(blurRadius: 1, color: Colors.black26)
                         ]),

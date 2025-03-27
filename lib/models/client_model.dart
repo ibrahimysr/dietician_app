@@ -1,7 +1,7 @@
-import 'package:dietician_app/models/Diet_plan.dart';
-import 'package:dietician_app/models/Dietitian.dart';
-import 'package:dietician_app/models/Progress.dart';
-import 'package:dietician_app/models/User.dart';
+import 'package:dietician_app/models/diet_plan_model.dart';
+import 'package:dietician_app/models/dietitian_model.dart';
+import 'package:dietician_app/models/user_model.dart';
+import 'package:dietician_app/models/progress_model.dart';
 
 class ClientResponse {
   final bool success;

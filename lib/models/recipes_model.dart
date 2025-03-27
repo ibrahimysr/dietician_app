@@ -1,9 +1,9 @@
-import 'package:dietician_app/models/Dietitian.dart';
+import 'package:dietician_app/models/dietitian_model.dart';
 
 class RecipesResponse { 
   final bool success;
   final String message; 
-  final List<Recipes> data;  // Change this to a List
+  final List<Recipes> data; 
 
   RecipesResponse({
     required this.success,

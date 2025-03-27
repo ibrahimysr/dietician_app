@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dietician_app/components/setting/profile_action_card.dart';
 import 'package:dietician_app/components/setting/profile_app_bar.dart';
 import 'package:dietician_app/components/setting/profile_error_widget.dart';
@@ -13,7 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/color.dart';
 import '../../core/utils/auth_storage.dart';
-import '../../models/Client.dart';
+import '../../models/client_model.dart';
 import '../../services/auth/client_service.dart';
 
 
