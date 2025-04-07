@@ -1,7 +1,11 @@
 import 'package:dietician_app/components/food/food_card.dart';
+import 'package:dietician_app/components/food/food_category_list.dart';
+import 'package:dietician_app/components/food/food_empty_state.dart';
+import 'package:dietician_app/components/food/food_filter_chips.dart';
+import 'package:dietician_app/components/food/food_list_title.dart';
+import 'package:dietician_app/components/food/food_search_bar.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
-import 'package:dietician_app/core/utils/formatters.dart';
 import 'package:dietician_app/models/food_model.dart';
 import 'package:dietician_app/screens/food/food_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -111,117 +115,28 @@ class _AllFoodsScreenState extends State<AllFoodsScreen> {
       ),
       body: Column(
         children: [
-          // Search bar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.grey[100],
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha:0.03),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Besin adı veya kategori ara...',
-                  hintStyle: AppTextStyles.body1Regular.copyWith(color: AppColor.greyLight),
-                  prefixIcon: Icon(Icons.search, color: AppColor.primary),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                  suffixIcon: _searchController.text.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(Icons.clear, color: AppColor.greyLight),
-                          onPressed: () {
-                            _searchController.clear();
-                          },
-                        )
-                      : null,
-                ),
-              ),
-            ),
+          FoodSearchBar(
+            controller: _searchController,
+            onClear: () => _searchController.clear(),
           ),
-
-          Container(
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildFilterChip("Tümü", _currentFilter == FoodFilter.all, () {
-                  _updateFilter(FoodFilter.all);
-                }),
-                const SizedBox(width: 12),
-                _buildFilterChip("Özel Besinler", _currentFilter == FoodFilter.custom, () {
-                  _updateFilter(FoodFilter.custom);
-                }),
-                const SizedBox(width: 12),
-                _buildFilterChip("Genel Besinler", _currentFilter == FoodFilter.nonCustom, () {
-                  _updateFilter(FoodFilter.nonCustom);
-                }),
-              ],
-            ),
+          FoodFilterChips(
+            currentFilter: _currentFilter,
+            onFilterSelected: _updateFilter,
           ),
-
-          SizedBox(height: 16),
-          Container(
-            height: 120,
-            padding: const EdgeInsets.only(left: 20),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _categories.length,
-              itemBuilder: (context, index) {
-                return _buildCategoryCard(_categories[index]);
-              },
-            ),
+          const SizedBox(height: 16),
+          FoodCategoryList(
+            categories: _categories,
+            onCategoryTap: (category) {
+              _searchController.text = category;
+              _filterFoods();
+            },
           ),
-          SizedBox(height: 16),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Expanded(child: Divider(color: AppColor.grey)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    "Besin Listesi",
-                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.greyLight),
-                  ),
-                ),
-                Expanded(child: Divider(color: AppColor.grey)),
-              ],
-            ),
-          ),
-          SizedBox(height: 16),
-
+          const SizedBox(height: 16),
+          const FoodListTitle(),
+          const SizedBox(height: 16),
           Expanded(
             child: _filteredFoods.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search_off,
-                          size: 64,
-                          color: AppColor.greyLight,
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          _searchController.text.isEmpty
-                              ? "Bu filtreye uygun besin bulunamadı."
-                              : "Arama sonucuyla eşleşen besin bulunamadı.",
-                          style: AppTextStyles.body1Medium.copyWith(color: AppColor.greyLight),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  )
+                ? FoodEmptyState(isSearchActive: _searchController.text.isNotEmpty)
                 : ListView.builder(
                     controller: _scrollController,
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
@@ -246,81 +161,4 @@ class _AllFoodsScreenState extends State<AllFoodsScreen> {
       ),
     );
   }
-
-  Widget _buildFilterChip(String label, bool isSelected, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColor.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? AppColor.primary : Colors.grey.withValues(alpha:0.3),
-            width: 1,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: AppTextStyles.body2Medium.copyWith(
-              color: isSelected ? AppColor.white : AppColor.black,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategoryCard(String category) {
-    return GestureDetector(
-      onTap: () {
-        _searchController.text = category;
-        _filterFoods();
-      },
-      child: Container(
-        width: 100,
-        margin: const EdgeInsets.only(right: 12),
-        decoration: BoxDecoration(
-          color: AppColor.grey,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha:0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColor.primary.withValues(alpha:0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                getCategoryIcon(category),
-                color: AppColor.primary,
-                size: 28,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              category,
-              style: AppTextStyles.body2Medium,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  
 }
-
