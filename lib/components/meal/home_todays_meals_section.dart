@@ -25,7 +25,8 @@ class TodaysMealsSection extends StatelessWidget {
       final startDate = DateTime.parse(activeDietPlan!.startDate.split('T')[0]);
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
-      final startOnly = DateTime(startDate.year, startDate.month, startDate.day);
+      final startOnly =
+          DateTime(startDate.year, startDate.month, startDate.day);
       final diff = today.difference(startOnly);
       return !diff.isNegative ? diff.inDays + 1 : 0;
     } catch (_) {
@@ -39,7 +40,8 @@ class TodaysMealsSection extends StatelessWidget {
     final meals = activeDietPlan!.meals
         .where((meal) => meal.dayNumber == dayNumber)
         .toList();
-    meals.sort((a, b) => _mealTypeOrder(a.mealType).compareTo(_mealTypeOrder(b.mealType)));
+    meals.sort((a, b) =>
+        getMealTypeOrder(a.mealType).compareTo(getMealTypeOrder(b.mealType)));
     return meals;
   }
 
@@ -49,7 +51,10 @@ class TodaysMealsSection extends StatelessWidget {
     final meals = _getTodaysMeals();
     final canShowAll = activeDietPlan?.meals.isNotEmpty == true;
 
-    if (isLoading || errorMessage != null || activeDietPlan == null || dayNumber == -1) {
+    if (isLoading ||
+        errorMessage != null ||
+        activeDietPlan == null ||
+        dayNumber == -1) {
       return const SizedBox.shrink();
     }
 
@@ -64,7 +69,8 @@ class TodaysMealsSection extends StatelessWidget {
               dayNumber > 0
                   ? "Bugünün Öğünleri (Gün $dayNumber)"
                   : "Bugünün Öğünleri",
-              style: AppTextStyles.heading4.copyWith(fontWeight: FontWeight.bold),
+              style:
+                  AppTextStyles.heading4.copyWith(fontWeight: FontWeight.bold),
             ),
             if (canShowAll)
               TextButton(
@@ -72,22 +78,29 @@ class TodaysMealsSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => AllMealsScreen(activePlan: activeDietPlan!),
+                      builder: (_) =>
+                          AllMealsScreen(activePlan: activeDietPlan!),
                     ),
                   );
                 },
-                child: Text("Tümünü Gör", style: AppTextStyles.body1Medium.copyWith(color: AppColor.primary)),
+                child: Text("Tümünü Gör",
+                    style: AppTextStyles.body1Medium
+                        .copyWith(color: AppColor.primary)),
               ),
           ],
         ),
         SizedBox(height: context.getDynamicHeight(1.5)),
 
         if (dayNumber == -2)
-          _buildInfoCard("Günün öğünleri getirilirken bir sorun oluştu.", Icons.error_outline)
+          _buildInfoCard("Günün öğünleri getirilirken bir sorun oluştu.",
+              Icons.error_outline)
         else if (dayNumber == 0)
-          _buildInfoCard("Diyet planınız ${formatDate(activeDietPlan!.startDate)} tarihinde başlayacak.", Icons.calendar_today_outlined)
+          _buildInfoCard(
+              "Diyet planınız ${formatDate(activeDietPlan!.startDate)} tarihinde başlayacak.",
+              Icons.calendar_today_outlined)
         else if (meals.isEmpty)
-          _buildInfoCard("Bugün için planlanmış öğün bulunmamaktadır.", Icons.no_food_outlined)
+          _buildInfoCard("Bugün için planlanmış öğün bulunmamaktadır.",
+              Icons.no_food_outlined)
         else
           SizedBox(
             height: context.getDynamicHeight(16),
@@ -109,7 +122,7 @@ class TodaysMealsSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       decoration: BoxDecoration(
-        color: AppColor.grey?.withOpacity(0.5),
+        color: AppColor.grey?.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -120,7 +133,8 @@ class TodaysMealsSection extends StatelessWidget {
           Expanded(
             child: Text(
               message,
-              style: AppTextStyles.body1Regular.copyWith(color: AppColor.black.withOpacity(0.7)),
+              style: AppTextStyles.body1Regular
+                  .copyWith(color: AppColor.black.withValues(alpha: 0.7)),
               textAlign: TextAlign.center,
             ),
           ),
@@ -150,11 +164,12 @@ class TodaysMealsSection extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(_getMealTypeIcon(meal.mealType), color: AppColor.secondary, size: 20),
+                    Icon(getMealTypeIcon(meal.mealType),
+                        color: AppColor.secondary, size: 20),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        _getMealTypeName(meal.mealType),
+                        getMealTypeName(meal.mealType),
                         style: AppTextStyles.body1Medium.copyWith(
                           color: AppColor.secondary,
                           fontWeight: FontWeight.bold,
@@ -168,7 +183,8 @@ class TodaysMealsSection extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
                     meal.description,
-                    style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withOpacity(0.8)),
+                    style: AppTextStyles.body2Regular
+                        .copyWith(color: AppColor.black.withValues(alpha: 0.8)),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -179,7 +195,8 @@ class TodaysMealsSection extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
                       "${meal.calories} kcal",
-                      style: AppTextStyles.body1Medium.copyWith(color: AppColor.primary, fontWeight: FontWeight.w600),
+                      style: AppTextStyles.body1Medium.copyWith(
+                          color: AppColor.primary, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -189,35 +206,5 @@ class TodaysMealsSection extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  IconData _getMealTypeIcon(String type) {
-    switch (type.toLowerCase()) {
-      case 'breakfast': return Icons.free_breakfast_outlined;
-      case 'lunch': return Icons.lunch_dining_outlined;
-      case 'dinner': return Icons.dinner_dining_outlined;
-      case 'snack': return Icons.fastfood_outlined;
-      default: return Icons.restaurant_menu_outlined;
-    }
-  }
-
-  String _getMealTypeName(String type) {
-    switch (type.toLowerCase()) {
-      case 'breakfast': return 'Kahvaltı';
-      case 'lunch': return 'Öğle Yemeği';
-      case 'dinner': return 'Akşam Yemeği';
-      case 'snack': return 'Ara Öğün';
-      default: return type;
-    }
-  }
-
-  int _mealTypeOrder(String type) {
-    switch (type.toLowerCase()) {
-      case 'breakfast': return 1;
-      case 'snack': return 2;
-      case 'lunch': return 3;
-      case 'dinner': return 5;
-      default: return 99;
-    }
   }
 }

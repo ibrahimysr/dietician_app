@@ -58,7 +58,7 @@ class _AllDietPlansScreenState extends State<AllDietPlansScreen> {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColor.white.withOpacity(0.2),
+                  color: AppColor.white.withValues(alpha:0.2),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
@@ -90,7 +90,7 @@ class _AllDietPlansScreenState extends State<AllDietPlansScreen> {
         color: AppColor.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -185,7 +185,7 @@ class _AllDietPlansScreenState extends State<AllDietPlansScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -224,7 +224,7 @@ class _AllDietPlansScreenState extends State<AllDietPlansScreen> {
                       Text(
                         "Dyt. ${plan.dietitian.user?.name ?? 'N/A'}",
                         style: AppTextStyles.body2Regular.copyWith(
-                          color: AppColor.black.withOpacity(0.7),
+                          color: AppColor.black.withValues(alpha:0.7),
                         ),
                       ),
                     ],
@@ -260,7 +260,7 @@ class _AllDietPlansScreenState extends State<AllDietPlansScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
+        color: statusColor.withValues(alpha:0.1),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
@@ -284,7 +284,7 @@ class _AllDietPlansScreenState extends State<AllDietPlansScreen> {
           Text(
             _calculateDuration(plan.startDate, plan.endDate),
             style: AppTextStyles.body2Regular.copyWith(
-              color: AppColor.black.withOpacity(0.6),
+              color: AppColor.black.withValues(alpha:0.6),
             ),
           ),
         ],
@@ -307,7 +307,7 @@ class _AllDietPlansScreenState extends State<AllDietPlansScreen> {
           Text(
             "${plan.meals.length} öğün",
             style: AppTextStyles.body2Regular.copyWith(
-              color: AppColor.black.withOpacity(0.6),
+              color: AppColor.black.withValues(alpha:0.6),
             ),
           ),
           Spacer(),
@@ -341,13 +341,13 @@ class _AllDietPlansScreenState extends State<AllDietPlansScreen> {
           Icon(
             icon,
             size: 14,
-            color: AppColor.black.withOpacity(0.6),
+            color: AppColor.black.withValues(alpha:0.6),
           ),
           SizedBox(width: 4),
           Text(
             text,
             style: AppTextStyles.body2Regular.copyWith(
-              color: AppColor.black.withOpacity(0.7),
+              color: AppColor.black.withValues(alpha:0.7),
             ),
           ),
         ],

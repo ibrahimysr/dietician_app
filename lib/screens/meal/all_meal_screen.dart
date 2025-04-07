@@ -35,7 +35,7 @@ class AllMealsScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
               activePlan.title,
-              style: AppTextStyles.body1Regular.copyWith(color: AppColor.white.withOpacity(0.8)),
+              style: AppTextStyles.body1Regular.copyWith(color: AppColor.white.withValues(alpha:0.8)),
             ),
           ),
         ),
@@ -76,7 +76,7 @@ class AllMealsScreen extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: ExpansionTile(
         title: Text("Gün $dayNumber", style: AppTextStyles.heading4.copyWith(color: AppColor.black)),
-        backgroundColor: AppColor.grey?.withOpacity(0.1),
+        backgroundColor: AppColor.grey?.withValues(alpha:0.1),
         collapsedBackgroundColor: AppColor.white,
         shape: Border(), 
         collapsedShape: Border(), 
@@ -96,7 +96,7 @@ class AllMealsScreen extends StatelessWidget {
         ),
         subtitle: Text(
           meal.description,
-          style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withOpacity(0.8)),
+          style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withValues(alpha:0.8)),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),

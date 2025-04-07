@@ -94,11 +94,11 @@ class MealDetailScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Divider(height: 25, color: AppColor.grey?.withOpacity(0.5)),
+                  Divider(height: 25, color: AppColor.grey?.withValues(alpha:0.5)),
                   Text(
                     "Açıklama:",
                     style: AppTextStyles.body1Medium
-                        .copyWith(color: AppColor.black.withOpacity(0.7)),
+                        .copyWith(color: AppColor.black.withValues(alpha:0.7)),
                   ),
                   SizedBox(height: 6),
                   Text(

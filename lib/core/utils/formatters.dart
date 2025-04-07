@@ -59,3 +59,31 @@ int getMealTypeOrder(String mealType) {
       return dateString;
     }
   }
+
+
+ IconData getCategoryIcon(String category) {
+    switch (category.toLowerCase()) {
+      case 'meyve':
+        return Icons.apple;
+      case 'sebze':
+        return Icons.local_florist;
+      case 'tahıl':
+        return Icons.grain;
+      case 'et':
+      case 'tavuk':
+      case 'balık':
+        return Icons.set_meal;
+      case 'süt ürünleri':
+        return Icons.local_drink;
+      case 'kuruyemiş':
+        return Icons.scatter_plot;
+      case 'i̇çecek':
+        return Icons.local_cafe;
+      case 'atıştırmalık':
+        return Icons.fastfood;
+      case 'salata':
+        return Icons.restaurant;
+      default:
+        return Icons.food_bank;
+    }
+  }
