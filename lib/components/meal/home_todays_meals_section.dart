@@ -183,7 +183,7 @@ class TodaysMealsSection extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
                     meal.description,
-                    style: AppTextStyles.body2Regular
+                    style: AppTextStyles.body1Medium
                         .copyWith(color: AppColor.black.withValues(alpha: 0.8)),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

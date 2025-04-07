@@ -46,12 +46,12 @@ class FoodCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColor.secondary.withValues(alpha:0.1),
+                      color: AppColor.primary.withValues(alpha:0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
                       getCategoryIcon(food.category),
-                      color: AppColor.secondary,
+                      color: AppColor.primary,
                       size: 20,
                     ),
                   ),
@@ -82,18 +82,15 @@ class FoodCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 food.category,
-                style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight),
+                style: AppTextStyles.body2Regular.copyWith(color: AppColor.secondary),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 12),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    "${food.servingSize} gr",
-                    style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight),
-                  ),
+                  
                   Text(
                     "${food.calories} kcal",
                     style: AppTextStyles.body1Medium.copyWith(
@@ -179,11 +176,11 @@ class FoodCard extends StatelessWidget {
                       children: [
                         Text(
                           food.category,
-                          style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight),
+                          style: AppTextStyles.body2Regular.copyWith(color: AppColor.secondary),
                         ),
                         Text(
                           " · ${food.servingSize} gr",
-                          style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight),
+                          style: AppTextStyles.body2Regular.copyWith(color: AppColor.secondary),
                         ),
                       ],
                     ),
