@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:dietician_app/components/diet_plan/active_diet_plan.dart';
+import 'package:dietician_app/components/meal/home_todays_meals_section.dart';
 import 'package:dietician_app/core/utils/auth_storage.dart';
+
 import 'package:dietician_app/services/diet_plan/diet_plan_service.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -72,9 +74,11 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-
+ 
+   
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+  
     return Scaffold(
       backgroundColor: AppColor.white,
       appBar: AppBar(
@@ -111,6 +115,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 activeDietPlan: _activeDietPlan,
                 onRetry: _fetchDietPlans,
               ),
+             TodaysMealsSection(
+  activeDietPlan: _activeDietPlan,
+  isLoading: _isLoading,
+  errorMessage: _errorMessage,
+),
+
             ],
           ),
         ),

@@ -114,17 +114,17 @@ class DietPlan {
   final int clientId;
   final int dietitianId;
   final String title;
-  final String startDate; // String olarak bırakmak genellikle daha güvenlidir
-  final String endDate;   // İstersen DateTime'a çevirebilirsin
+  final String startDate; 
+  final String endDate;  
   final int dailyCalories;
   final String notes;
   final String status;
   final bool isOngoing;
   final String createdAt;
   final String updatedAt;
-  final String? deletedAt; // Null olabilir
-  final Dietitian dietitian; // İç içe nesne
-  final List<Meal> meals;   // İç içe liste
+  final String? deletedAt; 
+  final Dietitian dietitian; 
+  final List<Meal> meals;   
 
   DietPlan({
     required this.id,
@@ -145,7 +145,6 @@ class DietPlan {
   });
 
   factory DietPlan.fromJson(Map<String, dynamic> json) {
-    // 'meals' listesini ayrıştırma
     var mealList = json['meals'] as List?;
     List<Meal> mealsData = mealList != null
         ? mealList.map((m) => Meal.fromJson(m)).toList()

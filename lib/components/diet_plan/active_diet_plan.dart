@@ -1,3 +1,4 @@
+import 'package:dietician_app/screens/diet_plan/diet_plan_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
@@ -40,7 +41,8 @@ class ActiveDietPlanSection extends StatelessWidget {
             Text("Hata: $errorMessage",
                 style: AppTextStyles.body1Medium.copyWith(color: Colors.red)),
             const SizedBox(height: 10),
-            ElevatedButton(onPressed: onRetry, child: const Text("Tekrar Dene")),
+            ElevatedButton(
+                onPressed: onRetry, child: const Text("Tekrar Dene")),
           ],
         ),
       );
@@ -69,7 +71,8 @@ class ActiveDietPlanSection extends StatelessWidget {
           children: [
             Text(
               activeDietPlan != null ? "Aktif Diyet Planın" : "Diyet Planların",
-              style: AppTextStyles.heading4.copyWith(fontWeight: FontWeight.bold),
+              style:
+                  AppTextStyles.heading4.copyWith(fontWeight: FontWeight.bold),
             ),
             if (allDietPlans.isNotEmpty)
               TextButton(
@@ -84,7 +87,8 @@ class ActiveDietPlanSection extends StatelessWidget {
                 },
                 child: Text(
                   "Tümünü Gör (${allDietPlans.length})",
-                  style: AppTextStyles.body1Medium.copyWith(color: AppColor.primary),
+                  style: AppTextStyles.body1Medium
+                      .copyWith(color: AppColor.primary),
                 ),
               ),
           ],
@@ -99,84 +103,100 @@ class ActiveDietPlanSection extends StatelessWidget {
   }
 
   Widget _buildDietPlanCard(BuildContext context, DietPlan plan) {
-    return Card(
-      elevation: 3.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: AppColor.grey,
-      clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    plan.title,
-                    style: AppTextStyles.body1Medium.copyWith(fontSize: 17),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                _buildStatusBadge(plan.status),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                 Icon(Icons.person_outline, size: 16, color: AppColor.black),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    "Diyetisyen: Dyt. ${plan.dietitian.user?.name}",
-                    style: AppTextStyles.body1Medium.copyWith(color: AppColor.black),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                 Icon(Icons.date_range_outlined,
-                    size: 16, color: AppColor.black),
-                const SizedBox(width: 6),
-                Text(
-                  "Tarihler: ${_formatDate(plan.startDate)} - ${_formatDate(plan.endDate)}",
-                  style: AppTextStyles.body1Medium.copyWith(color: AppColor.black),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            if (plan.notes.isNotEmpty)
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DietPlanDetailScreen(plan: plan),
+          ),
+        );
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Card(
+        elevation: 3.0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        color: AppColor
+            .grey, 
+        clipBehavior: Clip.antiAlias,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Icon(Icons.notes_outlined,
-                      size: 16, color: AppColor.black),
-                  const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      "Not: ${plan.notes}",
-                      style: AppTextStyles.body1Medium.copyWith(color: AppColor.black),
+                      plan.title,
+                      style: AppTextStyles.heading4.copyWith(
+                          color: AppColor.black), 
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  const SizedBox(width: 10),
+                  _buildStatusBadge(plan
+                      .status),
                 ],
               ),
-          ],
+              const SizedBox(height: 10),
+              _buildInfoRow(
+                icon: Icons.person_outline,
+                text:
+                    "Diyetisyen: Dyt. ${plan.dietitian.user?.name ?? 'Belirtilmemiş'}",
+              ),
+              const SizedBox(height: 6),
+              _buildInfoRow(
+                icon: Icons.date_range_outlined,
+                text:
+                    "Tarihler: ${_formatDate(plan.startDate)} - ${_formatDate(plan.endDate)}",
+              ),
+              const SizedBox(height: 10),
+              if (plan.notes.isNotEmpty)
+                _buildInfoRow(
+                  icon: Icons.notes_outlined,
+                  text: "Not: ${plan.notes}",
+                  maxLines: 3, 
+                ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoRow(
+      {required IconData icon, required String text, int maxLines = 1}) {
+    return Row(
+      crossAxisAlignment:
+          maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+      children: [
+        Icon(icon,
+            size: 16,
+            color:
+                AppColor.black.withValues(alpha:0.7)),
+        const SizedBox(width: 8), 
+        Expanded(
+          child: Text(
+            text,
+            style: AppTextStyles.body2Regular.copyWith(
+                color: AppColor.black.withValues(alpha:0.9)), 
+            maxLines: maxLines,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildStatusBadge(String status) {
     IconData icon;
     Color color;
+    Color textColor;
     String text;
 
     switch (status.toLowerCase()) {
@@ -184,40 +204,46 @@ class ActiveDietPlanSection extends StatelessWidget {
         icon = Icons.play_circle_fill;
         color = Colors.green;
         text = "Aktif";
+        textColor = Colors.green.shade800; 
         break;
       case 'paused':
         icon = Icons.pause_circle_filled;
         color = Colors.orange;
         text = "Duraklatıldı";
+        textColor = Colors.orange.shade800;
         break;
       case 'completed':
         icon = Icons.check_circle;
-        color = AppColor.primary;
+        color = AppColor.secondary; 
         text = "Tamamlandı";
+        textColor = AppColor.secondary;
         break;
       default:
         icon = Icons.help_outline;
-        color = Colors.grey;
+        color = Colors.grey.shade400;
         text = status.isNotEmpty
             ? status[0].toUpperCase() + status.substring(1)
             : 'Bilinmiyor';
+        textColor = Colors.grey.shade700;
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withValues(alpha:0.15),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: 14),
+          Icon(icon, color: textColor, size: 14), 
           const SizedBox(width: 4),
           Text(
             text,
-            style: AppTextStyles.body1Medium
-                .copyWith(color: color, fontWeight: FontWeight.bold),
+            style: AppTextStyles.body2Medium 
+                .copyWith(
+                    color: textColor,
+                    fontWeight: FontWeight.w600), 
           ),
         ],
       ),
@@ -235,7 +261,7 @@ class ActiveDietPlanSection extends StatelessWidget {
       ),
       child: Column(
         children: [
-           Icon(Icons.info_outline, color: AppColor.black, size: 30),
+          Icon(Icons.info_outline, color: AppColor.black, size: 30),
           const SizedBox(height: 10),
           Text(
             "Şu anda takip ettiğiniz aktif bir diyet planı bulunmuyor.",
