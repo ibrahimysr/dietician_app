@@ -39,8 +39,6 @@ dependencies:
   provider:
   shared_preferences:
   lottie:
-  flutter_localizations:
-    sdk: flutter
   numberpicker: ^2.1.2
   flutter_animate: ^4.2.0
   cached_network_image: ^3.3.0
@@ -48,6 +46,7 @@ dependencies:
   smooth_page_indicator: 
   google_fonts: 
   flutter_staggered_animations:
+  collection: ^1.17.0
 
   
 dev_dependencies:

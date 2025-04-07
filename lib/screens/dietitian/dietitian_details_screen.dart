@@ -58,7 +58,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
         elevation: 0,
         leading: IconButton(
           icon: CircleAvatar(
-            backgroundColor: AppColor.white.withOpacity(0.7),
+            backgroundColor: AppColor.white.withValues(alpha:0.7),
             child: Icon(Icons.arrow_back_ios_new_rounded, color: AppColor.primary, size: 20),
           ),
           onPressed: () => Navigator.of(context).pop(),
@@ -139,7 +139,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
         ),
         boxShadow: [
            BoxShadow(
-             color: AppColor.primary.withOpacity(0.2), 
+             color: AppColor.primary.withValues(alpha:0.2), 
              blurRadius: 20,
              offset: const Offset(0, 8),
            )
@@ -176,7 +176,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
                 const SizedBox(height: 6),
                 Text(
                   _displayValue(dietitian.specialty),
-                  style: AppTextStyles.body1Medium.copyWith(color: AppColor.white.withOpacity(0.9)), 
+                  style: AppTextStyles.body1Medium.copyWith(color: AppColor.white.withValues(alpha:0.9)), 
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -198,7 +198,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
           const SizedBox(height: 12),
           Text(
             _displayValue(dietitian.bio, defaultValue: "Diyetisyen hakkında bilgi bulunmamaktadır."),
-            style: AppTextStyles.body1Regular.copyWith(color: AppColor.black.withOpacity(0.75), height: 1.55),
+            style: AppTextStyles.body1Regular.copyWith(color: AppColor.black.withValues(alpha:0.75), height: 1.55),
             textAlign: TextAlign.justify,
           ),
         ],
@@ -211,7 +211,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
         margin: const EdgeInsets.symmetric(horizontal: 20.0),
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
         decoration: BoxDecoration(
-            color: AppColor.grey?.withOpacity(0.8), 
+            color: AppColor.grey?.withValues(alpha:0.8), 
             borderRadius: BorderRadius.circular(16)
         ),
        child: Row(
@@ -242,7 +242,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
           const SizedBox(height: 8),
           Text(value, style: AppTextStyles.body1Medium.copyWith(color: AppColor.black)),
           const SizedBox(height: 3),
-          Text(label, style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withOpacity(0.65))),
+          Text(label, style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withValues(alpha:0.65))),
         ],
       );
    }
@@ -270,7 +270,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
-      shadowColor: AppColor.black.withOpacity(0.06),
+      shadowColor: AppColor.black.withValues(alpha:0.06),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -302,7 +302,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
             const SizedBox(height: 12),
              Text(
               _displayValue(plan.description, defaultValue: "Açıklama yok."),
-              style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withOpacity(0.7)),
+              style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withValues(alpha:0.7)),
             ),
             if (plan.features.isNotEmpty) ...[
               const SizedBox(height: 14),
@@ -310,9 +310,9 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
                  spacing: 8.0,
                  runSpacing: 6.0, 
                  children: plan.features.map((feature) => Chip(
-                    avatar: Icon(Icons.check, size: 16, color: AppColor.secondary.withOpacity(0.8)), 
-                    label: Text(feature, style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withOpacity(0.85))), 
-                    backgroundColor: AppColor.secondary.withOpacity(0.1),
+                    avatar: Icon(Icons.check, size: 16, color: AppColor.secondary.withValues(alpha:0.8)), 
+                    label: Text(feature, style: AppTextStyles.body2Regular.copyWith(color: AppColor.black.withValues(alpha:0.85))), 
+                    backgroundColor: AppColor.secondary.withValues(alpha:0.1),
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), 
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: const VisualDensity(horizontal: 0.0, vertical: -2),
@@ -337,7 +337,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
                 minimumSize: const Size(double.infinity, 52),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), 
                 elevation: 4, 
-                shadowColor: AppColor.secondary.withOpacity(0.4)
+                shadowColor: AppColor.secondary.withValues(alpha:0.4)
             ),
             onPressed: () {
                log("İletişime Geç butonuna tıklandı: ${dietitian.user?.name}");

@@ -79,9 +79,8 @@ class Dietitian {
   final String updatedAt;
   final String? deletedAt;
   final User? user;
-  // Bu listelerin detay endpoint'inde geldiğini varsayıyoruz
-  final List<ClientData> client; // Varsayılan olarak boş liste atandı
-  final List<SubscriptionPlansModel> subscriptionPlans; // Varsayılan olarak boş liste atandı
+  final List<ClientData> client; 
+  final List<SubscriptionPlansModel> subscriptionPlans; 
 
   Dietitian({
     required this.id,

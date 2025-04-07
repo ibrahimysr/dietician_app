@@ -76,13 +76,13 @@ class _DietitianListScreenState extends State<DietitianListScreen> {
         ),
         backgroundColor: AppColor.primary,
         elevation: 3,
-        shadowColor: AppColor.primary.withOpacity(0.3),
+        shadowColor: AppColor.primary.withValues(alpha:0.3),
         iconTheme: IconThemeData(color: AppColor.white),
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColor.white, AppColor.grey!.withOpacity(0.3)],
+            colors: [AppColor.white, AppColor.grey!.withValues(alpha:0.3)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -180,7 +180,7 @@ class _DietitianListScreenState extends State<DietitianListScreen> {
     return Card(
       margin: const EdgeInsets.only(bottom: 20.0),
       elevation: 5,
-      shadowColor: AppColor.black.withOpacity(0.1),
+      shadowColor: AppColor.black.withValues(alpha:0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -197,7 +197,7 @@ class _DietitianListScreenState extends State<DietitianListScreen> {
                 children: [
                   CircleAvatar(
                     radius: 32,
-                    backgroundColor: AppColor.secondary.withOpacity(0.1),
+                    backgroundColor: AppColor.secondary.withValues(alpha:0.1),
                     backgroundImage:
                         (profilePhotoUrl != null && profilePhotoUrl.isNotEmpty)
                             ? NetworkImage(profilePhotoUrl)
@@ -244,7 +244,7 @@ class _DietitianListScreenState extends State<DietitianListScreen> {
             Divider(
               height: 1,
               thickness: 1,
-              color: AppColor.grey?.withOpacity(0.8),
+              color: AppColor.grey?.withValues(alpha:0.8),
               indent: 16,
               endIndent: 16,
             ),
@@ -258,7 +258,7 @@ class _DietitianListScreenState extends State<DietitianListScreen> {
                     icon: Icons.star_border_rounded,
                     text: "${dietitian.experienceYears} Yıl Deneyim",
                     iconColor: Colors.orangeAccent,
-                    textColor: AppColor.black.withOpacity(0.7),
+                    textColor: AppColor.black.withValues(alpha:0.7),
                   ),
                   _buildInfoChip(
                     icon: Icons.payments_outlined,
