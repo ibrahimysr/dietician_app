@@ -108,7 +108,6 @@ class _AllFoodsScreenState extends State<AllFoodsScreen> {
           IconButton(
             icon: Icon(Icons.add_circle_outline, color: AppColor.primary),
             onPressed: () {
-              // Add new food action
             },
           ),
         ],

@@ -113,28 +113,19 @@ class Goal {
   }
 
 double get calculatedProgress {
-  // ... (API yüzdesi kontrolü aynı) ...
 
   if (targetValue == null || currentValue == null) return 0.0;
 
-  // Hedefin azaltma mı artırma mı olduğunu anlamaya çalış
-  // Kesin yol: Kategoriye bakmak ('weight', 'measurement' genellikle azaltmadır)
-  // Veya target < initialValue (initial yoksa zor)
-  // Şimdilik basit varsayım: Eğer target < current ise azaltma olabilir
+  
    bool isLikelyReduction = targetValue! < currentValue!;
 
    if (isLikelyReduction) {
-      // Azaltma: Hedefe ne kadar yaklaşıldı?
-      // Eğer current <= target ise %100 (1.0)
+      
       if (currentValue! <= targetValue!) return 1.0;
-      // Başlangıç değeri olmadan yüzdesel hesap zor.
-      // Tersine bir mantık: Hedef değere ne kadar kaldı? (1.0 - YaklaşmaOranı)
-      // Ama yaklaşma oranını bilmiyoruz.
-      // Belki sadece 0.0 veya 1.0 dönebiliriz.
-       return 0.0; // Veya 0.5 gibi sabit bir değer? Kafa karıştırıcı.
+     
+       return 0.0; 
    } else {
-      // Artırma: Mevcut / Hedef
-      if (targetValue == 0) return currentValue! >= 0 ? 1.0 : 0.0; // Hedef 0 ise
+      if (targetValue == 0) return currentValue! >= 0 ? 1.0 : 0.0; 
       return (currentValue! / targetValue!).clamp(0.0, 1.0);
    }
 }

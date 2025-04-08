@@ -34,7 +34,6 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
 
-    // Animasyonu otomatik başlat
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _animationController.forward();
@@ -50,7 +49,9 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return AppBar( 
+
+      iconTheme: IconThemeData(color: AppColor.white),
       elevation: 0,
       backgroundColor: Colors.transparent,
       flexibleSpace: Container(

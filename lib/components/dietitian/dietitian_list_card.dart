@@ -29,7 +29,6 @@ class DietitianListCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 20.0),
       elevation: 0,
       color: AppColor.grey,
-      //shadowColor: AppColor.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),

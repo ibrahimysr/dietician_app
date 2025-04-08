@@ -1,4 +1,3 @@
-// recipe_details_page.dart
 import 'package:dietician_app/components/recipes/recipe_detail/dietitian_details.dart';
 import 'package:dietician_app/components/recipes/recipe_detail/ingredients_list.dart';
 import 'package:dietician_app/components/recipes/recipe_detail/instructions_list.dart';
