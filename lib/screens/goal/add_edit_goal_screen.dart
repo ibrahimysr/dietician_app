@@ -1,18 +1,17 @@
-// screens/goal/add_edit_goal_screen.dart
 
 import 'package:dietician_app/core/utils/parsing.dart';
 import 'package:flutter/material.dart';
 import 'package:dietician_app/models/goal_model.dart';
 import 'package:dietician_app/core/theme/color.dart';
-import 'package:dietician_app/core/theme/textstyle.dart';
-import 'package:dietician_app/services/goal/goal_service.dart'; // Servisi ekle
-import 'package:dietician_app/core/utils/auth_storage.dart'; // ID ve Token için
-import 'package:intl/intl.dart'; // Tarih formatlama ve seçme için
+import 'package:dietician_app/services/goal/goal_service.dart'; 
+import 'package:dietician_app/core/utils/auth_storage.dart'; 
+import 'package:intl/intl.dart'; 
 
 class AddEditGoalScreen extends StatefulWidget {
-  final Goal? goal; // Düzenleme için mevcut hedef, ekleme için null
+  final Goal? goal; 
+  final int dietitianId;
 
-  const AddEditGoalScreen({super.key, this.goal});
+  const AddEditGoalScreen({super.key, this.goal, required this.dietitianId});
 
   @override
   State<AddEditGoalScreen> createState() => _AddEditGoalScreenState();
@@ -20,25 +19,22 @@ class AddEditGoalScreen extends StatefulWidget {
 
 class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
   final _formKey = GlobalKey<FormState>();
-  final GoalService _goalService = GoalService(); // Servisi oluştur
+  final GoalService _goalService = GoalService(); 
   bool get _isEditing => widget.goal != null;
   bool _isLoading = false;
 
-  // Form Controllerları
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   late TextEditingController _targetValueController;
   late TextEditingController _currentValueController;
   late TextEditingController _unitController;
 
-  // Seçilebilir Değerler
   String? _selectedCategory;
   String? _selectedStatus;
   String? _selectedPriority;
   DateTime? _selectedStartDate;
   DateTime? _selectedTargetDate;
 
-  // Sabit listeler (API'den gelmiyorsa)
   final List<String> _categories = ['habit', 'measurement', 'weight', 'nutrition', 'other'];
   final List<String> _statuses = ['pending', 'in_progress', 'completed', 'failed', 'cancelled'];
   final List<String> _priorities = ['low', 'medium', 'high'];
@@ -46,7 +42,6 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
   @override
   void initState() {
     super.initState();
-    // Controller'ları ve başlangıç değerlerini ata
     _titleController = TextEditingController(text: widget.goal?.title ?? '');
     _descriptionController = TextEditingController(text: widget.goal?.description ?? '');
     _targetValueController = TextEditingController(text: widget.goal?.targetValue?.toString() ?? '');
@@ -58,7 +53,6 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
     _selectedStartDate = widget.goal?.startDate;
     _selectedTargetDate = widget.goal?.targetDate;
 
-     // Başlangıçta category veya status seçili değilse varsayılan ata (isteğe bağlı)
      if (_selectedCategory == null && _categories.isNotEmpty) _selectedCategory = _categories.first;
      if (_selectedStatus == null && _statuses.isNotEmpty) _selectedStatus = _statuses.first;
      if (_selectedPriority == null && _priorities.isNotEmpty) _selectedPriority = _priorities.first;
@@ -66,7 +60,6 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
 
   @override
   void dispose() {
-    // Controller'ları dispose et
     _titleController.dispose();
     _descriptionController.dispose();
     _targetValueController.dispose();
@@ -92,13 +85,11 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
        setState(() {
          if (isStartDate) {
            _selectedStartDate = picked;
-           // Eğer hedef tarih başlangıçtan önceyse, hedef tarihi başlangıç yap
            if (_selectedTargetDate != null && _selectedTargetDate!.isBefore(picked)) {
              _selectedTargetDate = picked;
            }
          } else {
            _selectedTargetDate = picked;
-            // Eğer başlangıç tarihi hedeften sonraysa, başlangıcı hedef yap
             if (_selectedStartDate != null && _selectedStartDate!.isAfter(picked)) {
              _selectedStartDate = picked;
            }
@@ -110,9 +101,9 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
 
   Future<void> _saveGoal() async {
     if (!_formKey.currentState!.validate()) {
-      return; // Form geçerli değilse dur
+      return; 
     }
-    if (_isLoading) return; // Zaten işlem yapılıyorsa dur
+    if (_isLoading) return; 
 
     setState(() { _isLoading = true; });
 
@@ -125,35 +116,29 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
      }
 
 
-    // Form verilerini Map'e topla
     Map<String, dynamic> goalData = {
       'client_id': clientId,
-      // dietitian_id backend'de otomatik atanabilir veya burada gönderilebilir
+      'dietitian_id': widget.dietitianId,
       'title': _titleController.text.trim(),
       'description': _descriptionController.text.trim(),
-      // Sayıları parse et (API number bekliyorsa)
       'target_value': parseDouble(_targetValueController.text),
       'current_value': parseDouble(_currentValueController.text),
       'unit': _unitController.text.trim(),
       'category': _selectedCategory,
-      // Tarihleri formatla (API YYYY-MM-DD bekliyorsa)
       if (_selectedStartDate != null) 'start_date': DateFormat('yyyy-MM-dd').format(_selectedStartDate!),
       if (_selectedTargetDate != null) 'target_date': DateFormat('yyyy-MM-dd').format(_selectedTargetDate!),
       'status': _selectedStatus,
       'priority': _selectedPriority,
-      // progress_percentage genellikle backend'de hesaplanır, göndermeye gerek yok
-      // 'progress_percentage': null,
     };
 
-    // Null olabilecek ama boş string olarak gönderilmemesi gereken alanları temizle
     goalData.removeWhere((key, value) =>
         value == null ||
-        (value is String && value.isEmpty && ['title', 'category', 'status'].contains(key) == false) // Gerekli stringler hariç boşları sil
+        (value is String && value.isEmpty && ['title', 'category', 'status'].contains(key) == false) 
     );
 
 
     try {
-      dynamic response; // Hem GoalResponse hem SimpleApiResponse olabilir
+      dynamic response; 
 
       if (_isEditing) {
         response = await _goalService.updateGoal(
@@ -174,7 +159,7 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
              SnackBar(content: Text(response.message), backgroundColor: Colors.green)
           );
-          Navigator.pop(context, true); // Başarılı olduğunu belirtmek için true dön
+          Navigator.pop(context, true);
        } else {
           ScaffoldMessenger.of(context).showSnackBar(
              SnackBar(content: Text(response.message), backgroundColor: Colors.red)
@@ -231,7 +216,6 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
                       controller: _targetValueController,
                      decoration: InputDecoration(labelText: 'Hedef Değer', border: OutlineInputBorder()),
                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                     // Validator eklenebilir
                    ),
                  ),
                   SizedBox(width: 10),
@@ -240,7 +224,6 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
                      controller: _currentValueController,
                      decoration: InputDecoration(labelText: 'Mevcut Değer', border: OutlineInputBorder()),
                       keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      // Validator eklenebilir
                    ),
                  ),
                ],
@@ -251,13 +234,12 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
                 decoration: InputDecoration(labelText: 'Birim (örn: kg, adım, cm, %)', border: OutlineInputBorder()),
               ),
              SizedBox(height: 16),
-              // --- Dropdown Seçimleri ---
               _buildDropdown<String>(
                  label: 'Kategori *',
                  value: _selectedCategory,
                  items: _categories,
                  onChanged: (value) => setState(() => _selectedCategory = value),
-                 itemText: (item) => item, // Direkt string'i göster
+                 itemText: (item) => item, 
               ),
                SizedBox(height: 16),
                _buildDropdown<String>(
@@ -265,18 +247,17 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
                  value: _selectedStatus,
                  items: _statuses,
                  onChanged: (value) => setState(() => _selectedStatus = value),
-                 itemText: (item) => _getStatusText(item), // Daha anlaşılır metin
+                 itemText: (item) => _getStatusText(item), 
                ),
                 SizedBox(height: 16),
                 _buildDropdown<String>(
-                 label: 'Öncelik', // Zorunlu olmayabilir
+                 label: 'Öncelik', 
                  value: _selectedPriority,
                  items: _priorities,
                  onChanged: (value) => setState(() => _selectedPriority = value),
-                 itemText: (item) => item.capitalize(), // İlk harfi büyük yap
+                 itemText: (item) => item.capitalize(), 
                ),
                SizedBox(height: 16),
-               // --- Tarih Seçimleri ---
                Row(
                  children: [
                     Expanded(
@@ -303,7 +284,7 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
             ElevatedButton.icon(
                icon: Icon(_isLoading ? Icons.hourglass_empty : Icons.save),
                label: Text(_isLoading ? "Kaydediliyor..." : (_isEditing ? "Güncelle" : "Oluştur")),
-               onPressed: _isLoading ? null : _saveGoal, // Yüklenirken butonu devre dışı bırak
+               onPressed: _isLoading ? null : _saveGoal, 
                style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.primary,
                   foregroundColor: Colors.white,
@@ -316,13 +297,12 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
     );
   }
 
-  // Dropdown widget'ı oluşturmak için yardımcı metot
    Widget _buildDropdown<T>({
      required String label,
      required T? value,
      required List<T> items,
      required ValueChanged<T?> onChanged,
-     required String Function(T) itemText, // Öğeyi metne çeviren fonksiyon
+     required String Function(T) itemText, 
      String? hint,
    }) {
      return DropdownButtonFormField<T>(
@@ -344,7 +324,6 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
      );
    }
 
-  // Tarih alanı için yardımcı metot
   Widget _buildDatePickerField({
     required BuildContext context,
     required String label,
@@ -375,7 +354,6 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
      );
    }
 
-    // Status metinleri için (AllGoalsScreen'den kopyalandı)
     String _getStatusText(String status) {
       switch(status.toLowerCase()){
         case 'in_progress': return "Devam Ediyor";
@@ -389,7 +367,6 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
 }
 
 
-// String extension for capitalize (isteğe bağlı)
 extension StringExtension on String {
     String capitalize() {
       if (this.isEmpty) return "";

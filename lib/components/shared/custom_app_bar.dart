@@ -93,4 +93,90 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
       ),
     );
   }
+} 
+
+
+
+
+class AnimatedAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Animation<double> fadeAnimation;
+  final String greeting;
+  final DateTime currentDate;
+  final VoidCallback onMenuPressed;
+  final VoidCallback onNotificationsPressed;
+
+  const AnimatedAppBar({
+    super.key,
+    required this.fadeAnimation,
+    required this.greeting,
+    required this.currentDate,
+    required this.onMenuPressed,
+    required this.onNotificationsPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColor.primary, AppColor.primary.withOpacity(0.7)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+        ),
+      ),
+      leading: IconButton(
+        icon: Icon(Icons.menu, color: AppColor.white),
+        onPressed: onMenuPressed,
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.notifications_outlined, color: AppColor.white),
+          onPressed: onNotificationsPressed,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: CircleAvatar(
+            backgroundColor: AppColor.white,
+            radius: 18,
+            child: Lottie.asset(
+              AppAssets.loginAnimation,
+              width: 30,
+              height: 30,
+            ),
+          ),
+        ),
+      ],
+      centerTitle: false,
+      title: FadeTransition(
+        opacity: fadeAnimation,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "$greeting İbrahim 👋",
+              style: AppTextStyles.heading3.copyWith(
+                color: AppColor.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "${currentDate.day}/${currentDate.month}/${currentDate.year}",
+              style: AppTextStyles.body1Medium.copyWith(color: AppColor.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

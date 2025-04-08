@@ -1,5 +1,3 @@
-// screens/goal/all_goals_screen.dart (Yeni dosya)
-
 import 'package:dietician_app/screens/goal/add_edit_goal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dietician_app/models/goal_model.dart';
@@ -9,11 +7,11 @@ import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/utils/formatters.dart';
-import 'package:intl/intl.dart'; // Tarih formatlama
-// import 'package:dietician_app/screens/goal/add_edit_goal_screen.dart'; // Henüz oluşturmadık ama gerekecek
+
 
 class AllGoalsScreen extends StatefulWidget {
-  const AllGoalsScreen({super.key});
+  final int dietitianId;
+  const AllGoalsScreen({super.key, required this.dietitianId});
 
   @override
   State<AllGoalsScreen> createState() => _AllGoalsScreenState();
@@ -62,11 +60,9 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
       if (!mounted) return;
       if (response.success) {
         _allGoals = response.data;
-        // Hedefleri durum veya tarihe göre sıralayabiliriz
         _allGoals.sort((a, b) {
            int statusCompare = _goalStatusOrder(a.status).compareTo(_goalStatusOrder(b.status));
            if(statusCompare != 0) return statusCompare;
-           // Aynı statüdeyse hedef tarihe göre (varsa, en yakın olan üste)
            return (a.targetDate ?? DateTime(9999)).compareTo(b.targetDate ?? DateTime(9999));
         });
       } else {
@@ -80,11 +76,10 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
     }
   }
 
-  // Sıralama için yardımcı
   int _goalStatusOrder(String status){
      switch(status.toLowerCase()){
         case 'in_progress': return 0;
-        case 'pending': return 1; // veya 'not_started'
+        case 'pending': return 1; 
         case 'completed': return 2;
         case 'failed': return 3;
         case 'cancelled': return 4;
@@ -93,7 +88,6 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
   }
 
 
-  // --- Silme İşlemi ---
   Future<void> _handleDeleteGoal(int goalId, int index) async {
      final confirmed = await showDialog<bool>(
       context: context,
@@ -116,7 +110,6 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
     );
      if (confirmed != true) return;
 
-     // Yükleniyor...
      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hedef siliniyor...')));
 
      try {
@@ -136,15 +129,13 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
      }
   }
 
-  // --- Yeni Hedef Ekleme/Düzenleme Ekranına Gitme ---
   void _navigateToAddEditGoal({Goal? goal}) async {
      final result = await Navigator.push(
        context,
        MaterialPageRoute(
-         builder: (context) => AddEditGoalScreen(goal: goal), // Bu ekranı oluşturmamız lazım
+         builder: (context) => AddEditGoalScreen(goal: goal,dietitianId: widget.dietitianId,), 
        ),
      );
-     // Eğer ekleme/düzenleme başarılıysa listeyi yenile
      if (result == true && mounted) {
         _fetchGoals();
      }
@@ -188,7 +179,6 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                         itemCount: _allGoals.length,
                         itemBuilder: (context, index) {
                           final goal = _allGoals[index];
-                          // Ana ekrandakine benzer bir kart kullanalım ama daha fazla detay ve aksiyon içerebilir
                           return _buildDetailedGoalItem(goal, index);
                         },
                       ),
@@ -196,17 +186,17 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
     );
   }
 
-  // Tüm hedefler ekranı için daha detaylı kart
   Widget _buildDetailedGoalItem(Goal goal, int index) {
     double progress = goal.calculatedProgress;
-    Color progressColor = _getStatusColor(goal.status); // Status'e göre renk
+    Color progressColor = _getStatusColor(goal.status); 
     String statusText = _getStatusText(goal.status);
 
     return Card(
-      elevation: 2.0,
+      elevation: 0.0,
+      color: AppColor.grey,
       margin: EdgeInsets.only(bottom: context.getDynamicHeight(1.5)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: InkWell( // Tıklanınca düzenlemeye gitsin
+      child: InkWell( 
         onTap: () => _navigateToAddEditGoal(goal: goal),
         borderRadius: BorderRadius.circular(10),
         child: Padding(
@@ -227,12 +217,11 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                            if(goal.description != null && goal.description!.isNotEmpty)
                               Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
-                                child: Text(goal.description!, style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight)),
+                                child: Text(goal.description!, style: AppTextStyles.body2Regular.copyWith(color: AppColor.black)),
                               ),
                        ],
                      ),
                    ),
-                   // Durum ve Silme Butonu
                    Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -257,7 +246,6 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                 ],
               ),
               SizedBox(height: 12),
-              // İlerleme (Sadece in_progress ise göster)
               if(goal.status.toLowerCase() == 'in_progress' && goal.targetValue != null && goal.targetValue! > 0) ...[
                   Row(
                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -281,12 +269,11 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                   ),
               ],
               SizedBox(height: 8),
-               // Tarihler
                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                     if(goal.startDate != null) Text("Başl: ${formatDate(goal.startDate!, format: 'dd MMM yy')}", style: AppTextStyles.body1Medium.copyWith(color: AppColor.greyLight)),
-                     if(goal.targetDate != null) Text("Hedef: ${formatDate(goal.targetDate!, format: 'dd MMM yy')}", style: AppTextStyles.body1Medium.copyWith(color: AppColor.greyLight)),
+                     if(goal.startDate != null) Text("Başl: ${formatDate(goal.startDate!, format: 'dd MMM yy')}", style: AppTextStyles.body1Medium.copyWith(color: AppColor.black)),
+                     if(goal.targetDate != null) Text("Hedef: ${formatDate(goal.targetDate!, format: 'dd MMM yy')}", style: AppTextStyles.body1Medium.copyWith(color: AppColor.black)),
                   ],
                )
             ],
@@ -296,14 +283,12 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
     );
   }
 
-  // Helper metotlar (Kategori ikonu, durum rengi, durum metni)
    IconData _getGoalCategoryIcon(String category) {
-     // API'den gelen category değerlerine göre ikon döndür
      switch (category.toLowerCase()) {
        case 'weight': return Icons.monitor_weight_outlined;
-       case 'habit': return Icons.directions_run; // Veya steps vs.
+       case 'habit': return Icons.directions_run; 
        case 'nutrition': return Icons.restaurant_menu;
-       case 'measurement': return Icons.straighten; // Bel çevresi vs.
+       case 'measurement': return Icons.straighten; 
        default: return Icons.flag_outlined;
      }
    }
@@ -314,8 +299,8 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
         case 'pending': return Colors.orange.shade700;
         case 'completed': return Colors.green.shade600;
         case 'failed': return Colors.redAccent;
-        case 'cancelled': return AppColor.greyLight!;
-        default: return AppColor.greyLight!;
+        case 'cancelled': return AppColor.greyLight;
+        default: return AppColor.greyLight;
      }
    }
 
@@ -326,7 +311,7 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
         case 'completed': return "Tamamlandı";
         case 'failed': return "Başarısız";
         case 'cancelled': return "İptal Edildi";
-        default: return status; // Bilinmeyen durumu olduğu gibi göster
+        default: return status; 
      }
    }
 

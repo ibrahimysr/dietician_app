@@ -31,7 +31,7 @@ class DailyComparisonSection extends StatelessWidget {
 
     if (comparisonErrorMessage != null && dailyComparisonData == null) {
       return Card(
-        color: AppColor.grey?.withAlpha(100),
+        color: AppColor.grey,
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -72,9 +72,9 @@ class DailyComparisonSection extends StatelessWidget {
             : Colors.green;
 
     return Card(
-      elevation: 3.0,
+      elevation: 0.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: AppColor.white,
+      color: AppColor.grey,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
