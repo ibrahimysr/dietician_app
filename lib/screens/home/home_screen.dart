@@ -8,12 +8,17 @@ import 'package:dietician_app/core/generated/asset.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
 import 'package:dietician_app/core/utils/auth_storage.dart';
+import 'package:dietician_app/core/utils/formatters.dart';
+import 'package:dietician_app/core/utils/parsing.dart';
 import 'package:dietician_app/models/compare_diet_plan_model.dart';
 import 'package:dietician_app/models/diet_plan_model.dart';
 import 'package:dietician_app/models/food_model.dart';
+import 'package:dietician_app/models/goal_model.dart';
+import 'package:dietician_app/screens/goal/all_goal_screen.dart';
 import 'package:dietician_app/services/diet_plan/diet_plan_service.dart';
 import 'package:dietician_app/services/food/food_service.dart';
 import 'package:dietician_app/services/food_log/food_log_service.dart';
+import 'package:dietician_app/services/goal/goal_service.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -28,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final DietPlanService _dietPlanService = DietPlanService();
   final FoodService _foodService = FoodService();
   final FoodLogService _foodLogService = FoodLogService();
+  final GoalService _goalService = GoalService();
 
   bool _isDietPlanLoading = true;
   String? _dietPlanErrorMessage;
@@ -47,6 +53,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   late DateTime _currentDate;
   late String _greeting;
+
+  bool _isLoadingGoals = true;
+  String? _goalErrorMessage;
+  List<Goal> _goals = [];
 
   @override
   void initState() {
@@ -87,18 +97,65 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       _isDietPlanLoading = true;
       _isFoodLoading = true;
       _isLoadingComparison = true;
+      _isLoadingGoals = true;
       _dietPlanErrorMessage = null;
       _foodErrorMessage = null;
       _comparisonErrorMessage = null;
+      _goalErrorMessage = null;
     });
 
     await Future.wait([
       _fetchDietPlans(),
       _fetchFoods(),
       _fetchDailyComparison(),
+      _fetchGoals(),
     ]);
 
     if (mounted) {}
+  }
+
+  Future<void> _fetchGoals() async {
+    setState(() {
+      _goalErrorMessage = null;
+    });
+
+    final token = await AuthStorage.getToken();
+    if (token == null) {
+      if (mounted)
+        setState(() {
+          _isLoadingGoals = false;
+          _goalErrorMessage = "Oturum bulunamadı (Hedefler).";
+        });
+      return;
+    }
+    final int? clientId = await AuthStorage.getId();
+    if (clientId == null || clientId == 0) {
+      if (mounted)
+        setState(() {
+          _isLoadingGoals = false;
+          _goalErrorMessage = "Kullanıcı ID bulunamadı (Hedefler).";
+        });
+      return;
+    }
+
+    try {
+      final response =
+          await _goalService.getGoals(token: token, clientId: clientId);
+      if (!mounted) return;
+      if (response.success) {
+        _goals = response.data;
+      } else {
+        _goalErrorMessage = response.message;
+      }
+    } catch (e) {
+      if (!mounted) return;
+      _goalErrorMessage = "Hedefler alınırken hata oluştu: ${e.toString()}";
+    } finally {
+      if (mounted)
+        setState(() {
+          _isLoadingGoals = false;
+        });
+    }
   }
 
   Future<void> _fetchDietPlans() async {
@@ -246,7 +303,40 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         });
       }
     }
-  }
+  } 
+
+  Future<void> _markGoalAsCompleted(int goalId) async {
+   final token = await AuthStorage.getToken();
+   if (token == null) {
+      print("Tamamlama için token bulunamadı.");
+      return;
+   }
+   try {
+      print("Hedef $goalId tamamlandı olarak işaretleniyor...");
+      await _goalService.updateGoal(
+         token: token,
+         goalId: goalId,
+         updateData: {'status': 'completed'}
+      );
+      print("Hedef $goalId durumu güncellendi (veya API çağrısı yapıldı).");
+   } catch (e) {
+      print("Hedef tamamlandı olarak işaretlenirken hata: $e");
+   }
+} 
+
+
+double calculateProgressManually({required double currentValue, double? targetValue, double? initialValue}) {
+     if (targetValue == null) return 0.0;
+     if (targetValue == (initialValue ?? currentValue) ) return (currentValue == targetValue) ? 1.0 : 0.0; 
+
+     bool targetReached = false;
+     if(targetValue < (initialValue ?? currentValue)) { 
+        targetReached = currentValue <= targetValue;
+     } else { 
+        targetReached = currentValue >= targetValue;
+     }
+     return targetReached ? 1.0 : 0.0; 
+}
 
   @override
   Widget build(BuildContext context) {
@@ -254,6 +344,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       if (_dietPlanErrorMessage != null) "Diyet Planı: $_dietPlanErrorMessage",
       if (_foodErrorMessage != null) "Besinler: $_foodErrorMessage",
       if (_comparisonErrorMessage != null) "Özet: $_comparisonErrorMessage",
+      if (_goalErrorMessage != null) "Hedefler: $_goalErrorMessage",
     ];
     String? combinedErrorMessage =
         errorMessages.isNotEmpty ? errorMessages.join('\n') : null;
@@ -261,9 +352,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     bool isInitialLoading = _isDietPlanLoading &&
         _isFoodLoading &&
         _isLoadingComparison &&
+        _isLoadingGoals &&
         _allDietPlans.isEmpty &&
         _allFoods.isEmpty &&
-        _dailyComparisonData == null;
+        _dailyComparisonData == null &&
+        _goals.isEmpty;
 
     return Scaffold(
       backgroundColor: AppColor.white,
@@ -318,6 +411,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           dailyComparisonData: _dailyComparisonData,
                           onRetry: _fetchDailyComparison,
                         ),
+                        SizedBox(height: context.getDynamicHeight(3)),
+                        _buildGoalsSection(),
                         SizedBox(height: context.getDynamicHeight(3)),
                         FoodPreviewSection(
                           isLoading: _isFoodLoading,
@@ -393,6 +488,243 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
   }
+
+  Widget _buildGoalsSection() {
+    final activeGoals = _goals
+        .where((g) => g.status.toLowerCase() == 'in_progress')
+        .take(3)
+        .toList();
+    final hasMoreGoals = _goals.length > 0 ||
+        _goals.any((g) => g.status.toLowerCase() != 'in_progress');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Aktif Hedefler", style: AppTextStyles.heading4),
+            if (hasMoreGoals)
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => AllGoalsScreen()))
+                      .then((_) => _fetchGoals());
+                },
+                style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact),
+                child: Text("Tümünü Gör",
+                    style: AppTextStyles.body1Medium
+                        .copyWith(color: AppColor.primary)),
+              ),
+          ],
+        ),
+        SizedBox(height: context.getDynamicHeight(1.5)),
+        if (_isLoadingGoals)
+          Center(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: CircularProgressIndicator(
+                      color: AppColor.primary.withOpacity(0.7))))
+        else if (_goalErrorMessage != null)
+          Center(
+              child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text("Hedefler yüklenemedi.",
+                      style: TextStyle(color: Colors.redAccent))))
+        else if (_goals.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 16),
+            decoration: BoxDecoration(
+                color: AppColor.grey?.withAlpha(50), 
+                borderRadius: BorderRadius.circular(10),
+                border:
+                    Border.all(color: AppColor.grey!.withAlpha(100), width: 1)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.flag_outlined, color: AppColor.greyLight, size: 20),
+                SizedBox(width: 10),
+                Text(
+                  "Şu anda aktif bir hedefiniz bulunmuyor.",
+                  style: AppTextStyles.body1Regular
+                      .copyWith(color: AppColor.greyLight),
+                ),
+              ],
+            ),
+          )
+        else if (activeGoals.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 16),
+            decoration: BoxDecoration(
+              color: AppColor.grey?.withAlpha(50),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              "Şu anda devam eden bir hedefiniz yok.\nTüm hedeflerinizi görmek için 'Tümünü Gör'e dokunun.",
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body1Regular
+                  .copyWith(color: AppColor.greyLight),
+            ),
+          )
+        else
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: activeGoals.length,
+            itemBuilder: (context, index) {
+              return _buildHomeScreenGoalItem(activeGoals[index]);
+            },
+          )
+      ],
+    );
+  }
+
+  Widget _buildHomeScreenGoalItem(Goal goal) {
+    double progress = goal.calculatedProgress;
+    Color progressColor =
+        Color.lerp(Colors.orange, AppColor.primary, progress) ??
+            AppColor.primary;
+    String currentValueStr = goal.currentValue?.toStringAsFixed(0) ?? '-';
+    String targetValueStr = goal.targetValue?.toStringAsFixed(0) ?? '-';
+    String unitStr = goal.unit ?? '';
+
+    return Card(
+      elevation: 2.0,
+      margin: EdgeInsets.only(bottom: context.getDynamicHeight(1.5)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.flag_outlined, color: progressColor, size: 22),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(goal.title,
+                      style: AppTextStyles.body1Medium
+                          .copyWith(fontWeight: FontWeight.w600)),
+                ),
+                IconButton(
+                  icon: Icon(Icons.edit_note,
+                      color: AppColor.secondary, size: 24),
+                  tooltip: "İlerlemeyi Güncelle",
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  onPressed: () =>
+                      _showUpdateProgressDialog(goal), 
+                )
+              ],
+            ),
+            SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "$currentValueStr / $targetValueStr $unitStr",
+                  style: AppTextStyles.body1Regular
+                      .copyWith(color: AppColor.black.withValues(alpha: 0.8)),
+                ),
+                Text(
+                  "${(progress * 100).toStringAsFixed(0)}%", 
+                  style: AppTextStyles.body1Medium.copyWith(
+                      color: progressColor, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(height: 6),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: LinearProgressIndicator(
+                value: progress,
+                minHeight: 7,
+                valueColor: AlwaysStoppedAnimation<Color>(progressColor),
+                backgroundColor: progressColor.withOpacity(0.2),
+              ),
+            ),
+            if (targetValueStr.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(targetValueStr,
+                        style: AppTextStyles.body1Medium
+                            .copyWith(color: AppColor.greyLight))),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showUpdateProgressDialog(Goal goal) {
+   showDialog<double>(
+      context: context,
+      builder: (dialogContext) {
+         return _UpdateGoalProgressDialog(
+            goal: goal,
+            onSave: (newValue) async { 
+               Navigator.pop(dialogContext); 
+
+                showDialog(context: context, barrierDismissible: false, builder: (ctx)=> Center(child: CircularProgressIndicator()));
+
+               final token = await AuthStorage.getToken();
+               if(token == null) {
+                   Navigator.pop(context); 
+                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Oturum bulunamadı"), backgroundColor: Colors.red));
+                   return;
+               }
+
+               GoalResponse updateResponse;
+               try {
+                  updateResponse = await _goalService.updateGoal(
+                     token: token,
+                     goalId: goal.id,
+                     updateData: {'current_value': newValue}
+                  );
+                  Navigator.pop(context); 
+                  if (!mounted) return;
+
+                  if(updateResponse.success){
+                      Goal? updatedGoal = updateResponse.data;
+                      bool shouldMarkCompleted = false;
+                      if (updatedGoal != null && updatedGoal.calculatedProgress >= 1.0 && updatedGoal.status.toLowerCase() == 'in_progress') {
+                          shouldMarkCompleted = true;
+                      } else if (updatedGoal == null) { 
+                           double tempProgress = goal.targetValue != null && goal.targetValue != 0
+                                                ? (newValue / goal.targetValue!).clamp(0.0, 1.0) 
+                                                : (newValue >= (goal.targetValue ?? 0) ? 1.0 : 0.0); 
+                           if (tempProgress >= 1.0 && goal.status.toLowerCase() == 'in_progress') {
+                               shouldMarkCompleted = true;
+                           }
+                      }
+
+                      if (shouldMarkCompleted) {
+                         await _markGoalAsCompleted(goal.id);
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("İlerleme güncellendi."), backgroundColor: Colors.green));
+                       await _fetchGoals(); 
+
+                  } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(updateResponse.message), backgroundColor: Colors.red));
+                  }
+               } catch(e){
+                    Navigator.pop(context);
+                     if (!mounted) return;
+                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Güncelleme hatası: $e"), backgroundColor: Colors.red));
+               }
+            },
+         ); 
+      },
+   );
+  
+}
 }
 
 Widget _buildSearchBar() {
@@ -412,4 +744,97 @@ Widget _buildSearchBar() {
       onChanged: (value) {},
     ),
   );
+}
+
+
+
+class _UpdateGoalProgressDialog extends StatefulWidget {
+  final Goal goal;
+  final Function(double newValue) onSave;
+
+  const _UpdateGoalProgressDialog({
+    required this.goal,
+    required this.onSave,
+  });
+
+  @override
+  State<_UpdateGoalProgressDialog> createState() => _UpdateGoalProgressDialogState();
+}
+
+class _UpdateGoalProgressDialogState extends State<_UpdateGoalProgressDialog> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _valueController;
+
+  @override
+  void initState() {
+    super.initState();
+    _valueController = TextEditingController(
+      text: widget.goal.currentValue?.toStringAsFixed(
+        (widget.goal.unit?.toLowerCase() == 'adım' || (widget.goal.currentValue ?? 0) % 1 == 0) ? 0 : 1 
+      ) ?? ''
+    );
+  }
+
+  @override
+  void dispose() {
+    _valueController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      final newValue = parseDouble(_valueController.text); 
+      if (newValue != null) {
+        widget.onSave(newValue); 
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("İlerlemeyi Güncelle"),
+      content: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(widget.goal.title, style: AppTextStyles.body1Medium, textAlign: TextAlign.center),
+              SizedBox(height: 15),
+              TextFormField(
+                controller: _valueController,
+                decoration: InputDecoration(
+                  labelText: "Mevcut Değer (${widget.goal.unit ?? ''})",
+                  border: OutlineInputBorder(), 
+                ),
+                keyboardType: TextInputType.numberWithOptions(
+                   decimal: !(widget.goal.unit?.toLowerCase() == 'adım')
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Değer gerekli.';
+                  final val = parseDouble(value);
+                  if (val == null) return 'Geçerli bir sayı girin.';
+                  if (val < 0) return 'Değer negatif olamaz.';
+                  return null;
+                },
+                onFieldSubmitted: (_) => _submit(),
+              )
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context), 
+          child: Text("İptal"),
+        ),
+        ElevatedButton(
+          onPressed: _submit, 
+          child: Text("Kaydet"),
+          style: ElevatedButton.styleFrom(backgroundColor: AppColor.primary, foregroundColor: Colors.white),
+        )
+      ],
+    );
+  }
 }
