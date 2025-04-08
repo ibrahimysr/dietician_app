@@ -24,7 +24,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final DietPlanService _dietPlanService = DietPlanService();
   final FoodService _foodService = FoodService();
   final FoodLogService _foodLogService = FoodLogService();
@@ -42,10 +42,44 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _comparisonErrorMessage;
   DietComparisonData? _dailyComparisonData;
 
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
+  late DateTime _currentDate;
+  late String _greeting;
+
   @override
   void initState() {
     super.initState();
-    _fetchAllData();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: _animationController, curve: Curves.easeIn));
+
+    _setGreetingMessage();
+
+    _fetchAllData().then((_) {
+      if (mounted) {
+        _animationController.forward();
+      }
+    });
+  }
+
+  void _setGreetingMessage() {
+    _currentDate = DateTime.now();
+    final hour = _currentDate.hour;
+
+    if (hour < 12) {
+      _greeting = "Günaydın";
+    } else if (hour < 18) {
+      _greeting = "İyi Günler";
+    } else {
+      _greeting = "İyi Akşamlar";
+    }
   }
 
   Future<void> _fetchAllData() async {
@@ -233,22 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: AppColor.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: AppColor.primary),
-          onPressed: () {},
-        ),
-        actions: [
-          SizedBox(
-            width: 50,
-            height: 50,
-            child: Lottie.asset(AppAssets.loginAnimation),
-          ),
-        ],
-        backgroundColor: AppColor.white,
-        title: Text("Ana Sayfa", style: AppTextStyles.heading3),
-        centerTitle: true,
-      ),
+      appBar: _buildAnimatedAppBar(),
       body: Padding(
         padding: context.paddingNormal,
         child: RefreshIndicator(
@@ -276,8 +295,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : ListView(
                       children: [
-                        Text("Hoşgeldin İbrahim 👋",
-                            style: AppTextStyles.heading3),
                         SizedBox(height: context.getDynamicHeight(2)),
                         _buildSearchBar(),
                         SizedBox(height: context.getDynamicHeight(3)),
@@ -310,6 +327,68 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(height: context.getDynamicHeight(3)),
                       ],
                     ),
+        ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAnimatedAppBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColor.primary, AppColor.primary.withOpacity(0.7)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+        ),
+      ),
+      leading: IconButton(
+        icon: Icon(Icons.menu, color: AppColor.white),
+        onPressed: () {},
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.notifications_outlined, color: AppColor.white),
+          onPressed: () {},
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: CircleAvatar(
+            backgroundColor: AppColor.white,
+            radius: 18,
+            child: Lottie.asset(
+              AppAssets.loginAnimation,
+              width: 30,
+              height: 30,
+            ),
+          ),
+        ),
+      ],
+      centerTitle: false,
+      title: FadeTransition(
+        opacity: _fadeAnimation,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "$_greeting İbrahim 👋",
+              style: AppTextStyles.heading3.copyWith(
+                color: AppColor.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "${_currentDate.day}/${_currentDate.month}/${_currentDate.year}",
+              style: AppTextStyles.body1Medium.copyWith(color: AppColor.white),
+            ),
+          ],
         ),
       ),
     );

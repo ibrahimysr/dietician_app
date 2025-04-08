@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:dietician_app/components/dietitian/dietitian_list_card.dart';
 import 'package:dietician_app/components/dietitian/dietitian_list_empty_state.dart';
 import 'package:dietician_app/components/dietitian/dietitian_list_error_widget.dart';
+import 'package:dietician_app/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
 import 'package:dietician_app/core/utils/auth_storage.dart';
@@ -18,14 +19,18 @@ class DietitianListScreen extends StatefulWidget {
   State<DietitianListScreen> createState() => _DietitianListScreenState();
 }
 
-class _DietitianListScreenState extends State<DietitianListScreen> {
+class _DietitianListScreenState extends State<DietitianListScreen> with TickerProviderStateMixin {
   late Future<DietitianResponse> _dietitiansFuture;
-  final DietitiansService _dietitianService = DietitiansService();
+  final DietitiansService _dietitianService = DietitiansService(); 
 
+  
   @override
   void initState() {
-    super.initState();
-    _dietitiansFuture = _fetchDietitiansList();
+    super.initState(); 
+
+   
+    _dietitiansFuture = _fetchDietitiansList(); 
+
   }
 
   Future<DietitianResponse> _fetchDietitiansList() async {
@@ -67,16 +72,7 @@ class _DietitianListScreenState extends State<DietitianListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Diyetisyenleri Keşfet',
-          style: AppTextStyles.heading3.copyWith(color: AppColor.white),
-        ),
-        backgroundColor: AppColor.primary,
-        elevation: 3,
-        shadowColor: AppColor.primary.withValues(alpha: 0.3),
-        iconTheme: IconThemeData(color: AppColor.white),
-      ),
+      appBar:CustomAppBar(title: "Diyetisyenleri Keşfet"),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

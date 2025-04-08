@@ -19,6 +19,7 @@ class RecipeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.antiAlias,
+      color: AppColor.grey,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: BorderSide(color: AppColor.greyLight.withValues(alpha:0.2), width: 1),

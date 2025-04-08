@@ -48,6 +48,7 @@ dependencies:
   flutter_staggered_animations:
   collection: ^1.17.0 
   flutter_localization: ^0.3.2
+  animate_do: ^3.0.2
 
   
 dev_dependencies:

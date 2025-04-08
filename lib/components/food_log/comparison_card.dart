@@ -105,7 +105,7 @@ class ComparisonCard extends StatelessWidget {
               if (planned.items.isNotEmpty) ...[
                 Text(
                   "Planlanan Öğeler:",
-                  style: AppTextStyles.body2Medium.copyWith(color: AppColor.grey),
+                  style: AppTextStyles.body2Medium.copyWith(color: AppColor.black),
                 ),
                 ...planned.items.map((item) => _buildComparisonItemRow(item, isPlanned: true)).toList(),
                 SizedBox(height: 10),
@@ -113,7 +113,7 @@ class ComparisonCard extends StatelessWidget {
               if (logged.items.isNotEmpty) ...[
                 Text(
                   "Yenilen Öğeler:",
-                  style: AppTextStyles.body2Medium.copyWith(color: AppColor.grey),
+                  style: AppTextStyles.body2Medium.copyWith(color: AppColor.black),
                 ),
                 ...logged.items.map((item) => _buildComparisonItemRow(item, isPlanned: false)).toList(),
               ],

@@ -1,10 +1,10 @@
 import 'package:dietician_app/components/recipes/recipe_card.dart';
 import 'package:dietician_app/components/recipes/recipe_empty_state.dart';
 import 'package:dietician_app/components/recipes/recipe_error_widget.dart';
+import 'package:dietician_app/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/screens/recipes/recipes_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dietician_app/core/theme/color.dart';
-import 'package:dietician_app/core/theme/textstyle.dart';
 import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/services/recipes/recipes_service.dart';
 import 'package:dietician_app/models/recipes_model.dart';
@@ -64,15 +64,7 @@ class _RecipesPageState extends State<RecipesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.white,
-      appBar: AppBar(
-        title: Text(
-          'Sağlıklı Tarifler',
-          style: AppTextStyles.heading2.copyWith(color: AppColor.white),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColor.primary,
-        elevation: 4.0,
-      ),
+      appBar: CustomAppBar(title: "Sağlıklı Tarifler"),
       body: _buildBody(),
     );
   }
