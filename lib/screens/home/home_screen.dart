@@ -1,18 +1,21 @@
 import 'package:collection/collection.dart';
 import 'package:dietician_app/components/diet_plan/active_diet_plan.dart';
 import 'package:dietician_app/components/food/home_food_preview_section.dart';
+import 'package:dietician_app/components/food_log/home_daily_comparison_section.dart';
 import 'package:dietician_app/components/meal/home_todays_meals_section.dart';
-import 'package:dietician_app/core/utils/auth_storage.dart';
-import 'package:dietician_app/models/food_model.dart';
-import 'package:dietician_app/services/diet_plan/diet_plan_service.dart';
-import 'package:dietician_app/services/food/food_service.dart';
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/generated/asset.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
+import 'package:dietician_app/core/utils/auth_storage.dart';
+import 'package:dietician_app/models/compare_diet_plan_model.dart';
 import 'package:dietician_app/models/diet_plan_model.dart';
+import 'package:dietician_app/models/food_model.dart';
+import 'package:dietician_app/services/diet_plan/diet_plan_service.dart';
+import 'package:dietician_app/services/food/food_service.dart';
+import 'package:dietician_app/services/food_log/food_log_service.dart';
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,6 +27,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final DietPlanService _dietPlanService = DietPlanService();
   final FoodService _foodService = FoodService();
+  final FoodLogService _foodLogService = FoodLogService();
 
   bool _isDietPlanLoading = true;
   String? _dietPlanErrorMessage;
@@ -34,6 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _foodErrorMessage;
   List<Food> _allFoods = [];
 
+  bool _isLoadingComparison = true;
+  String? _comparisonErrorMessage;
+  DietComparisonData? _dailyComparisonData;
+
   @override
   void initState() {
     super.initState();
@@ -41,10 +49,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _fetchAllData() async {
+    setState(() {
+      _isDietPlanLoading = true;
+      _isFoodLoading = true;
+      _isLoadingComparison = true;
+      _dietPlanErrorMessage = null;
+      _foodErrorMessage = null;
+      _comparisonErrorMessage = null;
+    });
+
     await Future.wait([
       _fetchDietPlans(),
       _fetchFoods(),
+      _fetchDailyComparison(),
     ]);
+
+    if (mounted) {}
   }
 
   Future<void> _fetchDietPlans() async {
@@ -141,11 +161,75 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  bool get _isLoading => _isDietPlanLoading || _isFoodLoading;
+  Future<void> _fetchDailyComparison() async {
+    setState(() {
+      _comparisonErrorMessage = null;
+    });
+
+    final token = await AuthStorage.getToken();
+    if (token == null) {
+      if (mounted) {
+        setState(() {
+          _isLoadingComparison = false;
+          _comparisonErrorMessage = "Oturum bulunamadı.";
+        });
+      }
+      return;
+    }
+    final int? clientId = await AuthStorage.getId();
+    if (clientId == null || clientId == 0) {
+      if (mounted) {
+        setState(() {
+          _isLoadingComparison = false;
+          _comparisonErrorMessage = "Kullanıcı ID bulunamadı.";
+        });
+      }
+      return;
+    }
+
+    try {
+      final today = DateTime.now();
+      final response = await _foodLogService.getDietComparison(
+        token: token,
+        clientId: clientId,
+        date: today,
+      );
+
+      if (!mounted) return;
+
+      if (response.success && response.data != null) {
+        _dailyComparisonData = response.data;
+      } else {
+        _comparisonErrorMessage = response.message;
+      }
+    } catch (e) {
+      if (!mounted) return;
+      _comparisonErrorMessage = "Günlük özet alınamadı: ${e.toString()}";
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingComparison = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    String? errorMessage = _dietPlanErrorMessage ?? _foodErrorMessage;
+    List<String> errorMessages = [
+      if (_dietPlanErrorMessage != null) "Diyet Planı: $_dietPlanErrorMessage",
+      if (_foodErrorMessage != null) "Besinler: $_foodErrorMessage",
+      if (_comparisonErrorMessage != null) "Özet: $_comparisonErrorMessage",
+    ];
+    String? combinedErrorMessage =
+        errorMessages.isNotEmpty ? errorMessages.join('\n') : null;
+
+    bool isInitialLoading = _isDietPlanLoading &&
+        _isFoodLoading &&
+        _isLoadingComparison &&
+        _allDietPlans.isEmpty &&
+        _allFoods.isEmpty &&
+        _dailyComparisonData == null;
 
     return Scaffold(
       backgroundColor: AppColor.white,
@@ -159,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 50,
             height: 50,
             child: Lottie.asset(AppAssets.loginAnimation),
-          )
+          ),
         ],
         backgroundColor: AppColor.white,
         title: Text("Ana Sayfa", style: AppTextStyles.heading3),
@@ -170,17 +254,19 @@ class _HomeScreenState extends State<HomeScreen> {
         child: RefreshIndicator(
           onRefresh: _fetchAllData,
           color: AppColor.primary,
-          child: _isLoading && _allDietPlans.isEmpty && _allFoods.isEmpty
+          child: isInitialLoading
               ? Center(
                   child: CircularProgressIndicator(color: AppColor.primary))
-              : errorMessage != null &&
+              : combinedErrorMessage != null &&
                       _allDietPlans.isEmpty &&
-                      _allFoods.isEmpty
+                      _allFoods.isEmpty &&
+                      _dailyComparisonData == null
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Hata: $errorMessage'),
+                          Text(
+                              'Veriler yüklenirken hata oluştu:\n$combinedErrorMessage'),
                           ElevatedButton(
                             onPressed: _fetchAllData,
                             child: Text('Tekrar Dene'),
@@ -209,6 +295,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           errorMessage: _dietPlanErrorMessage,
                         ),
                         SizedBox(height: context.getDynamicHeight(3)),
+                        DailyComparisonSection(
+                          isLoadingComparison: _isLoadingComparison,
+                          comparisonErrorMessage: _comparisonErrorMessage,
+                          dailyComparisonData: _dailyComparisonData,
+                          onRetry: _fetchDailyComparison,
+                        ),
+                        SizedBox(height: context.getDynamicHeight(3)),
                         FoodPreviewSection(
                           isLoading: _isFoodLoading,
                           errorMessage: _foodErrorMessage,
@@ -221,24 +314,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
 
-  Widget _buildSearchBar() {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: AppColor.grey),
-      child: TextFormField(
-        decoration: InputDecoration(
-          hintText: "Diyet planı ara...",
-          prefixIcon: Icon(Icons.search, color: AppColor.primary),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+Widget _buildSearchBar() {
+  return Container(
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10), color: AppColor.grey),
+    child: TextFormField(
+      decoration: InputDecoration(
+        hintText: "Diyet planı ara...",
+        prefixIcon: Icon(Icons.search, color: AppColor.primary),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
         ),
-        onChanged: (value) {},
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
       ),
-    );
-  }
+      onChanged: (value) {},
+    ),
+  );
 }

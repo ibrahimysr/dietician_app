@@ -46,7 +46,8 @@ dependencies:
   smooth_page_indicator: 
   google_fonts: 
   flutter_staggered_animations:
-  collection: ^1.17.0
+  collection: ^1.17.0 
+  flutter_localization: ^0.3.2
 
   
 dev_dependencies:

@@ -86,9 +86,9 @@ class AllMealsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMealItem(BuildContext context, Meal meal) {
+   Widget _buildMealItem(BuildContext context, Meal meal) {
     return ListTile(
-       contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0), 
+       contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
        leading: Icon(getMealTypeIcon(meal.mealType), color: AppColor.secondary, size: 28),
        title: Text(
           getMealTypeName(meal.mealType),
@@ -100,26 +100,47 @@ class AllMealsScreen extends StatelessWidget {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
-        trailing: Column( 
+        trailing: Column(
            mainAxisAlignment: MainAxisAlignment.center,
+           crossAxisAlignment: CrossAxisAlignment.end, 
            children: [
               Text(
                  "${meal.calories} kcal",
                  style: AppTextStyles.body1Medium.copyWith(color: AppColor.primary, fontWeight: FontWeight.w600),
               ),
-               Icon(Icons.chevron_right, color: AppColor.greyLight),
+              SizedBox(height: 2), 
+              Icon(Icons.chevron_right, color: AppColor.greyLight, size: 20),
            ],
         ),
         onTap: () {
+          DateTime? startDate; 
+          try {
+            if (activePlan.startDate.isNotEmpty) {
+              startDate = DateTime.parse(activePlan.startDate.split('T')[0]);
+            } else {
+               throw FormatException("Diyet planı başlangıç tarihi boş.");
+            }
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Öğün detayı gösterilemiyor: Geçersiz plan başlangıç tarihi.'),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
+            return;
+          }
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => MealDetailScreen(meal: meal), 
+              builder: (_) => MealDetailScreen(
+                meal: meal,
+                dietPlanStartDate: startDate!, 
+              ),
             ),
           );
         },
         visualDensity: VisualDensity.compact,
     );
-
   }
 }

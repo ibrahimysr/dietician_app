@@ -151,10 +151,24 @@ class TodaysMealsSection extends StatelessWidget {
         elevation: 2,
         color: AppColor.grey,
         child: InkWell(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => MealDetailScreen(meal: meal)),
-          ),
+          onTap: () {
+            DateTime? startDate;
+            try {
+              startDate =
+                  DateTime.parse(activeDietPlan!.startDate.split('T')[0]);
+            } catch (e) {
+              return;
+            }
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => MealDetailScreen(
+                        meal: meal,
+                        dietPlanStartDate: startDate!,
+                      )),
+            );
+          },
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.all(12),

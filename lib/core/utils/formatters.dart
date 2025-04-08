@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 IconData getMealTypeIcon(String mealType) {
   switch (mealType.toLowerCase()) {
@@ -47,18 +48,29 @@ int getMealTypeOrder(String mealType) {
   }
 } 
 
- String? formatDate(String? dateString) {
-    if (dateString == null || dateString.isEmpty) return 'Belirtilmemiş';
+String formatDate(dynamic dateInput, {String format = 'dd.MM.yyyy', String locale = 'tr_TR'}) {
+  DateTime? dateTime;
+
+  if (dateInput is DateTime) {
+    dateTime = dateInput;
+  } else if (dateInput is String) {
     try {
-      if (dateString.contains('T')) {
-        dateString = dateString.split('T')[0];
-      }
-      final dateTime = DateTime.parse(dateString);
-      return "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.year}";
+      dateTime = DateTime.parse(dateInput).toLocal(); 
     } catch (e) {
-      return dateString;
+      print("formatDate parsing error: $e");
+      return dateInput; 
     }
+  } else {
+    return 'Geçersiz Tarih'; 
   }
+
+  try {
+    return DateFormat(format, locale).format(dateTime);
+  } catch (e) {
+    print("formatDate formatting error: $e");
+    return dateTime.toIso8601String(); 
+  }
+}
 
 
  IconData getCategoryIcon(String category) {
@@ -86,4 +98,14 @@ int getMealTypeOrder(String mealType) {
       default:
         return Icons.food_bank;
     }
+  } 
+
+
+String formatDateTime(String dateTimeString, {String format = 'yyyy-MM-dd HH:mm'}) {
+  try {
+    final dateTime = DateTime.parse(dateTimeString).toLocal(); 
+    return DateFormat(format, 'tr_TR').format(dateTime);
+  } catch (e) {
+    return dateTimeString; 
   }
+}
