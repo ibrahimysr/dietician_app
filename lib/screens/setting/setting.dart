@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:dietician_app/components/setting/profile_action_card.dart';
 import 'package:dietician_app/components/setting/profile_app_bar.dart';
 import 'package:dietician_app/components/setting/profile_error_widget.dart';
 import 'package:dietician_app/components/setting/profile_info_card.dart';
@@ -180,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                ProfileActionCard(delay: cardDelay * 5),
+                //ProfileActionCard(delay: cardDelay * 5),
                 SizedBox(height: context.normalValue),
               ],
             ),

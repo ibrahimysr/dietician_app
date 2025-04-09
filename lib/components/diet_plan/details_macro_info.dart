@@ -12,7 +12,7 @@ class DetailsMacroInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(label, style: AppTextStyles.body2Medium.copyWith(color: AppColor.greyLight)),
+        Text(label, style: AppTextStyles.body2Medium.copyWith(color: AppColor.secondary)),
         SizedBox(height: 2),
         Text(value, style: AppTextStyles.body1Medium.copyWith(color: AppColor.black)),
       ],

@@ -103,7 +103,7 @@ class FoodLogItem extends StatelessWidget {
               SizedBox(height: 8),
               Text(
                 "Kaydedildi: $loggedAtFormatted",
-                style: AppTextStyles.body1Medium.copyWith(color: AppColor.greyLight),
+                style: AppTextStyles.body1Medium.copyWith(color: AppColor.secondary),
               ),
             ],
           ),

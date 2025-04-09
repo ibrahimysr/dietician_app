@@ -5,9 +5,9 @@ import 'package:dietician_app/components/diet_plan/details_dietitian_card.dart';
 import 'package:dietician_app/components/diet_plan/details_empty_meals_card.dart';
 import 'package:dietician_app/components/diet_plan/details_general_info_card.dart';
 import 'package:dietician_app/components/diet_plan/details_section_header.dart';
+import 'package:dietician_app/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/theme/color.dart';
-import 'package:dietician_app/core/theme/textstyle.dart';
 import 'package:dietician_app/models/diet_plan_model.dart';
 import 'package:flutter/material.dart';
 
@@ -23,16 +23,7 @@ class DietPlanDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColor.white,
-      appBar: AppBar(
-        backgroundColor: AppColor.primary,
-        title: Text(
-          plan.title,
-          style: AppTextStyles.heading3.copyWith(color: AppColor.white),
-          overflow: TextOverflow.ellipsis,
-        ),
-        iconTheme: IconThemeData(color: AppColor.white),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(title: plan.title),
       body: ListView(
         padding: context.paddingNormal,
         children: [

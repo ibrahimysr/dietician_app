@@ -21,7 +21,7 @@ class MacroInfo extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyles.body2Medium.copyWith(color: AppColor.greyLight),
+          style: AppTextStyles.body2Medium.copyWith(color: AppColor.secondary),
         ),
         SizedBox(height: 4),
         Text(

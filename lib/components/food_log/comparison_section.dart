@@ -25,7 +25,7 @@ class ComparisonSection extends StatelessWidget {
     if (isLoadingComparison) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 30.0),
-        child: Center(child: CircularProgressIndicator(color: AppColor.secondary.withOpacity(0.7))),
+        child: Center(child: CircularProgressIndicator(color: AppColor.secondary.withValues(alpha:0.7))),
       );
     }
 
@@ -56,17 +56,7 @@ class ComparisonSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: context.getDynamicHeight(2.5)),
-        Text(
-          "Günlük Karşılaştırma (${formatDate(comparisonData!.date, format: 'dd MMMM')})",
-          style: AppTextStyles.heading4,
-        ),
-        SizedBox(height: context.getDynamicHeight(1)),
-        ComparisonCard(
-          title: "Günlük Toplamlar",
-          planned: comparisonData!.dailyTotals.dietPlan,
-          logged: comparisonData!.dailyTotals.foodLogs,
-          difference: comparisonData!.dailyTotals.difference,
-        ),
+        
         if (specificMealComparison != null) ...[
           SizedBox(height: context.getDynamicHeight(2.5)),
           Text(

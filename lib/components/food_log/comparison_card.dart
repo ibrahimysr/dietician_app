@@ -36,7 +36,7 @@ class ComparisonCard extends StatelessWidget {
                   flex: 2,
                   child: Text(
                     'Besin',
-                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.grey),
+                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.secondary),
                   ),
                 ),
                 Expanded(
@@ -44,7 +44,7 @@ class ComparisonCard extends StatelessWidget {
                   child: Text(
                     'Plan',
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.greyLight),
+                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.secondary),
                   ),
                 ),
                 Expanded(
@@ -52,7 +52,7 @@ class ComparisonCard extends StatelessWidget {
                   child: Text(
                     'Yenilen',
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.greyLight),
+                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.secondary),
                   ),
                 ),
                 Expanded(
@@ -60,7 +60,7 @@ class ComparisonCard extends StatelessWidget {
                   child: Text(
                     'Fark',
                     textAlign: TextAlign.right,
-                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.greyLight),
+                    style: AppTextStyles.body2Medium.copyWith(color: AppColor.secondary),
                   ),
                 ),
               ],
@@ -107,7 +107,7 @@ class ComparisonCard extends StatelessWidget {
                   "Planlanan Öğeler:",
                   style: AppTextStyles.body2Medium.copyWith(color: AppColor.black),
                 ),
-                ...planned.items.map((item) => _buildComparisonItemRow(item, isPlanned: true)).toList(),
+                ...planned.items.map((item) => _buildComparisonItemRow(item, isPlanned: true)),
                 SizedBox(height: 10),
               ],
               if (logged.items.isNotEmpty) ...[
@@ -115,7 +115,7 @@ class ComparisonCard extends StatelessWidget {
                   "Yenilen Öğeler:",
                   style: AppTextStyles.body2Medium.copyWith(color: AppColor.black),
                 ),
-                ...logged.items.map((item) => _buildComparisonItemRow(item, isPlanned: false)).toList(),
+                ...logged.items.map((item) => _buildComparisonItemRow(item, isPlanned: false)),
               ],
             ],
           ],
@@ -193,7 +193,7 @@ class ComparisonCard extends StatelessWidget {
           SizedBox(width: 10),
           Text(
             "${item.calories}kcal, P:${item.protein.toStringAsFixed(1)}g, Y:${item.fat.toStringAsFixed(1)}g, K:${item.carbs.toStringAsFixed(1)}g",
-            style: AppTextStyles.body1Medium.copyWith(color: AppColor.greyLight),
+            style: AppTextStyles.body1Medium.copyWith(color: AppColor.secondary),
           ),
         ],
       ),

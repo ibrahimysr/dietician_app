@@ -57,7 +57,7 @@ class _CustomAppBarState extends State<CustomAppBar> with SingleTickerProviderSt
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColor.primary, AppColor.primary.withOpacity(0.7)],
+            colors: [AppColor.primary, AppColor.primary.withValues(alpha:0.7)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -123,7 +123,7 @@ class AnimatedAppBar extends StatelessWidget implements PreferredSizeWidget {
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColor.primary, AppColor.primary.withOpacity(0.7)],
+            colors: [AppColor.primary, AppColor.primary.withValues(alpha:0.7)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

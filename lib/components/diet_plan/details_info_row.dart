@@ -30,7 +30,7 @@ class DetailsInfoRow extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight),
+                style: AppTextStyles.body2Regular.copyWith(color: AppColor.secondary),
               ),
               SizedBox(height: isMultiline ? 4 : 2),
               Text(

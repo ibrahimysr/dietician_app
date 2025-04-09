@@ -197,7 +197,7 @@ class TodaysMealsSection extends StatelessWidget {
                   child: Text(
                     meal.description,
                     style: AppTextStyles.body1Medium
-                        .copyWith(color: AppColor.black.withValues(alpha: 0.8)),
+                        .copyWith(color: AppColor.black),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -209,7 +209,7 @@ class TodaysMealsSection extends StatelessWidget {
                     child: Text(
                       "${meal.calories} kcal",
                       style: AppTextStyles.body1Medium.copyWith(
-                          color: AppColor.primary, fontWeight: FontWeight.w600),
+                          color: AppColor.secondary, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),

@@ -114,7 +114,7 @@ class ActiveDietPlanSection extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(12),
       child: Card(
-        elevation: 3.0,
+     
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         color: AppColor
             .grey, 
@@ -133,7 +133,7 @@ class ActiveDietPlanSection extends StatelessWidget {
                     child: Text(
                       plan.title,
                       style: AppTextStyles.heading4.copyWith(
-                          color: AppColor.black), 
+                          color: AppColor.secondary), 
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -178,13 +178,14 @@ class ActiveDietPlanSection extends StatelessWidget {
         Icon(icon,
             size: 16,
             color:
-                AppColor.black.withValues(alpha:0.7)),
+                AppColor.secondary),
         const SizedBox(width: 8), 
         Expanded(
           child: Text(
             text,
-            style: AppTextStyles.body2Regular.copyWith(
-                color: AppColor.black.withValues(alpha:0.9)), 
+            style: AppTextStyles.body1Medium.copyWith(
+                color: AppColor.black, 
+                fontSize: 14), 
             maxLines: maxLines,
             overflow: TextOverflow.ellipsis,
           ),

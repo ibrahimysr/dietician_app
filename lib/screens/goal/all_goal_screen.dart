@@ -349,7 +349,7 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                       Container(
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: AppColor.secondary.withOpacity(0.1),
+                          color: AppColor.secondary.withValues(alpha:0.1),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(categoryIcon, color: AppColor.secondary, size: 24),
@@ -369,7 +369,7 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                                 child: Text(
                                   goal.description!,
                                   style: AppTextStyles.body2Regular.copyWith(
-                                    color: AppColor.black.withOpacity(0.7),
+                                    color: AppColor.black.withValues(alpha:0.7),
                                   ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -381,7 +381,7 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.15),
+                          color: statusColor.withValues(alpha:0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -419,7 +419,7 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                           width: double.infinity,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: statusColor.withOpacity(0.2),
+                            color: statusColor.withValues(alpha:0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
@@ -432,7 +432,7 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
                               borderRadius: BorderRadius.circular(4),
                               boxShadow: [
                                 BoxShadow(
-                                  color: statusColor.withOpacity(0.3),
+                                  color: statusColor.withValues(alpha:0.3),
                                   blurRadius: 4,
                                   offset: Offset(0, 2),
                                 ),

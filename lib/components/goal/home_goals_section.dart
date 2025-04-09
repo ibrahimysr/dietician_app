@@ -55,7 +55,7 @@ class GoalsSection extends StatelessWidget {
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: CircularProgressIndicator(color: AppColor.primary.withOpacity(0.7)),
+              child: CircularProgressIndicator(color: AppColor.primary.withValues(alpha:0.7)),
             ),
           )
         else if (goalErrorMessage != null)

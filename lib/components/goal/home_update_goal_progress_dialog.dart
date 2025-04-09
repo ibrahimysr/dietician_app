@@ -87,8 +87,8 @@ class _UpdateGoalProgressDialogState extends State<UpdateGoalProgressDialog> {
         ),
         ElevatedButton(
           onPressed: _submit,
-          child: Text("Kaydet"),
           style: ElevatedButton.styleFrom(backgroundColor: AppColor.primary, foregroundColor: Colors.white),
+          child: Text("Kaydet"),
         ),
       ],
     );

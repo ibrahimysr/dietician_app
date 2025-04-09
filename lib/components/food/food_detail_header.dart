@@ -31,7 +31,7 @@ class FoodHeader extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: AppColor.secondary.withOpacity(0.1),
+                  color: AppColor.secondary.withValues(alpha:0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -47,7 +47,7 @@ class FoodHeader extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: AppColor.greyLight.withOpacity(0.2),
+            color: AppColor.greyLight.withValues(alpha:0.2),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(

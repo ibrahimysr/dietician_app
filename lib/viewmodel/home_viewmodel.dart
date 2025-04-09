@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/models/compare_diet_plan_model.dart';
@@ -229,11 +231,11 @@ class HomeViewModel with ChangeNotifier {
   Future<void> markGoalAsCompleted(int goalId) async {
     final token = await AuthStorage.getToken();
     if (token == null) {
-      print("Tamamlama için token bulunamadı.");
+      log("Tamamlama için token bulunamadı.");
       return;
     }
     try {
-      print("Hedef $goalId tamamlandı olarak işaretleniyor...");
+      log("Hedef $goalId tamamlandı olarak işaretleniyor...");
       await _goalService.updateGoal(
         token: token,
         goalId: goalId,
@@ -241,7 +243,7 @@ class HomeViewModel with ChangeNotifier {
       );
       await fetchGoals();
     } catch (e) {
-      print("Hedef tamamlandı olarak işaretlenirken hata: $e");
+      log("Hedef tamamlandı olarak işaretlenirken hata: $e");
     }
   }
 
@@ -283,7 +285,7 @@ class HomeViewModel with ChangeNotifier {
         return false;
       }
     } catch (e) {
-      print("Güncelleme hatası: $e");
+      log("Güncelleme hatası: $e");
       return false;
     }
   }

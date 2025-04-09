@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -57,7 +59,7 @@ String formatDate(dynamic dateInput, {String format = 'dd.MM.yyyy', String local
     try {
       dateTime = DateTime.parse(dateInput).toLocal(); 
     } catch (e) {
-      print("formatDate parsing error: $e");
+      log("formatDate parsing error: $e");
       return dateInput; 
     }
   } else {
@@ -67,7 +69,7 @@ String formatDate(dynamic dateInput, {String format = 'dd.MM.yyyy', String local
   try {
     return DateFormat(format, locale).format(dateTime);
   } catch (e) {
-    print("formatDate formatting error: $e");
+    log("formatDate formatting error: $e");
     return dateTime.toIso8601String(); 
   }
 }

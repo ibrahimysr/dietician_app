@@ -73,7 +73,7 @@ class GoalItem extends StatelessWidget {
                 value: progress,
                 minHeight: 7,
                 valueColor: AlwaysStoppedAnimation<Color>(progressColor),
-                backgroundColor: progressColor.withOpacity(0.2),
+                backgroundColor: progressColor.withValues(alpha:0.2),
               ),
             ),
             if (targetValueStr.isNotEmpty)

@@ -2,6 +2,7 @@ import 'package:dietician_app/components/food_log/comparison_section.dart';
 import 'package:dietician_app/components/food_log/edit_log_dialog.dart';
 import 'package:dietician_app/components/food_log/food_log_section.dart';
 import 'package:dietician_app/components/food_log/macro_info.dart';
+import 'package:dietician_app/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/theme/textstyle.dart';
@@ -361,9 +362,9 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   onPressed: () => Navigator.of(dialogContext).pop(),
                 ),
                 ElevatedButton(
-                  child: Text('Kaydet'),
                   style: ElevatedButton.styleFrom(backgroundColor: AppColor.primary, foregroundColor: AppColor.white),
                   onPressed: _handleAddFoodLog,
+                  child: Text('Kaydet'),
                 ),
               ],
             );
@@ -507,15 +508,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
 
     return Scaffold(
       backgroundColor: AppColor.white,
-      appBar: AppBar(
-        backgroundColor: AppColor.secondary,
-        title: Text(
-          mealTypeName,
-          style: AppTextStyles.heading3.copyWith(color: AppColor.white),
-        ),
-        iconTheme: IconThemeData(color: AppColor.white),
-        centerTitle: true,
-      ),
+      appBar:CustomAppBar(title: mealTypeName),
       body: RefreshIndicator(
         onRefresh: _fetchAllScreenData,
         color: AppColor.secondary,
@@ -580,7 +573,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                               ),
                               Text(
                                 "Gün ${widget.meal.dayNumber}",
-                                style: AppTextStyles.body1Regular.copyWith(color: AppColor.greyLight),
+                                style: AppTextStyles.body1Regular.copyWith(color: AppColor.secondary),
                               ),
                             ],
                           ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dietician_app/models/compare_diet_plan_model.dart';
 import 'package:dietician_app/models/simple_api_response.dart';
 import 'package:intl/intl.dart';
@@ -64,7 +66,7 @@ class FoodLogService {
       return FoodLogResponse.fromJson(response);
 
     } catch (e) {
-      print("addFoodLog sırasında hata: $e");
+      log("addFoodLog sırasında hata: $e");
       return FoodLogResponse(success: false, message: 'Kayıt eklenirken bir hata oluştu: ${e.toString()}', data: null);
     }
   } 
@@ -81,7 +83,7 @@ class FoodLogService {
 
       return DietComparisonResponse.fromJson(response);
     } catch (e) {
-      print("getDietComparison sırasında hata: $e");
+      log("getDietComparison sırasında hata: $e");
       return DietComparisonResponse(
         success: false,
         message: 'Karşılaştırma verisi alınırken bir hata oluştu: ${e.toString()}',
@@ -100,7 +102,7 @@ class FoodLogService {
       return SimpleApiResponse.fromJson(response);
       
     } catch (e) {
-      print("deleteFoodLog sırasında hata: $e");
+      log("deleteFoodLog sırasında hata: $e");
       return SimpleApiResponse(
           success: false, message: 'Kayıt silinirken bir hata oluştu: ${e.toString()}');
     }
@@ -132,7 +134,7 @@ class FoodLogService {
       return FoodLogResponse.fromJson(response);
 
     } catch (e) {
-      print("updateFoodLog sırasında hata: $e");
+      log("updateFoodLog sırasında hata: $e");
       return FoodLogResponse(
         success: false,
         message: 'Kayıt güncellenirken bir hata oluştu: ${e.toString()}',

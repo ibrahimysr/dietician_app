@@ -24,7 +24,7 @@ class DailyComparisonSection extends StatelessWidget {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
-          child: CircularProgressIndicator(color: AppColor.primary.withOpacity(0.7)),
+          child: CircularProgressIndicator(color: AppColor.primary.withValues(alpha:0.7)),
         ),
       );
     }
@@ -85,7 +85,7 @@ class DailyComparisonSection extends StatelessWidget {
               children: [
                 Text(
                   "Bugünkü Özet (${formatDate(DateTime.now(), format: 'dd MMMM')})",
-                  style: AppTextStyles.heading4.copyWith(color: AppColor.secondary),
+                  style: AppTextStyles.body1Medium.copyWith(color: AppColor.secondary),
                 ),
               ],
             ),
@@ -109,7 +109,7 @@ class DailyComparisonSection extends StatelessWidget {
                         ),
                         Text(
                           " / $plannedCal",
-                          style: AppTextStyles.body1Regular.copyWith(color: AppColor.greyLight),
+                          style: AppTextStyles.body1Regular.copyWith(color: AppColor.black),
                         ),
                       ],
                     ),
@@ -120,7 +120,7 @@ class DailyComparisonSection extends StatelessWidget {
                   children: [
                     Text(
                       "Fark",
-                      style: AppTextStyles.body2Medium.copyWith(color: AppColor.greyLight),
+                      style: AppTextStyles.body2Medium.copyWith(color: AppColor.black),
                     ),
                     SizedBox(height: 4),
                     Text(
@@ -140,7 +140,7 @@ class DailyComparisonSection extends StatelessWidget {
                     value: (loggedCal / plannedCal).clamp(0.0, 1.5),
                     minHeight: 8,
                     valueColor: AlwaysStoppedAnimation<Color>(AppColor.primary),
-                    backgroundColor: AppColor.primary.withOpacity(0.2),
+                    backgroundColor: AppColor.primary.withValues(alpha:0.2),
                   ),
                 ),
               ),
@@ -220,7 +220,7 @@ class NutrientProgressRow extends StatelessWidget {
               value: progress,
               minHeight: 6,
               valueColor: AlwaysStoppedAnimation<Color>(color),
-              backgroundColor: color.withOpacity(0.2),
+              backgroundColor: color.withValues(alpha:0.2),
             ),
           ),
         ],
