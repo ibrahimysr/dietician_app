@@ -9,7 +9,7 @@ import 'package:dietician_app/components/shared/search_bar.dart';
 import 'package:dietician_app/core/extension/context_extension.dart';
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/models/goal_model.dart';
-import 'package:dietician_app/viewmodel/home_view_model.dart';
+import 'package:dietician_app/viewmodel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
