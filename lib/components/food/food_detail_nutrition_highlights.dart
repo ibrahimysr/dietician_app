@@ -13,7 +13,7 @@ class FoodNutritionHighlights extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColor.white,
+        color: AppColor.grey,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -37,7 +37,7 @@ class FoodNutritionHighlights extends StatelessWidget {
                 Text(
                   'Porsiyon',
                   style: AppTextStyles.body2Medium.copyWith(
-                    color: AppColor.greyLight,
+                    color: AppColor.secondary,
                   ),
                 ),
                 SizedBox(height: 4),
@@ -65,7 +65,7 @@ class FoodNutritionHighlights extends StatelessWidget {
                 Text(
                   'Kalori',
                   style: AppTextStyles.body2Medium.copyWith(
-                    color: AppColor.greyLight,
+                    color: AppColor.secondary,
                   ),
                 ),
                 SizedBox(height: 4),

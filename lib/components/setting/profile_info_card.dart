@@ -26,7 +26,7 @@ class ProfileInfoCard extends StatelessWidget {
       elevation: 2.0,
       margin: EdgeInsets.only(bottom: context.normalValue), 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      color: AppColor.white,
+      color: AppColor.grey,
       child: Padding(
         padding: context.paddingNormal,
         child: Column(

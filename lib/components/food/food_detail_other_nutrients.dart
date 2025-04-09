@@ -13,7 +13,7 @@ class FoodOtherNutrients extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColor.white,
+        color: AppColor.grey,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(

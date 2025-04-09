@@ -9,8 +9,9 @@ class DetailsEmptyMealsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 1.0,
+      
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: AppColor.grey?.withValues(alpha: 0.5),
+      color: AppColor.grey,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: Row(

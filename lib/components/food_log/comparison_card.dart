@@ -24,7 +24,7 @@ class ComparisonCard extends StatelessWidget {
     return Card(
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: AppColor.white,
+      color: AppColor.grey,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

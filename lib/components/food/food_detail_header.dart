@@ -53,7 +53,7 @@ class FoodHeader extends StatelessWidget {
           child: Text(
             food.category,
             style: AppTextStyles.body2Medium.copyWith(
-              color: AppColor.greyLight,
+              color: AppColor.secondary,
             ),
           ),
         ),

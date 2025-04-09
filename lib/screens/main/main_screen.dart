@@ -27,10 +27,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   ];
 
   final List<BottomNavItem> items = [
-    BottomNavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: "Ana Sayfa"),
+    BottomNavItem(icon: Icons.home, activeIcon: Icons.home, label: "Ana Sayfa"),
     BottomNavItem(icon: Icons.restaurant_menu_outlined, activeIcon: Icons.restaurant_menu, label: "Tarifler"),
-    BottomNavItem(icon: Icons.person, activeIcon: Icons.calendar_today, label: "Diyetisyenler"),
-    BottomNavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: "Profil"),
+    BottomNavItem(icon: Icons.person, activeIcon: Icons.person, label: "Diyetisyenler"),
+    BottomNavItem(icon: Icons.settings, activeIcon: Icons.settings, label: "Profil"),
   ];
 
    Future getClientId() async {
@@ -115,7 +115,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                     1.0,
                   child: Icon(
                     isSelected ? items[index].activeIcon : items[index].icon,
-                    color: isSelected ? AppColor.secondary : AppColor.greyLight,
+                    color: isSelected ? AppColor.secondary : AppColor.primary,
                     size: 24,
                   ),
                 );

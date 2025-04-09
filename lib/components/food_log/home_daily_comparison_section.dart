@@ -209,7 +209,7 @@ class NutrientProgressRow extends StatelessWidget {
               Text(label, style: AppTextStyles.body1Medium),
               Text(
                 "$loggedStr / $plannedStr $unit",
-                style: AppTextStyles.body1Regular.copyWith(color: AppColor.greyLight),
+                style: AppTextStyles.body1Regular.copyWith(color: AppColor.secondary),
               ),
             ],
           ),

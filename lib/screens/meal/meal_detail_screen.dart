@@ -555,7 +555,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   Card(
                     elevation: 2.0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    color: AppColor.white,
+                    color: AppColor.grey,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -593,9 +593,8 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   ),
                   SizedBox(height: context.getDynamicHeight(2)),
                   Card(
-                    elevation: 2.0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    color: AppColor.white,
+                    color: AppColor.grey,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(

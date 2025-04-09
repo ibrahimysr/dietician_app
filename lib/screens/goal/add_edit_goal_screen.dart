@@ -237,7 +237,7 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: AppColor.white,
       appBar: CustomAppBar(
         title: _isEditing ? "Hedefi Düzenle" : "Yeni Hedef Ekle",
         
@@ -303,18 +303,12 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
               _buildSectionHeader('Kategori ve Durum'),
               SizedBox(height: 8),
               _buildCategoryDropdown(),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildStatusDropdown(),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: _buildPriorityDropdown(),
-                  ),
-                ],
-              ),
+              SizedBox(height: 16), 
+               _buildStatusDropdown(), 
+                             SizedBox(height: 16), 
+
+               _buildPriorityDropdown(),
+              
               SizedBox(height: 24),
               
               _buildSectionHeader('Zaman Çizelgesi'),
@@ -362,11 +356,11 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColor.primary,
+            color: AppColor.secondary,
           ),
         ),
         SizedBox(height: 4),
-        Divider(color: AppColor.primary.withOpacity(0.3), thickness: 1),
+        Divider(color: AppColor.secondary, thickness: 1),
       ],
     );
   }
@@ -415,7 +409,13 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
   }
 
   Widget _buildCategoryDropdown() {
-    return DropdownButtonFormField<String>(
+    
+    return DropdownButtonFormField<String>( 
+       dropdownColor: Colors.white,
+    iconEnabledColor: AppColor.primary,
+    elevation: 8,
+    menuMaxHeight: 300,
+    isDense: true,
       value: _selectedCategory,
       decoration: InputDecoration(
         labelText: 'Kategori *',
@@ -458,6 +458,11 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
 
   Widget _buildStatusDropdown() {
     return DropdownButtonFormField<String>(
+       dropdownColor: Colors.white,
+    iconEnabledColor: AppColor.primary,
+    elevation: 8,
+    menuMaxHeight: 300,
+    isDense: true,
       value: _selectedStatus,
       decoration: InputDecoration(
         labelText: 'Durum *',
@@ -477,6 +482,7 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
         filled: true,
         fillColor: Colors.white,
         contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        
       ),
       items: _statuses.map((String item) {
         return DropdownMenuItem<String>(
@@ -502,50 +508,59 @@ class _AddEditGoalScreenState extends State<AddEditGoalScreen> {
     );
   }
 
-  Widget _buildPriorityDropdown() {
-    return DropdownButtonFormField<String>(
-      value: _selectedPriority,
-      decoration: InputDecoration(
-        labelText: 'Öncelik',
-        prefixIcon: Icon(Icons.priority_high, color: _selectedPriority != null ? _priorityColors[_selectedPriority] : AppColor.primary),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade400),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade400),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColor.primary, width: 2),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+ Widget _buildPriorityDropdown() {
+  return DropdownButtonFormField<String>(
+    value: _selectedPriority,
+    decoration: InputDecoration(
+      labelText: 'Öncelik',
+      prefixIcon: Icon(Icons.priority_high, color: _selectedPriority != null ? _priorityColors[_selectedPriority] : AppColor.primary),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade400),
       ),
-      items: _priorities.map((String item) {
-        return DropdownMenuItem<String>(
-          value: item,
-          child: Row(
-            children: [
-              Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: _priorityColors[item] ?? Colors.grey,
-                  shape: BoxShape.circle,
-                ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.grey.shade400),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppColor.primary, width: 2),
+      ),
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+    ),
+    dropdownColor: Colors.white,
+    iconEnabledColor: AppColor.primary,
+    elevation: 8,
+    menuMaxHeight: 300,
+    isDense: true,
+    style: TextStyle(
+      color: Colors.black87,
+      fontSize: 16,
+    ),
+    items: _priorities.map((String item) {
+      return DropdownMenuItem<String>(
+        value: item,
+        child: Row(
+          children: [
+            Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(
+                color: _priorityColors[item] ?? Colors.grey,
+                shape: BoxShape.circle,
               ),
-              SizedBox(width: 8),
-              Text(item.capitalize()),
-            ],
-          ),
-        );
-      }).toList(),
-      onChanged: (value) => setState(() => _selectedPriority = value),
-    );
-  }
+            ),
+            SizedBox(width: 8),
+            Text(item.capitalize()),
+          ],
+        ),
+      );
+    }).toList(),
+    onChanged: (value) => setState(() => _selectedPriority = value),
+  );
+}
 
   Widget _buildDatePickerField({
     required BuildContext context,

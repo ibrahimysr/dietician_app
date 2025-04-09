@@ -58,7 +58,7 @@ class GoalItem extends StatelessWidget {
               children: [
                 Text(
                   "$currentValueStr / $targetValueStr $unitStr",
-                  style: AppTextStyles.body1Regular.copyWith(color: AppColor.black.withValues(alpha: 0.8)),
+                  style: AppTextStyles.body1Regular.copyWith(color: AppColor.secondary),
                 ),
                 Text(
                   "${(progress * 100).toStringAsFixed(0)}%",
@@ -83,7 +83,7 @@ class GoalItem extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: Text(
                     targetValueStr,
-                    style: AppTextStyles.body1Medium.copyWith(color: AppColor.greyLight),
+                    style: AppTextStyles.body1Medium.copyWith(color: AppColor.secondary),
                   ),
                 ),
               ),
