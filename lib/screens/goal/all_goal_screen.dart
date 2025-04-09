@@ -299,7 +299,7 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
           SizedBox(height: 4),
           Text(
             "İlerlemenizi görmek ve hedeflerinize ulaşmak için düzenli takip yapın",
-            style: AppTextStyles.body1Regular.copyWith(color: AppColor.greyLight),
+            style: AppTextStyles.body1Regular.copyWith(color: AppColor.black),
           ),
           SizedBox(height: 16),
         ],
@@ -317,205 +317,188 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
 
     return Card(
       elevation: 0,
-      shadowColor: AppColor.white,
+      color: AppColor.grey,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       margin: EdgeInsets.only(bottom: 16),
       child: InkWell(
         onTap: () => _navigateToAddEditGoal(goal: goal),
         borderRadius: BorderRadius.circular(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 8,
-              decoration: BoxDecoration(
-               
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
-            ),
-            
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppColor.secondary.withValues(alpha:0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(categoryIcon, color: AppColor.secondary, size: 24),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              goal.title,
-                              style: AppTextStyles.heading4,
-                            ),
-                            if (goal.description != null && goal.description!.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4),
-                                child: Text(
-                                  goal.description!,
-                                  style: AppTextStyles.body2Regular.copyWith(
-                                    color: AppColor.black.withValues(alpha:0.7),
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: statusColor.withValues(alpha:0.15),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          statusText,
-                          style: AppTextStyles.body2Medium.copyWith(
-                            color: statusColor,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColor.secondary.withValues(alpha:0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(categoryIcon, color: AppColor.secondary, size: 24),
                   ),
-                  
-                  SizedBox(height: 16),
-                  
-                  if (goal.status.toLowerCase() == 'in_progress' && 
-                      goal.targetValue != null && 
-                      goal.targetValue! > 0) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${goal.currentValue?.toStringAsFixed(0) ?? '0'} ${goal.unit ?? ''}",
-                          style: AppTextStyles.body2Regular,
+                          goal.title,
+                          style: AppTextStyles.heading4,
                         ),
-                        Text(
-                          "${goal.targetValue?.toStringAsFixed(0) ?? '-'} ${goal.unit ?? ''}",
-                          style: AppTextStyles.body2Regular,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 6),
-                    Stack(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: statusColor.withValues(alpha:0.2),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                        FractionallySizedBox(
-                          widthFactor: progress,
-                          child: Container(
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: statusColor,
-                              borderRadius: BorderRadius.circular(4),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: statusColor.withValues(alpha:0.3),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
+                        if (goal.description != null && goal.description!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              goal.description!,
+                              style: AppTextStyles.body2Regular.copyWith(
+                                color: AppColor.black.withValues(alpha:0.7),
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        ),
                       ],
                     ),
-                    SizedBox(height: 4),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        "${(progress * 100).toStringAsFixed(0)}%",
-                        style: AppTextStyles.body2Medium.copyWith(
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha:0.15),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      statusText,
+                      style: AppTextStyles.body2Medium.copyWith(
+                        color: statusColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              
+              SizedBox(height: 16),
+              
+              if (goal.status.toLowerCase() == 'in_progress' && 
+                  goal.targetValue != null && 
+                  goal.targetValue! > 0) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "${goal.currentValue?.toStringAsFixed(0) ?? '0'} ${goal.unit ?? ''}",
+                      style: AppTextStyles.body2Regular,
+                    ),
+                    Text(
+                      "${goal.targetValue?.toStringAsFixed(0) ?? '-'} ${goal.unit ?? ''}",
+                      style: AppTextStyles.body2Regular,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 6),
+                Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: statusColor.withValues(alpha:0.2),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: progress,
+                      child: Container(
+                        height: 8,
+                        decoration: BoxDecoration(
                           color: statusColor,
+                          borderRadius: BorderRadius.circular(4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: statusColor.withValues(alpha:0.3),
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ],
-                  
-                  SizedBox(height: 12),
+                ),
+                SizedBox(height: 4),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "${(progress * 100).toStringAsFixed(0)}%",
+                    style: AppTextStyles.body2Medium.copyWith(
+                      color: statusColor,
+                    ),
+                  ),
+                ),
+              ],
+              
+              SizedBox(height: 12),
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (goal.startDate != null)
+                        Row(
+                          children: [
+                            Icon(Icons.calendar_today, size: 14, color: AppColor.greyLight),
+                            SizedBox(width: 4),
+                            Text(
+                              "Başlangıç: ${formatDate(goal.startDate!, format: 'dd MMM yy')}",
+                              style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight),
+                            ),
+                          ],
+                        ),
+                      if (goal.targetDate != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Row(
+                            children: [
+                              Icon(Icons.flag, size: 14, color: AppColor.primary),
+                              SizedBox(width: 4),
+                              Text(
+                                "Bitiş: ${formatDate(goal.targetDate!, format: 'dd MMM yy')}",
+                                style: AppTextStyles.body2Regular.copyWith(color: AppColor.primary),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
                   
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (goal.startDate != null)
-                            Row(
-                              children: [
-                                Icon(Icons.calendar_today, size: 14, color: AppColor.greyLight),
-                                SizedBox(width: 4),
-                                Text(
-                                  "Başlangıç: ${formatDate(goal.startDate!, format: 'dd MMM yy')}",
-                                  style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight),
-                                ),
-                              ],
-                            ),
-                          if (goal.targetDate != null)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.flag, size: 14, color: AppColor.primary),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    "Bitiş: ${formatDate(goal.targetDate!, format: 'dd MMM yy')}",
-                                    style: AppTextStyles.body2Regular.copyWith(color: AppColor.primary),
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
+                      IconButton(
+                        onPressed: () => _navigateToAddEditGoal(goal: goal),
+                        icon: Icon(Icons.edit_outlined, color: AppColor.secondary),
+                        tooltip: "Düzenle",
+                        constraints: BoxConstraints(),
+                        padding: EdgeInsets.all(8),
+                        splashRadius: 24,
                       ),
-                      
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () => _navigateToAddEditGoal(goal: goal),
-                            icon: Icon(Icons.edit_outlined, color: AppColor.secondary),
-                            tooltip: "Düzenle",
-                            constraints: BoxConstraints(),
-                            padding: EdgeInsets.all(8),
-                            splashRadius: 24,
-                          ),
-                          IconButton(
-                            onPressed: () => _handleDeleteGoal(goal.id, index),
-                            icon: Icon(Icons.delete_outline, color: Colors.redAccent),
-                            tooltip: "Sil",
-                            constraints: BoxConstraints(),
-                            padding: EdgeInsets.all(8),
-                            splashRadius: 24,
-                          ),
-                        ],
+                      IconButton(
+                        onPressed: () => _handleDeleteGoal(goal.id, index),
+                        icon: Icon(Icons.delete_outline, color: Colors.redAccent),
+                        tooltip: "Sil",
+                        constraints: BoxConstraints(),
+                        padding: EdgeInsets.all(8),
+                        splashRadius: 24,
                       ),
                     ],
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
