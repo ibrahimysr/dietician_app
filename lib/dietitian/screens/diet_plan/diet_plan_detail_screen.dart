@@ -31,7 +31,7 @@ class DietPlanDetailScreen extends StatelessWidget {
         padding: context.paddingNormal, 
         children: [
           const DetailsSectionHeader(title: "Genel Bilgiler"),
-          DetailsGeneralInfoCard(plan: plan),
+          DietitianDetailsGeneralInfoCard(plan: plan),
           SizedBox(height: context.getDynamicHeight(2.5)),
           
           SizedBox(height: context.getDynamicHeight(2.5)),
@@ -41,9 +41,10 @@ class DietPlanDetailScreen extends StatelessWidget {
             const DetailsEmptyMealsCard() 
           else
             ...sortedDays
-                .map((dayNumber) =>DetailsDayMealsCard (
+                .map((dayNumber) =>DietitianDetailsDayMealsCard (
                       dayNumber: dayNumber,
                       meals: groupedMeals[dayNumber]!,
+                        plan: plan,
                     ))
                 .expand((widget) => [widget, SizedBox(height: context.getDynamicHeight(1.5))]),
 

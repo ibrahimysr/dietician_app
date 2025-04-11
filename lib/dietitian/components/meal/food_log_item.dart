@@ -1,10 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; 
-
 import 'package:dietician_app/client/models/food_log_model.dart';
 import 'package:dietician_app/client/core/utils/formatters.dart'; 
-
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
 
@@ -42,7 +40,7 @@ class FoodLogItem extends StatelessWidget {
     try {
       loggedAtFormatted = formatDateTime(log.loggedAt, format: 'dd MMMM yyyy, HH:mm');
     } catch (e) {
-      try { 
+      try {
         loggedAtFormatted = DateFormat('dd.MM.yy HH:mm', 'tr_TR').format(DateTime.parse(log.loggedAt));
       } catch (_) {}
     }
@@ -50,16 +48,16 @@ class FoodLogItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0), 
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start, 
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 12.0, top: 2.0), 
+            padding: const EdgeInsets.only(right: 12.0, top: 2.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: (log.photoUrl != null && log.photoUrl!.isNotEmpty)
                   ? Image.network( 
                       log.photoUrl!,
-                      width: 60, 
+                      width: 60,
                       height: 60,
                       fit: BoxFit.cover,
                       loadingBuilder: (context, child, progress) => progress == null
@@ -91,7 +89,7 @@ class FoodLogItem extends StatelessWidget {
               children: [
                 Text(
                   foodName,
-                  style: AppTextStyles.body1Medium.copyWith(color: AppColor.black),
+                  style: AppTextStyles.body1Medium.copyWith(color: AppColor.black), 
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),

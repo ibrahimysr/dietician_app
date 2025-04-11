@@ -166,7 +166,7 @@ class DietitianData {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'deleted_at': deletedAt,
-      'user': user?.toJson(), // toJson'a eklendi
+      'user': user?.toJson(), 
       'clients': clients.map((c) => c.toJson()).toList(),
       'subscription_plans': subscriptionPlans.map((p) => p.toJson()).toList(),
       'recipes': recipes.map((r) => r.toJson()).toList(),
@@ -208,7 +208,7 @@ class DietitianClient {
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
-    this.user, // Constructor'a eklendi
+    this.user, 
   });
 
   factory DietitianClient.fromJson(Map<String, dynamic> json) {
@@ -250,7 +250,7 @@ class DietitianClient {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'deleted_at': deletedAt,
-      'user': user?.toJson(), // toJson'a eklendi
+      'user': user?.toJson(), 
     };
   }
 }

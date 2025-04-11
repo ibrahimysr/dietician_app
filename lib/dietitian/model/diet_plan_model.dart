@@ -1,10 +1,9 @@
-
 import 'package:dietician_app/dietitian/model/dietitian_model.dart';
 
 class ClientDietPlanListResponse {
   final bool success;
   final String message;
-  final List<ClientDietPlan> data; 
+  final List<ClientDietPlan> data;
 
   ClientDietPlanListResponse({
     required this.success,
@@ -13,14 +12,14 @@ class ClientDietPlanListResponse {
   });
 
   factory ClientDietPlanListResponse.fromJson(Map<String, dynamic> json) {
-    var list = json['data'] as List?; 
+    var list = json['data'] as List?;
     List<ClientDietPlan> dietPlanList = list != null
-        ? list.map((i) => ClientDietPlan.fromJson(i)).toList() 
-        : []; 
+        ? list.map((i) => ClientDietPlan.fromJson(i)).toList()
+        : [];
     return ClientDietPlanListResponse(
       success: json['success'] ?? false,
       message: json['message'] ?? '',
-      data: dietPlanList, 
+      data: dietPlanList,
     );
   }
 
@@ -33,14 +32,13 @@ class ClientDietPlanListResponse {
   }
 }
 
-
 class ClientDietPlan {
   final int id;
   final int clientId;
   final int dietitianId;
   final String title;
-  final String startDate; 
-  final String endDate;   
+  final String startDate;
+  final String endDate;
   final int dailyCalories;
   final String notes;
   final String status;
@@ -48,8 +46,8 @@ class ClientDietPlan {
   final String createdAt;
   final String updatedAt;
   final String? deletedAt;
-  final DietitianData dietitian; 
-  final List<ClientMeal> meals; 
+  final DietitianData dietitian;
+  final List<ClientMeal> meals;
 
   ClientDietPlan({
     required this.id,
@@ -75,11 +73,21 @@ class ClientDietPlan {
         ? mealList.map((m) => ClientMeal.fromJson(m)).toList()
         : [];
 
-    
     final dietitianData = json['dietitian'] != null
         ? DietitianData.fromJson(json['dietitian'])
-        
-        : DietitianData(id: 0, userId: 0, specialty: '', bio: '', hourlyRate: 0, experienceYears: 0, isActive: false, createdAt: '', updatedAt: '', clients: [], subscriptionPlans: [], recipes: []); // Boş veya varsayılan dietitian
+        : DietitianData(
+            id: 0,
+            userId: 0,
+            specialty: '',
+            bio: '',
+            hourlyRate: 0,
+            experienceYears: 0,
+            isActive: false,
+            createdAt: '',
+            updatedAt: '',
+            clients: [],
+            subscriptionPlans: [],
+            recipes: []);
 
     return ClientDietPlan(
       id: json['id'] ?? 0,
@@ -90,7 +98,7 @@ class ClientDietPlan {
       endDate: json['end_date'] ?? '',
       dailyCalories: json['daily_calories'] ?? 0,
       notes: json['notes'] ?? '',
-      status: json['status'] ?? 'unknown', 
+      status: json['status'] ?? 'unknown',
       isOngoing: json['is_ongoing'] ?? false,
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
@@ -121,7 +129,6 @@ class ClientDietPlan {
   }
 }
 
-
 class ClientMeal {
   final int id;
   final int dietPlanId;
@@ -129,9 +136,9 @@ class ClientMeal {
   final String mealType;
   final String description;
   final int calories;
-  final String protein; 
-  final String fat;     
-  final String carbs;   
+  final String protein;
+  final String fat;
+  final String carbs;
   final String? photoUrl;
   final String createdAt;
   final String updatedAt;
@@ -161,7 +168,7 @@ class ClientMeal {
       mealType: json['meal_type'] ?? '',
       description: json['description'] ?? '',
       calories: json['calories'] ?? 0,
-      protein: json['protein']?.toString() ?? '0.00', 
+      protein: json['protein']?.toString() ?? '0.00',
       fat: json['fat']?.toString() ?? '0.00',
       carbs: json['carbs']?.toString() ?? '0.00',
       photoUrl: json['photo_url'],

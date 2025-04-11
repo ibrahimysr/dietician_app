@@ -273,7 +273,7 @@ class _AllGoalsScreenState extends State<AllGoalsScreen> {
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: ListView.builder(
           physics: AlwaysScrollableScrollPhysics(),
-          itemCount: _allGoals.length + 1, // +1 for header
+          itemCount: _allGoals.length + 1, 
           itemBuilder: (context, index) {
             if (index == 0) {
               return _buildHeader();

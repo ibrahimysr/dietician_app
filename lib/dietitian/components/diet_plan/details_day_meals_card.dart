@@ -6,11 +6,12 @@ import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
 import 'package:dietician_app/client/core/utils/formatters.dart'; 
 
-class DetailsDayMealsCard extends StatelessWidget {
+class DietitianDetailsDayMealsCard extends StatelessWidget {
   final int dayNumber;
   final List<ClientMeal> meals;
+  final ClientDietPlan plan;
 
-  const DetailsDayMealsCard({super.key, required this.dayNumber, required this.meals});
+  const DietitianDetailsDayMealsCard({super.key, required this.dayNumber, required this.meals,  required this.plan,});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class DetailsDayMealsCard extends StatelessWidget {
         shape: const Border(),
         collapsedShape: const Border(),
         childrenPadding: const EdgeInsets.only(bottom: 10, left: 16, right: 16),
-        children: meals.map((meal) => DetailsMealItem(meal: meal)).toList(),
+        children: meals.map((meal) => DietitianDetailsMealItem(meal: meal,  plan: plan)).toList(),
       ),
     );
   }

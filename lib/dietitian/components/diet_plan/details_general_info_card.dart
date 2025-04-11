@@ -6,10 +6,10 @@ import 'package:dietician_app/client/components/diet_plan/details_status_badge.d
 
 import 'package:dietician_app/client/core/theme/color.dart';
 
-class DetailsGeneralInfoCard extends StatelessWidget {
+class DietitianDetailsGeneralInfoCard extends StatelessWidget {
   final ClientDietPlan plan;
 
-  const DetailsGeneralInfoCard({super.key, required this.plan});
+  const DietitianDetailsGeneralInfoCard({super.key, required this.plan});
 
   String _formatDate(String? dateString) {
     if (dateString == null || dateString.isEmpty) return 'Belirtilmemiş';
