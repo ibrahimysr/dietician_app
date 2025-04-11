@@ -307,6 +307,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
       itemBuilder: (context, index) {
         final recipe = recipes[index];
         return Card(
+          color: AppColor.grey,
           clipBehavior: Clip.antiAlias,
           margin: const EdgeInsets.symmetric(vertical: 5),
           child: ListTile(
@@ -343,8 +344,8 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
             title: Text(recipe.title, style: const TextStyle(fontWeight: FontWeight.w500)),
             subtitle: Text("${recipe.calories} kcal | P:${recipe.protein}g F:${recipe.fat}g K:${recipe.carbs}g"),
             trailing: recipe.isPublic
-               ? Tooltip(message: "Herkese Açık", child: Icon(Icons.public, size: 20, color: Colors.green.shade600))
-               : Tooltip(message: "Özel", child: Icon(Icons.lock_outline, size: 20, color: Colors.grey.shade600)),
+               ? Tooltip(message: "Herkese Açık", child: Icon(Icons.public, size: 20, color: AppColor.secondary))
+               : Tooltip(message: "Özel", child: Icon(Icons.lock_outline, size: 20, color: AppColor.secondary)),
             onTap: () {
               print("Tarif seçildi: ${recipe.title} (ID: ${recipe.id})");
             },
@@ -372,6 +373,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
         final plan = plans[index];
         bool isActive = plan.status.toLowerCase() == 'active';
         return Card(
+          color: AppColor.grey,
           margin: const EdgeInsets.symmetric(vertical: 5),
           child: ListTile(
             contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

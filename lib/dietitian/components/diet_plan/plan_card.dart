@@ -1,6 +1,7 @@
 import 'package:dietician_app/dietitian/components/diet_plan/card_footer.dart';
 import 'package:dietician_app/dietitian/components/diet_plan/header.dart';
 import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
+import 'package:dietician_app/dietitian/screens/diet_plan/diet_plan_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dietician_app/client/components/diet_plan/info_chip.dart';
@@ -46,14 +47,13 @@ class DietitianPlanCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          // DietPlanDetailScreen'in ClientDietPlan kabul ettiğini varsayıyoruz.
-          // Eğer kabul etmiyorsa, DietPlanDetailScreen'i de güncellemelisiniz.
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => DietPlanDetailScreen(plan: plan),
-          //   ),
-          // );
+         
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DietPlanDetailScreen(plan: plan),
+            ),
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
