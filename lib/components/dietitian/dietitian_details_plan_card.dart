@@ -4,9 +4,11 @@ import 'package:dietician_app/models/subscription_plans_model.dart';
 import 'package:flutter/material.dart';
 
 class DietitianDetailsPlanCard extends StatelessWidget {
-  final SubscriptionPlansModel plan;
+  final SubscriptionPlansModel plan; 
+    final VoidCallback onSelectPlan; 
 
-  const DietitianDetailsPlanCard({super.key, required this.plan});
+
+  const DietitianDetailsPlanCard({super.key, required this.plan, required this.onSelectPlan,});
 
   String _displayValue(String? value, {String defaultValue = "Belirtilmemiş"}) {
     return (value == null || value.isEmpty) ? defaultValue : value;
@@ -77,7 +79,23 @@ class DietitianDetailsPlanCard extends StatelessWidget {
                       ),
                     )
                     .toList(),
+              ), 
+              SizedBox(height: 16,),
+              Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: onSelectPlan,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColor.primary,
+                  foregroundColor: AppColor.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                child: const Text("Diyetisyeni Seç"), 
               ),
+            ),
             ],
           ],
         ),

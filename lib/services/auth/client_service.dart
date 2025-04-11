@@ -50,5 +50,22 @@ class ClientService {
     final response = await _apiClient.get('users/$userId/client', token: token);
      final data =  ClientResponse.fromJson(response); 
       await AuthStorage.saveId(data.data.userId);
+      await AuthStorage.saveClientId(data.data.id);
+  } 
+
+  Future<ClientResponse> updateDietitian({
+    required String token,
+    required int clientId,
+    required Map<String, dynamic> updateData,
+  }) async {
+   
+      final String path = 'clients-update/$clientId';
+
+      final response = await _apiClient.put(
+        path,
+        body: updateData, 
+        token: token,
+      );
+      return ClientResponse.fromJson(response);
   }
 }

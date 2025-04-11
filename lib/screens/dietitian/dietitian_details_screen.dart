@@ -9,6 +9,7 @@ import 'package:dietician_app/components/dietitian/dietitian_details_subscriptio
 import 'package:dietician_app/core/theme/color.dart';
 import 'package:dietician_app/core/utils/auth_storage.dart';
 import 'package:dietician_app/models/dietitian_model.dart';
+import 'package:dietician_app/services/auth/client_service.dart';
 import 'package:dietician_app/services/dietian/dietitians_servici.dart';
 import 'package:flutter/material.dart';
 
@@ -23,13 +24,16 @@ class DietitianDetailScreen extends StatefulWidget {
 
 class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
   late Future<SingleDietitianResponse> _detailFuture;
-  final DietitiansService _dietitianService = DietitiansService();
+  final DietitiansService _dietitianService = DietitiansService(); 
+
+   final ClientService _clientService = ClientService();
+  bool _isUpdatingDietitian = false;
 
   @override
   void initState() {
     super.initState();
     _detailFuture = _fetchDietitianDetails();
-  }
+  } 
 
   Future<SingleDietitianResponse> _fetchDietitianDetails() async {
     try {
@@ -45,6 +49,87 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
     } catch (e) {
       log("Error fetching dietitian details (ID: ${widget.dietitianId}): $e");
       throw Exception("Diyetisyen detayları yüklenirken bir hata oluştu.");
+    }
+  } 
+
+ Future<void> _handleSelectDietitian() async {
+    if (_isUpdatingDietitian) return;
+
+    setState(() {
+      _isUpdatingDietitian = true;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Diyetisyen seçiliyor...'), duration: Duration(seconds: 3)), 
+    );
+
+    try {
+      final token = await AuthStorage.getToken();
+      final clientId = await AuthStorage.getClientId(); 
+
+      if (token == null || token.isEmpty) {
+        throw Exception("Oturumunuz bulunamadı. Lütfen tekrar giriş yapın.");
+      }
+      if (clientId == null) {
+        throw Exception("Kullanıcı kimliği bulunamadı. Lütfen tekrar giriş yapın.");
+      }
+
+      
+     
+      final Map<String, dynamic> updateData = {
+        "dietitian_id": widget.dietitianId, 
+      };
+
+    
+      final updateResponse = await _clientService.updateDietitian(
+        token: token,
+        clientId: clientId,
+        updateData: updateData,
+      );
+
+      if (updateResponse.success) {
+        log("Danışan diyetisyeni başarıyla güncellendi!");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Diyetisyen başarıyla seçildi!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+       
+      } else {
+        log('Güncelleme başarısız: ${updateResponse.message}');
+        throw Exception(updateResponse.message.isNotEmpty
+            ? updateResponse.message 
+            : "Diyetisyen ataması güncellenemedi.");
+      }
+    } catch (e) {
+      log("Diyetisyen seçme hatası: $e");
+      String errorMessage = "Bilinmeyen bir hata oluştu.";
+       if (e is Exception) {
+         errorMessage = e.toString().replaceFirst("Exception: ", "");
+         if (errorMessage.contains("Danışan bilgileri alınamadı")) {
+         } else if (errorMessage.contains("No query results for model")) {
+           errorMessage = "İşlem sırasında bir sorun oluştu. Lütfen tekrar deneyin veya destek ile iletişime geçin.";
+         } else if (errorMessage.contains("Danışan kaydı ID'si alınamadı")) {
+             errorMessage = "Danışan kaydınızda bir sorun var gibi görünüyor. Lütfen destek ile iletişime geçin.";
+         } else if (errorMessage.contains("Oturumunuz bulunamadı") || errorMessage.contains("Kullanıcı kimliği bulunamadı")) {
+         }
+         else {
+            errorMessage = "İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.";
+         }
+       }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Hata: $errorMessage"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+         setState(() {
+           _isUpdatingDietitian = false;
+         });
+      }
     }
   }
 
@@ -94,7 +179,9 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
                     DietitianDetailsStatsSection(dietitian: dietitian),
                     if (dietitian.subscriptionPlans.isNotEmpty)
                       DietitianDetailsSubscriptionPlans(
-                          plans: dietitian.subscriptionPlans),
+                          plans: dietitian.subscriptionPlans, 
+                          
+                          onSelectPlan:  _handleSelectDietitian,),
                     DietitianDetailsContactButton(dietitian: dietitian),
                     const SizedBox(height: 30),
                   ],

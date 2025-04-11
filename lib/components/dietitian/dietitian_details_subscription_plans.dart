@@ -5,12 +5,19 @@ import 'package:dietician_app/models/subscription_plans_model.dart';
 import 'package:flutter/material.dart';
 
 class DietitianDetailsSubscriptionPlans extends StatelessWidget {
-  final List<SubscriptionPlansModel> plans;
+  final List<SubscriptionPlansModel> plans; 
 
-  const DietitianDetailsSubscriptionPlans({super.key, required this.plans});
+    final VoidCallback onSelectPlan;
+
+
+  const DietitianDetailsSubscriptionPlans({super.key, required this.plans, 
+   required this.onSelectPlan,});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+      if (plans.isEmpty) {
+      return const SizedBox.shrink(); 
+    }
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 24.0),
       child: Column(
@@ -23,7 +30,7 @@ class DietitianDetailsSubscriptionPlans extends StatelessWidget {
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: plans.length,
-            itemBuilder: (context, index) => DietitianDetailsPlanCard(plan: plans[index]),
+            itemBuilder: (context, index) => DietitianDetailsPlanCard(plan: plans[index],    onSelectPlan: onSelectPlan),
           ),
         ],
       ),
