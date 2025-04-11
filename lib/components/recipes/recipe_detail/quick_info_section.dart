@@ -13,7 +13,7 @@ class QuickInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.white,
+        color: AppColor.grey,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -73,7 +73,7 @@ class QuickInfoSection extends StatelessWidget {
         Text(
           label,
           style: AppTextStyles.body2Regular.copyWith(
-            color: AppColor.greyLight,
+            color: AppColor.secondary,
           ),
         ),
       ],

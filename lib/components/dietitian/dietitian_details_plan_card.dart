@@ -16,7 +16,7 @@ class DietitianDetailsPlanCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      elevation: 2,
+      color: AppColor.grey,
       shadowColor: AppColor.black.withValues(alpha: 0.06),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
@@ -44,7 +44,7 @@ class DietitianDetailsPlanCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               "${plan.duration} Günlük Plan",
-              style: AppTextStyles.body2Regular.copyWith(color: AppColor.greyLight),
+              style: AppTextStyles.body2Regular.copyWith(color: AppColor.black),
             ),
             const SizedBox(height: 12),
             Text(

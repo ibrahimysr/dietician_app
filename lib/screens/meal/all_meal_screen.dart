@@ -1,3 +1,4 @@
+import 'package:dietician_app/components/shared/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:dietician_app/models/diet_plan_model.dart';
 import 'package:dietician_app/core/theme/color.dart';
@@ -23,25 +24,7 @@ class AllMealsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColor.white,
-      appBar: AppBar(
-        backgroundColor: AppColor.primary, 
-        title: Text(
-          'Tüm Öğünler', 
-          style: AppTextStyles.heading3.copyWith(color: AppColor.white),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(20.0),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              activePlan.title,
-              style: AppTextStyles.body1Regular.copyWith(color: AppColor.white.withValues(alpha:0.8)),
-            ),
-          ),
-        ),
-        iconTheme: IconThemeData(color: AppColor.white),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(title: "Tüm Öğünler",),
       body: activePlan.meals.isEmpty
           ? Center( 
               child: Padding(
@@ -68,23 +51,25 @@ class AllMealsScreen extends StatelessWidget {
   }
 
   Widget _buildDayMealsCard(BuildContext context, int dayNumber, List<Meal> meals) {
-    return Card(
-      elevation: 2.0,
-      margin: EdgeInsets.only(bottom: context.getDynamicHeight(1.5)), 
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: AppColor.white,
-      clipBehavior: Clip.antiAlias,
+  return Card(
+    elevation: 2.0,
+    margin: EdgeInsets.only(bottom: context.getDynamicHeight(1.5)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    clipBehavior: Clip.antiAlias,
+    child: Container(
+      color: AppColor.grey,
       child: ExpansionTile(
         title: Text("Gün $dayNumber", style: AppTextStyles.heading4.copyWith(color: AppColor.black)),
-        backgroundColor: AppColor.grey?.withValues(alpha:0.1),
-        collapsedBackgroundColor: AppColor.white,
-        shape: Border(), 
-        collapsedShape: Border(), 
+        backgroundColor: Colors.transparent,
+        collapsedBackgroundColor: Colors.transparent,
+        shape: Border(),
+        collapsedShape: Border(),
         childrenPadding: EdgeInsets.only(bottom: 10, left: 16, right: 16),
         children: meals.map((meal) => _buildMealItem(context, meal)).toList(),
       ),
-    );
-  }
+    ),
+  );
+}
 
    Widget _buildMealItem(BuildContext context, Meal meal) {
     return ListTile(

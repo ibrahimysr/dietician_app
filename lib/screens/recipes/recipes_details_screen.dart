@@ -66,7 +66,7 @@ class RecipeDetailsPage extends StatelessWidget {
     return Text(
       title,
       style: AppTextStyles.heading3.copyWith(
-        color: AppColor.primary,
+        color: AppColor.black,
       ),
     );
   }

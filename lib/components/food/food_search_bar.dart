@@ -19,7 +19,7 @@ class FoodSearchBar extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.grey[100],
+          color: AppColor.grey,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),

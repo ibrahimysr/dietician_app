@@ -18,7 +18,7 @@ class DietitianDetailsStatsSection extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20.0),
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
       decoration: BoxDecoration(
-        color: AppColor.grey?.withValues(alpha: 0.8),
+        color: AppColor.grey,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(

@@ -13,7 +13,7 @@ class NutritionSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.white,
+        color: AppColor.grey,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -30,7 +30,7 @@ class NutritionSection extends StatelessWidget {
           children: [
             _buildNutritionItem('Protein', recipe.protein, AppColor.secondary),
             _buildNutritionItem('Karbonhidrat', recipe.carbs, AppColor.primary),
-            _buildNutritionItem('Yağ', recipe.fat, AppColor.greyLight),
+            _buildNutritionItem('Yağ', recipe.fat, AppColor.black),
           ],
         ),
       ),
@@ -44,7 +44,7 @@ class NutritionSection extends StatelessWidget {
         Text(
           label,
           style: AppTextStyles.body2Regular.copyWith(
-            color: AppColor.greyLight,
+            color: AppColor.black,
           ),
         ),
         const SizedBox(height: 4),

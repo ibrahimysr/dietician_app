@@ -72,6 +72,7 @@ class _DietitianListScreenState extends State<DietitianListScreen> with TickerPr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar:CustomAppBar(title: "Diyetisyenleri Keşfet"),
       body: Container(
         decoration: BoxDecoration(

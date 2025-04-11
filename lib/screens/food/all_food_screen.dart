@@ -4,8 +4,8 @@ import 'package:dietician_app/components/food/food_empty_state.dart';
 import 'package:dietician_app/components/food/food_filter_chips.dart';
 import 'package:dietician_app/components/food/food_list_title.dart';
 import 'package:dietician_app/components/food/food_search_bar.dart';
+import 'package:dietician_app/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/core/theme/color.dart';
-import 'package:dietician_app/core/theme/textstyle.dart';
 import 'package:dietician_app/models/food_model.dart';
 import 'package:dietician_app/screens/food/food_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -92,26 +92,7 @@ class _AllFoodsScreenState extends State<AllFoodsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.white,
-      appBar: AppBar(
-        backgroundColor: AppColor.white,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          "Besinler",
-          style: AppTextStyles.heading4.copyWith(color: AppColor.black),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: AppColor.primary),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add_circle_outline, color: AppColor.primary),
-            onPressed: () {
-            },
-          ),
-        ],
-      ),
+      appBar:CustomAppBar(title: "Besinler"),
       body: Column(
         children: [
           FoodSearchBar(

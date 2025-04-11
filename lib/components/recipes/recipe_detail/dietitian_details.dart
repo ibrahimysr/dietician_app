@@ -18,7 +18,7 @@ class DietitianDetails extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.white,
+        color: AppColor.grey,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -55,7 +55,7 @@ class DietitianDetails extends StatelessWidget {
                   Text(
                     dietitian.bio,
                     style: AppTextStyles.body2Regular.copyWith(
-                      color: AppColor.greyLight,
+                      color: AppColor.black,
                     ),
                   ),
                 ],
