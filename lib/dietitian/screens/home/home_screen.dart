@@ -1,3 +1,5 @@
+import 'package:dietician_app/client/core/theme/color.dart';
+import 'package:dietician_app/client/core/theme/textstyle.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
 import 'package:dietician_app/dietitian/model/dietitian_model.dart';
 import 'package:dietician_app/dietitian/screens/diet_plan/diet_plan_list_screen.dart';
@@ -81,6 +83,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
     }
 
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: CustomAppBar(title: appBarTitle),
       body: _buildBody(),
     );
@@ -160,6 +163,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
 
   Widget _buildWelcomeSection(DietitianData data) {
     return Card(
+      color: AppColor.grey,
        elevation: 3,
        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
        child: Padding(
@@ -169,10 +173,11 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
             children: [
                Text(
                   data.user?.name != null ? "Merhaba, ${data.user!.name}!" : "Kontrol Paneli",
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                     fontWeight: FontWeight.bold,
-                     color: Theme.of(context).primaryColorDark
-                  )
+                  style:AppTextStyles.body1Medium.copyWith(
+                     fontSize: 20,
+                     fontWeight: FontWeight.w600,
+                     color: AppColor.secondary
+                  ),
                ),
                const SizedBox(height: 10),
                _buildInfoRow(Icons.star_border, "Uzmanlık", data.specialty),
@@ -192,7 +197,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
      return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Icon(icon, size: 18, color: Theme.of(context).primaryColor),
+           Icon(icon, size: 18, color:AppColor.secondary),
            const SizedBox(width: 8),
            Text(
               "$label: ",
@@ -214,12 +219,14 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
        padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
        child: Row(
           children: [
-             Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 22),
+             Icon(icon, color: AppColor.black, size: 22),
              const SizedBox(width: 10),
              Text(
                title,
-               style: Theme.of(context).textTheme.titleLarge?.copyWith(
+               style: AppTextStyles.body1Medium.copyWith(
+                 fontSize: 18,
                  fontWeight: FontWeight.w600,
+                 color: AppColor.black,
                ),
              ),
           ],
@@ -247,17 +254,22 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
         final String? clientPhotoUrl = client.user?.profilePhoto;
 
         return Card(
+          color: AppColor.grey,
           margin: const EdgeInsets.symmetric(vertical: 5),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColorLight,
+              backgroundColor: AppColor.secondary,
               backgroundImage: (clientPhotoUrl != null && clientPhotoUrl.isNotEmpty)
                   ? NetworkImage(clientPhotoUrl) 
                   : null, 
               child: (clientPhotoUrl == null || clientPhotoUrl.isEmpty)
                   ? Text( 
                       clientName.isNotEmpty ? clientName[0].toUpperCase() : "?",
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColorDark),
+                      style:AppTextStyles.body1Medium.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: AppColor.white,
+                      ),
                     )
                   : null, 
             ),
@@ -265,7 +277,6 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
             subtitle: Text("Hedef: ${client.goal.isNotEmpty ? client.goal : 'Belirtilmemiş'}"),
             trailing: const Icon(Icons.chevron_right, color: Colors.grey),
             onTap: () {
-              print("Danışan seçildi: $clientName (ID: ${client.id})");
               Navigator.push(
     context,
     MaterialPageRoute(

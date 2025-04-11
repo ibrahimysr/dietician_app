@@ -18,7 +18,7 @@ class FilterChips extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColor.primary : AppColor.white,
+          color: isSelected ? AppColor.primary : AppColor.grey,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? AppColor.primary : AppColor.greyLight,
