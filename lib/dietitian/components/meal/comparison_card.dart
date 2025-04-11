@@ -37,7 +37,7 @@ class ComparisonCard extends StatelessWidget {
             const SizedBox(height: 10),
 
             _buildHeaderRow(),
-            Divider(height: 15, thickness: 1, color: AppColor.greyLight.withOpacity(0.5)),
+            Divider(height: 15, thickness: 1, color: AppColor.greyLight.withValues(alpha:0.5)),
 
             _buildComparisonDetailRow(
               label: '🔥 Kalori',
@@ -71,10 +71,10 @@ class ComparisonCard extends StatelessWidget {
 
            
             if (showItems && (planned.items.isNotEmpty || logged.items.isNotEmpty)) ...[
-              Divider(height: 25, thickness: 1, color: AppColor.greyLight.withOpacity(0.5)),
+              Divider(height: 25, thickness: 1, color: AppColor.greyLight.withValues(alpha:0.5)),
               Text(
                 "Detaylar:",
-                style: AppTextStyles.body1Medium.copyWith(color: AppColor.black.withOpacity(0.8)),
+                style: AppTextStyles.body1Medium.copyWith(color: AppColor.black.withValues(alpha:0.8)),
               ),
               const SizedBox(height: 8),
               if (planned.items.isNotEmpty) ...[
@@ -234,7 +234,7 @@ class ComparisonCard extends StatelessWidget {
             flex: 2,
             child: Text(
               "${item.calories}kcal$proteinStr$fatStr$carbsStr", 
-              style: AppTextStyles.body1Medium.copyWith(color: AppColor.secondary.withOpacity(0.9)),
+              style: AppTextStyles.body1Medium.copyWith(color: AppColor.secondary.withValues(alpha:0.9)),
               textAlign: TextAlign.right,
             ),
           ),

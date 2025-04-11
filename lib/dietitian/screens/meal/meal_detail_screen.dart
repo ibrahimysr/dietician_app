@@ -190,7 +190,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                             if (loadingProgress == null) return child;
                             return Container(
                               height: context.getDynamicHeight(25),
-                              color: AppColor.greyLight.withOpacity(0.3),
+                              color: AppColor.greyLight.withValues(alpha:0.3),
                               child: Center(
                                 child: CircularProgressIndicator(
                                   value: loadingProgress.expectedTotalBytes != null
@@ -203,7 +203,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                           },
                           errorBuilder: (context, error, stackTrace) => Container(
                             height: context.getDynamicHeight(25),
-                            color: AppColor.greyLight.withOpacity(0.3),
+                            color: AppColor.greyLight.withValues(alpha:0.3),
                             child: Center(
                               child: Icon(Icons.broken_image_outlined, color: AppColor.grey, size: 40),
                             ),
@@ -215,7 +215,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   Card(
                     elevation: 1.0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    color: AppColor.white, 
+                    color: AppColor.grey, 
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -237,10 +237,10 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                               ),
                             ],
                           ),
-                          Divider(height: 25, color: AppColor.greyLight.withOpacity(0.6)),
+                          Divider(height: 25, color: AppColor.greyLight.withValues(alpha:0.6)),
                           Text(
                             "Planlanan Açıklama:", 
-                            style: AppTextStyles.body1Medium.copyWith(color: AppColor.black.withOpacity(0.8)),
+                            style: AppTextStyles.body1Medium.copyWith(color: AppColor.black.withValues(alpha:0.8)),
                           ),
                           SizedBox(height: 6),
                           Text(
@@ -257,7 +257,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
 
                   Card(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    color: AppColor.white, 
+                    color: AppColor.grey, 
                     elevation: 1.0,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -301,7 +301,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                   SizedBox(height: context.getDynamicHeight(2.5)),
 
                   FoodLogSection(
-                    title: "Danışanın Girdiği Kayıtlar ($mealTypeName)", 
+                    title: "Danışanın Yedikleri", 
                     mealLogs: _mealLogs,
                     isLoadingLogs: _isLoadingLogs,
                     logErrorMessage: _logErrorMessage,

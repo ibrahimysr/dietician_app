@@ -228,7 +228,6 @@ class DietitianClient {
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
       deletedAt: json['deleted_at'],
-      // Danışanın user bilgisini parse et (null kontrolü önemli)
       user: json['user'] != null ? DietitianUser.fromJson(json['user']) : null,
     );
   }

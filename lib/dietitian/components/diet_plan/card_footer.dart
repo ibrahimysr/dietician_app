@@ -21,19 +21,19 @@ class DietitianCardFooter extends StatelessWidget {
           bottomLeft: Radius.circular(12),
           bottomRight: Radius.circular(12),
         ),
-         border: Border(top: BorderSide(color: AppColor.greyLight.withOpacity(0.5), width: 1)),
+         border: Border(top: BorderSide(color: AppColor.greyLight.withValues(alpha:0.5), width: 1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween, 
         children: [
           Row(
             children: [
-               Icon(Icons.restaurant_menu_outlined, size: 16, color: AppColor.black.withOpacity(0.8)),
+               Icon(Icons.restaurant_menu_outlined, size: 16, color: AppColor.black.withValues(alpha:0.8)),
                const SizedBox(width: 6),
                Text(
                 mealCount > 0 ? "$mealCount öğün tanımlı" : "Öğün tanımlanmamış",
                 style: AppTextStyles.body2Regular.copyWith(
-                  color: AppColor.black.withOpacity(0.9), 
+                  color: AppColor.black.withValues(alpha:0.9), 
                 ),
               ),
             ],

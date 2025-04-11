@@ -31,7 +31,7 @@ class FoodLogSection extends StatelessWidget {
     return Card(
       elevation: 1.0, 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: AppColor.white, 
+      color: AppColor.grey, 
       margin: EdgeInsets.zero, 
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -140,7 +140,7 @@ class FoodLogSection extends StatelessWidget {
         );
       },
       separatorBuilder: (context, index) => Divider( 
-        color: AppColor.greyLight.withOpacity(0.4), 
+        color: AppColor.greyLight.withValues(alpha:0.4), 
         height: 25, 
         thickness: 1, 
       ),

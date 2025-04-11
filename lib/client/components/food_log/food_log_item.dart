@@ -65,11 +65,11 @@ class FoodLogItem extends StatelessWidget {
                       loadingBuilder: (context, child, progress) => progress == null
                           ? child
                           : Container(
-                              width: 60, height: 60, color: AppColor.greyLight.withOpacity(0.3),
+                              width: 60, height: 60, color: AppColor.greyLight.withValues(alpha: 0.3),
                               child:  Center(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: AppColor.secondary))),
                             ),
                       errorBuilder: (context, error, stack) => Container(
-                            width: 60, height: 60, color: AppColor.greyLight.withOpacity(0.3),
+                            width: 60, height: 60, color: AppColor.greyLight.withValues(alpha:0.3),
                             child:  Icon(Icons.no_photography_outlined, color: AppColor.grey, size: 30), 
                           ),
                     )
@@ -77,10 +77,10 @@ class FoodLogItem extends StatelessWidget {
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: AppColor.greyLight.withOpacity(0.3),
+                        color: AppColor.greyLight.withValues(alpha:0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Icon(Icons.restaurant_menu_outlined, color: AppColor.secondary.withOpacity(0.8), size: 30),
+                      child: Icon(Icons.restaurant_menu_outlined, color: AppColor.secondary.withValues(alpha:0.8), size: 30),
                     ),
             ),
           ),
@@ -116,11 +116,11 @@ class FoodLogItem extends StatelessWidget {
                  const SizedBox(height: 8),
                  Row(
                    children: [
-                     Icon(Icons.access_time_filled_rounded, size: 14, color: AppColor.black.withOpacity(0.7)),
+                     Icon(Icons.access_time_filled_rounded, size: 14, color: AppColor.black.withValues(alpha:0.7)),
                      const SizedBox(width: 4),
                      Text(
                        loggedAtFormatted,
-                       style: AppTextStyles.body1Medium.copyWith(color: AppColor.black.withOpacity(0.9)), 
+                       style: AppTextStyles.body1Medium.copyWith(color: AppColor.black.withValues(alpha:0.9)), 
                      ),
                    ],
                  ),

@@ -90,7 +90,7 @@ class CardHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
+        color: statusColor.withValues(alpha:0.1),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
@@ -115,12 +115,12 @@ class CardHeader extends StatelessWidget {
           if (durationText.isNotEmpty)
             Row(
               children: [
-                 Icon(Icons.timer_outlined, size: 14, color: AppColor.black.withOpacity(0.8)),
+                 Icon(Icons.timer_outlined, size: 14, color: AppColor.black.withValues(alpha:0.8)),
                  const SizedBox(width: 4),
                  Text(
                   durationText,
                   style: AppTextStyles.body1Medium.copyWith( 
-                    color: AppColor.black.withOpacity(0.9), 
+                    color: AppColor.black.withValues(alpha:0.9), 
                   ),
                 ),
               ],

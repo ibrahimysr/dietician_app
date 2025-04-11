@@ -59,7 +59,7 @@ class DietitianDetailsGeneralInfoCard extends StatelessWidget {
             ),
             if (plan.notes.isNotEmpty) ...[
               Divider(
-                  color: AppColor.greyLight.withOpacity(0.5),
+                  color: AppColor.greyLight.withValues(alpha:0.5),
                   height: 25,
                   thickness: 1),
               DetailsInfoRow(
