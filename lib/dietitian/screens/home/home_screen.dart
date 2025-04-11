@@ -1,5 +1,6 @@
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
 import 'package:dietician_app/dietitian/model/dietitian_model.dart';
+import 'package:dietician_app/dietitian/screens/diet_plan/diet_plan_list_screen.dart';
 import 'package:dietician_app/dietitian/service/dietitian/dietitian_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
@@ -265,6 +266,12 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
             trailing: const Icon(Icons.chevron_right, color: Colors.grey),
             onTap: () {
               print("Danışan seçildi: $clientName (ID: ${client.id})");
+              Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => ClientDietPlansScreen(clientId: client.id), 
+    ),
+  );
             },
           ),
         );
