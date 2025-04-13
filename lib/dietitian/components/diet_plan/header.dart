@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
 import 'package:flutter/material.dart';
 
@@ -75,7 +77,7 @@ class CardHeader extends StatelessWidget {
         return "$days gün"; 
       }
     } catch (e) {
-      print("Süre hesaplama hatası: $e");
+      log("Süre hesaplama hatası: $e");
       return ''; 
     }
   }

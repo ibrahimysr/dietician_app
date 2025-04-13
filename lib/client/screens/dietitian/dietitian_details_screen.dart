@@ -87,7 +87,7 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
         updateData: updateData,
       );
 
-      if (updateResponse.success) {
+      if (updateResponse.success && mounted) {
         log("Danışan diyetisyeni başarıyla güncellendi!");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -117,13 +117,14 @@ class _DietitianDetailScreenState extends State<DietitianDetailScreen> {
          else {
             errorMessage = "İşlem sırasında bir hata oluştu. Lütfen tekrar deneyin.";
          }
-       }
+       } 
+       if(mounted){ 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Hata: $errorMessage"),
           backgroundColor: Colors.red,
         ),
-      );
+      );}
     } finally {
       if (mounted) {
          setState(() {

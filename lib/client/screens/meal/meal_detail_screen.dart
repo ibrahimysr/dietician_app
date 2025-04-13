@@ -189,7 +189,9 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
 
     try {
       final token = await AuthStorage.getToken();
-      if (token == null) {
+        if (!mounted) return;
+
+      if (token == null) { 
         Navigator.pop(context);
         throw Exception("Oturum bulunamadı.");
       }
@@ -209,6 +211,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
         carbs: _newLogCarbs,
         loggedAt: _newLogLoggedAt,
       );
+      if (!mounted) return;
 
       Navigator.pop(context);
       if (!mounted) return;
@@ -333,6 +336,8 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                             lastDate: DateTime.now().add(Duration(days: 1)),
                             locale: const Locale('tr', 'TR'),
                           );
+                        if (!mounted) return;
+
                           if (selectedDate != null) {
                             final selectedTime = await showTimePicker(
                               context: context,
@@ -398,6 +403,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
     if (confirmed != true) {
       return;
     }
+      if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Kayıt siliniyor...'), duration: Duration(seconds: 1)));
 
@@ -444,6 +450,8 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
 
     try {
       final token = await AuthStorage.getToken();
+            if (!mounted) return;
+
       if (token == null) {
         Navigator.pop(context);
         throw Exception("Oturum bulunamadı.");
@@ -454,6 +462,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
         logId: logId,
         updateData: updatedData,
       );
+      if (!mounted) return;
 
       Navigator.pop(context);
       if (!mounted) return;
@@ -462,6 +471,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(response.message), backgroundColor: Colors.green),
         );
+        
         Navigator.pop(dialogContext);
         setState(() {
           _mealLogs[index] = response.data!;
@@ -474,6 +484,8 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
         );
       }
     } catch (e) {
+            if (!mounted) return;
+
       Navigator.pop(context);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

@@ -144,19 +144,10 @@ class HomeScreen extends StatelessWidget {
               barrierDismissible: false,
               builder: (ctx) => Center(child: CircularProgressIndicator()),
             );
-
-            final success = await viewModel.updateGoalProgress(goal.id, newValue);
+            
             Navigator.pop(context);
 
-            if (success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("İlerleme güncellendi."), backgroundColor: Colors.green),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Güncelleme başarısız."), backgroundColor: Colors.red),
-              );
-            }
+           
           },
         );
       },

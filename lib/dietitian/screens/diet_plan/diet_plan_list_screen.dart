@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
 import 'package:dietician_app/dietitian/components/diet_plan/plan_card.dart';
 import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
@@ -63,7 +65,7 @@ class _ClientDietPlansScreenState extends State<ClientDietPlansScreen> {
         throw Exception(response.message.isNotEmpty ? response.message : "Planlar yüklenemedi.");
       }
     } catch (e) {
-      print("Planları çekerken hata: $e");
+      log("Planları çekerken hata: $e");
       if (mounted) {
         setState(() {
           _errorMessage = "Planlar yüklenirken bir sorun oluştu: ${e.toString()}";

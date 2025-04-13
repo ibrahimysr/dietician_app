@@ -1,4 +1,5 @@
-import 'dart:convert'; 
+import 'dart:convert';
+import 'dart:developer'; 
 
 class DietitianUser {
   final int id;
@@ -294,7 +295,7 @@ class DietitianSubscriptionPlan {
              }
         } catch (e) {
              featuresList = [json['features']];
-             print("Uyarı: Özellikler JSON string olarak çözümlenemedi: ${json['features']}");
+             log("Uyarı: Özellikler JSON string olarak çözümlenemedi: ${json['features']}");
         }
     }
 
@@ -385,7 +386,7 @@ class DietitianRecipe {
                }
           } catch (e) {
                ingredientsList = [json['ingredients']];
-               print("Uyarı: Malzemeler JSON string olarak çözümlenemedi: ${json['ingredients']}");
+               log("Uyarı: Malzemeler JSON string olarak çözümlenemedi: ${json['ingredients']}");
           }
       }
 

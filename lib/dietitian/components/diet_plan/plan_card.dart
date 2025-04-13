@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dietician_app/dietitian/components/diet_plan/card_footer.dart';
 import 'package:dietician_app/dietitian/components/diet_plan/header.dart';
 import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
@@ -24,7 +26,7 @@ class DietitianPlanCard extends StatelessWidget {
         final dateTime = DateTime.parse(dateString);
         return "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.year}";
       } catch (e) {
-        print("Tarih formatlama hatası: $e");
+        log("Tarih formatlama hatası: $e");
         return dateString; 
       }
     }

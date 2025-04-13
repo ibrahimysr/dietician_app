@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
 import 'package:dietician_app/dietitian/screens/meal/meal_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,7 @@ class DietitianDetailsMealItem extends StatelessWidget {
     try {
       mealTypeName = getMealTypeName(meal.mealType);
     } catch (e) {
-      print("getMealTypeName fonksiyonu bulunamadı veya hata verdi: $e");
+      log("getMealTypeName fonksiyonu bulunamadı veya hata verdi: $e");
       mealTypeName = meal.mealType; 
     }
 

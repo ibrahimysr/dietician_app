@@ -59,11 +59,11 @@ class _EditLogDialogState extends State<EditLogDialog> {
       locale: const Locale('tr', 'TR'),
     );
     if (selectedDate == null) return;
-
+    if(mounted) {
     final selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(_editedLoggedAt),
-    );
+    ); 
     if (selectedTime == null) return;
 
     setState(() {
@@ -75,7 +75,7 @@ class _EditLogDialogState extends State<EditLogDialog> {
         selectedTime.minute,
       );
     });
-  }
+  } }
 
   void _submitUpdate() {
     if (_formKey.currentState!.validate()) {

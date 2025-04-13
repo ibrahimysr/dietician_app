@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
@@ -67,7 +69,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      print("Diyetisyen bilgisi alınırken hata: $e"); 
+      log("Diyetisyen bilgisi alınırken hata: $e"); 
       setState(() {
         _errorMessage = "Bir hata oluştu: ${e.toString()}";
         _isLoading = false;
@@ -347,7 +349,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
                ? Tooltip(message: "Herkese Açık", child: Icon(Icons.public, size: 20, color: AppColor.secondary))
                : Tooltip(message: "Özel", child: Icon(Icons.lock_outline, size: 20, color: AppColor.secondary)),
             onTap: () {
-              print("Tarif seçildi: ${recipe.title} (ID: ${recipe.id})");
+              log("Tarif seçildi: ${recipe.title} (ID: ${recipe.id})");
             },
           ),
         );
@@ -395,7 +397,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
              ),
             isThreeLine: true, 
             onTap: () {
-              print("Plan seçildi: ${plan.name} (ID: ${plan.id})");
+              log("Plan seçildi: ${plan.name} (ID: ${plan.id})");
             },
           ),
         );
