@@ -25,7 +25,7 @@ class SubmitButton extends StatelessWidget {
                 strokeWidth: 2.5,
               ),
             )
-          : const Icon(Icons.cloud_upload_outlined, size: 20),
+          : const Icon(Icons.cloud_upload_outlined, size: 20,color: Colors.white,),
       label: Text(isLoading ? 'Kaydediliyor...' : 'Tarifi Kaydet'),
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(

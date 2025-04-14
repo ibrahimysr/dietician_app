@@ -30,7 +30,7 @@ class ImagePickerSection extends StatelessWidget {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: AppColor.greyLight,
+                color: AppColor.grey,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.grey),
                 image: selectedImage != null
@@ -43,7 +43,7 @@ class ImagePickerSection extends StatelessWidget {
               child: selectedImage == null
                   ? Center(
                       child: Icon(Icons.image_outlined,
-                          color: AppColor.grey, size: 40))
+                          color: AppColor.black, size: 40))
                   : null,
             ),
             const SizedBox(width: 16),
@@ -52,11 +52,11 @@ class ImagePickerSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ElevatedButton.icon(
-                    icon: const Icon(Icons.photo_library_outlined, size: 18),
+                    icon:  Icon(Icons.photo_library_outlined, size: 18,color: AppColor.grey,),
                     label: const Text("Galeriden Seç"),
                     onPressed: onPickImage,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.secondary,
+                      backgroundColor: AppColor.primary,
                       foregroundColor: AppColor.white,
                       textStyle: AppTextStyles.body2Medium,
                       padding: const EdgeInsets.symmetric(
