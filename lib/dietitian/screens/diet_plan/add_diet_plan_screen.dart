@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/client/components/shared/date_time_picker.dart';
@@ -10,6 +9,7 @@ import 'package:dietician_app/client/core/utils/parsing.dart';
 import 'package:dietician_app/dietitian/service/diet_plan/diet_plan_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import '../../components/recipes/recipes_add/error_message.dart';
 
@@ -44,13 +44,13 @@ class _AddDietPlanScreenState extends State<AddDietPlanScreen> {
         _isLoading = true;
         _errorMessage = null;
       });
-      final clientId;
-      final token;
+      final int clientId;
+      final String? token;
 
       try {
         clientId = 2;
-        token = AuthStorage.getToken();
-        if (token == null || clientId == null) {
+        token = await AuthStorage.getToken();
+        if (token == null) {
           throw Exception("Kimlik bilgileri alınamadı.");
         }
       } catch (e) {
@@ -63,18 +63,28 @@ class _AddDietPlanScreenState extends State<AddDietPlanScreen> {
         }
         return;
       }
+       
+       String? formattedStartDate;
+      String? formattedFinishDate;
+      final DateFormat formatter = DateFormat('yyyy-MM-dd'); 
 
+    if (selectedStartDate != null) {
+      formattedStartDate = formatter.format(selectedStartDate!);
+    }
+    if (selectedFinishDate != null) {
+      formattedFinishDate = formatter.format(selectedFinishDate!);
+    }
       Map<String, dynamic> dietPlanData = {
-        "client_id": 2,
+        "client_id": clientId,
         "title": titleController.text,
-        "start_date": selectedStartDate,
-        "end_date": selectedFinishDate,
+        if(formattedStartDate !=null) "start_date": formattedStartDate,
+        if(formattedFinishDate !=null) "end_date": formattedFinishDate,
         "daily_calories": int.tryParse(
               caloriesController.text,
             ) ??
             0,
         "notes": notesController.text,
-        "status": isPublic,
+        "status": isPublic ? "active" : "paused",
         "is_ongoing": false
       };
 
@@ -83,7 +93,7 @@ class _AddDietPlanScreenState extends State<AddDietPlanScreen> {
             token: token, data: dietPlanData);
 
         if (mounted) {
-          if (response?["succes"] == true) {
+          if (response?["success"] == true) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content:
@@ -92,9 +102,16 @@ class _AddDietPlanScreenState extends State<AddDietPlanScreen> {
               ),
             );
           }
+          Navigator.pop(context);
         }
       } catch (e) {
-        log("Veriler Kayıt Edilirken Bir Hata Oluştu:$e");
+        if (mounted) {
+          setState(() {
+            _errorMessage = "Oturum bilgileri alınamadı: ${e.toString()}";
+            _isLoading = false;
+          });
+        }
+        return;
       }
     }
   }
@@ -160,11 +177,11 @@ class _AddDietPlanScreenState extends State<AddDietPlanScreen> {
       child: Scaffold(
         backgroundColor: AppColor.white,
         appBar: CustomAppBar(title: "Yeni Diyet Planı Oluştur"),
-        body: Padding( 
+        body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(
-              children: [ 
+              children: [
                 ErrorMessageDisplay(errorMessage: _errorMessage),
                 _buildTextField(
                     controller: titleController,
@@ -232,8 +249,7 @@ class _AddDietPlanScreenState extends State<AddDietPlanScreen> {
                         backgroundColor: AppColor.primary,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: () { 
-            
+                      onPressed: () {
                         _isLoading ? null : _submitForm();
                       },
                       child: Text(
