@@ -50,10 +50,90 @@ class DietitiansRecipeService {
       return response;
     } on ApiException catch (e) {
       log("API Hatası (ApiException): $e");
-      throw e;
+      rethrow;
     } catch (e) {
       log("Tarif Ekleme Servis Genel Hata: $e");
       throw Exception("Tarif eklenirken beklenmedik bir hata oluştu: ${e.toString()}");
+    }
+  } 
+
+  
+  Future<Map<String, dynamic>> updateRecipe({
+    required String token,
+    required int recipeId,
+    required Map<String, dynamic> recipeData,
+    XFile? photo,
+    bool isPhotoRemoved = false, 
+  }) async {
+    final String endpoint = 'recipes-update/$recipeId';
+    log("Tarif Güncelleme Servisi Çağrıldı: Endpoint: $endpoint");
+    log("Gönderilecek Ham Veri: $recipeData");
+    if (photo != null) log("Yeni Fotoğraf: ${photo.name}");
+    if (isPhotoRemoved) log("Mevcut fotoğraf kaldırılacak.");
+
+    final Map<String, String> fields = {};
+    recipeData.forEach((key, value) {
+       if (key == 'user_id') return;
+
+       if (key == 'ingredients' && value is List) {
+         fields[key] = jsonEncode(value);
+       } else if (key == 'is_public' && value is bool) {
+         fields[key] = value ? '1' : '0';
+       } else if (value != null) {
+         fields[key] = value.toString();
+       }
+    });
+
+   
+     fields['_method'] = 'PUT'; 
+
+  
+     if (isPhotoRemoved) {
+        fields['remove_photo'] = '1'; 
+     }
+
+
+    log("API'ye Gönderilecek Son Alanlar (fields): $fields");
+
+    try {
+     
+      final response = await _apiClient.postMultipart(
+        endpoint, 
+        fields: fields,
+        token: token,
+        file: photo, 
+        fileField: 'photo',
+      );
+      log("API Güncelleme Yanıtı Alındı: $response");
+      return response;
+    } on ApiException catch (e) {
+      log("API Güncelleme Hatası (ApiException): $e");
+      rethrow;
+    } catch (e) {
+      log("Tarif Güncelleme Servis Genel Hata: $e");
+      throw Exception("Tarif güncellenirken beklenmedik bir hata oluştu: ${e.toString()}");
+    }
+  }
+
+
+  Future<Map<String, dynamic>> deleteRecipe({
+    required String token,
+    required int recipeId,
+  }) async {
+    final String endpoint = 'recipes-delete/$recipeId';
+    log("Tarif Silme Servisi Çağrıldı: Endpoint: $endpoint");
+
+    try {
+      final response = await _apiClient.delete(endpoint, token: token);
+      log("API Silme Yanıtı Alındı: $response");
+  
+      return response; 
+    } on ApiException catch (e) {
+      log("API Silme Hatası (ApiException): $e");
+      rethrow;
+    } catch (e) {
+      log("Tarif Silme Servis Genel Hata: $e");
+      throw Exception("Tarif silinirken beklenmedik bir hata oluştu: ${e.toString()}");
     }
   }
 }

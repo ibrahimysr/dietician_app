@@ -179,7 +179,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                //ProfileActionCard(delay: cardDelay * 5),
                 SizedBox(height: context.normalValue),
               ],
             ),
