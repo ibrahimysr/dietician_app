@@ -1,6 +1,8 @@
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/client/screens/recipes/recipes_screen.dart';
 import 'package:dietician_app/dietitian/screens/home/home_screen.dart';
+import 'package:dietician_app/dietitian/screens/setting/setting_screen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -19,8 +21,8 @@ class _DietitianMainScreenState extends State<DietitianMainScreen> with SingleTi
   
   final List<Widget> _screens = [
     DietitianHomeScreen(),
-    DietitianHomeScreen(),
-    DietitianHomeScreen(),
+    RecipesPage(),
+    DietitianSettingScreen(),
     
   ];
 
