@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/models/recipes_model.dart';
 import 'package:dietician_app/client/screens/recipes/recipes_details_screen.dart';
+import 'package:dietician_app/dietitian/screens/recipes/add_recipes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
 import 'dart:developer'; 
@@ -19,7 +20,24 @@ class AllRecipesScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _buildRecipeList(recipes),
-      ),
+      ), 
+
+      floatingActionButton: FloatingActionButton(
+  onPressed: () async {
+    final bool? addedSuccessfully = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const AddRecipeScreen()), 
+    );
+
+    if (addedSuccessfully == true ) {
+      log("Yeni tarif eklendi, liste yenileniyor...");
+       
+    }
+  },
+  tooltip: 'Yeni Tarif Ekle',
+  backgroundColor: Theme.of(context).primaryColor,
+  child: const Icon(Icons.add),
+),
     );
   }
 
