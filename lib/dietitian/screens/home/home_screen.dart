@@ -1,10 +1,14 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/client/models/recipes_model.dart';
+import 'package:dietician_app/client/screens/recipes/recipes_details_screen.dart';
 import 'package:dietician_app/dietitian/model/dietitian_model.dart';
 import 'package:dietician_app/dietitian/screens/diet_plan/diet_plan_list_screen.dart';
+import 'package:dietician_app/dietitian/screens/recipes/all_recipes_screen.dart';
 import 'package:dietician_app/dietitian/service/dietitian/dietitian_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
@@ -102,7 +106,11 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
 
     if (_dietitianData == null) {
       return _buildErrorWidget("Diyetisyen verisi bulunamadı.");
-    }
+    } 
+
+    final List<Recipes> allRecipes = _dietitianData!.recipes;
+    final bool showSeeAllButton = allRecipes.length > 2;
+    final List<Recipes> recipesToShow = showSeeAllButton ? allRecipes.take(3).toList() : allRecipes;
 
     return RefreshIndicator(
       onRefresh: _fetchDietitianInfo,
@@ -117,8 +125,21 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
             _buildSectionTitle(context, "Danışanlarım", Icons.people_outline),
             _buildClientList(_dietitianData!.clients), 
             const SizedBox(height: 24),
-            _buildSectionTitle(context, "Tariflerim", Icons.restaurant_menu),
-            _buildRecipeList(_dietitianData!.recipes), 
+           _buildSectionTitleWithSeeAll(
+              context: context,
+              title: "Tariflerim",
+              icon: Icons.restaurant_menu,
+              showSeeAll: showSeeAllButton,
+              onSeeAllTap: () {
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AllRecipesScreen(recipes: allRecipes), 
+                  ),
+                );
+              }
+            ),
+            _buildRecipeList(recipesToShow), 
             const SizedBox(height: 24),
             _buildSectionTitle(context, "Abonelik Planları", Icons.subscriptions_outlined),
             _buildSubscriptionPlanList(_dietitianData!.subscriptionPlans), 
@@ -192,6 +213,51 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
             ],
          ),
        ),
+    );
+  } 
+   Widget _buildSectionTitleWithSeeAll({
+    required BuildContext context,
+    required String title,
+    required IconData icon,
+    required bool showSeeAll,
+    VoidCallback? onSeeAllTap, 
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0, top: 8.0, left: 4, right: 4), 
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: AppColor.black, size: 22),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: AppTextStyles.body1Medium.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColor.black,
+                ),
+              ),
+            ],
+          ),
+          if (showSeeAll && onSeeAllTap != null)
+            InkWell( 
+              onTap: onSeeAllTap,
+              borderRadius: BorderRadius.circular(4), 
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                child: Text(
+                  "Tümünü Gör",
+                  style: AppTextStyles.body2Medium.copyWith( 
+                    color: AppColor.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -292,7 +358,7 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
     );
   }
 
-  Widget _buildRecipeList(List<DietitianRecipe> recipes) {
+  Widget _buildRecipeList(List<Recipes> recipes) {
      if (recipes.isEmpty) {
       return const Card(
           child: Padding(
@@ -313,25 +379,33 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
           clipBehavior: Clip.antiAlias,
           margin: const EdgeInsets.symmetric(vertical: 5),
           child: ListTile(
-             leading: recipe.photoUrl != null && recipe.photoUrl!.isNotEmpty
+             leading: recipe.photoUrl.isNotEmpty
                ? SizedBox(
                   width: 60,
                   height: 60,
                   child: ClipRRect( 
                      borderRadius: BorderRadius.circular(8.0),
-                     child: Image.network(
-                       recipe.photoUrl!,
-                       fit: BoxFit.cover, 
-                       loadingBuilder: (context, child, progress) {
-                         return progress == null ? child : const Center(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)));
-                       },
-                       errorBuilder: (context, error, stackTrace) {
-                         return Container( 
-                            color: Colors.grey.shade200,
-                            child: Icon(Icons.broken_image, color: Colors.grey.shade400)
-                         );
-                       },
-                     ),
+                     child:  Hero(
+              tag: 'recipe_image_${recipe.id}',
+              child: CachedNetworkImage(
+                imageUrl: recipe.photoUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: AppColor.greyLight,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColor.primary),
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: AppColor.greyLight,
+                  child:
+                      Icon(Icons.broken_image, color: AppColor.grey, size: 60),
+                ),
+              ),
+            ),
                   ),
                 )
                : Container( 
@@ -349,7 +423,9 @@ class _DietitianHomeScreenState extends State<DietitianHomeScreen> {
                ? Tooltip(message: "Herkese Açık", child: Icon(Icons.public, size: 20, color: AppColor.secondary))
                : Tooltip(message: "Özel", child: Icon(Icons.lock_outline, size: 20, color: AppColor.secondary)),
             onTap: () {
-              log("Tarif seçildi: ${recipe.title} (ID: ${recipe.id})");
+              log("Tarif seçildi: ${recipe.title} (ID: ${recipe.id})"); 
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => RecipeDetailsPage(recipe: recipe),));
+
             },
           ),
         );

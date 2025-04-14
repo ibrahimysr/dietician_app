@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'dart:developer'; 
+import 'dart:developer';
+
+import 'package:dietician_app/client/models/recipes_model.dart'; 
 
 class DietitianUser {
   final int id;
@@ -102,7 +104,7 @@ class DietitianData {
   final DietitianUser? user; 
   final List<DietitianClient> clients;
   final List<DietitianSubscriptionPlan> subscriptionPlans;
-  final List<DietitianRecipe> recipes;
+  final List<Recipes> recipes;
 
   DietitianData({
     required this.id,
@@ -133,8 +135,8 @@ class DietitianData {
         : [];
 
     var recipeList = json['recipes'] as List?;
-    List<DietitianRecipe> recipesData = recipeList != null
-        ? recipeList.map((r) => DietitianRecipe.fromJson(r)).toList()
+    List<Recipes> recipesData = recipeList != null
+        ? recipeList.map((r) => Recipes.fromJson(r)).toList()
         : [];
 
     return DietitianData(
@@ -331,109 +333,3 @@ class DietitianSubscriptionPlan {
   }
 }
 
-class DietitianRecipe {
-  final int id;
-  final int dietitianId;
-  final String title;
-  final String description;
-  final List<String> ingredients;
-  final String instructions;
-  final int prepTime;
-  final int cookTime;
-  final int servings;
-  final int calories;
-  final String protein;
-  final String fat;
-  final String carbs;
-  final String tags;
-  final String? photoUrl;
-  final bool isPublic;
-  final String createdAt;
-  final String updatedAt;
-  final String? deletedAt;
-
-  DietitianRecipe({
-    required this.id,
-    required this.dietitianId,
-    required this.title,
-    required this.description,
-    required this.ingredients,
-    required this.instructions,
-    required this.prepTime,
-    required this.cookTime,
-    required this.servings,
-    required this.calories,
-    required this.protein,
-    required this.fat,
-    required this.carbs,
-    required this.tags,
-    this.photoUrl,
-    required this.isPublic,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
-  });
-
-  factory DietitianRecipe.fromJson(Map<String, dynamic> json) {
-    List<String> ingredientsList = [];
-     if (json['ingredients'] != null && json['ingredients'] is List) {
-        ingredientsList = List<String>.from(json['ingredients'].map((item) => item.toString()));
-      } else if (json['ingredients'] is String) {
-          try {
-               var decoded = jsonDecode(json['ingredients']);
-               if (decoded is List) {
-                   ingredientsList = List<String>.from(decoded.map((item) => item.toString()));
-               }
-          } catch (e) {
-               ingredientsList = [json['ingredients']];
-               log("Uyarı: Malzemeler JSON string olarak çözümlenemedi: ${json['ingredients']}");
-          }
-      }
-
-    return DietitianRecipe(
-      id: json['id'] ?? 0,
-      dietitianId: json['dietitian_id'] ?? 0,
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      ingredients: ingredientsList,
-      instructions: json['instructions'] ?? '',
-      prepTime: json['prep_time'] ?? 0,
-      cookTime: json['cook_time'] ?? 0,
-      servings: json['servings'] ?? 0,
-      calories: json['calories'] ?? 0,
-      protein: json['protein']?.toString() ?? '0.00',
-      fat: json['fat']?.toString() ?? '0.00',
-      carbs: json['carbs']?.toString() ?? '0.00',
-      tags: json['tags'] ?? '',
-      photoUrl: json['photo_url'],
-      isPublic: json['is_public'] ?? false,
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
-      deletedAt: json['deleted_at'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'dietitian_id': dietitianId,
-      'title': title,
-      'description': description,
-      'ingredients': ingredients,
-      'instructions': instructions,
-      'prep_time': prepTime,
-      'cook_time': cookTime,
-      'servings': servings,
-      'calories': calories,
-      'protein': protein,
-      'fat': fat,
-      'carbs': carbs,
-      'tags': tags,
-      'photo_url': photoUrl,
-      'is_public': isPublic,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-      'deleted_at': deletedAt,
-    };
-  }
-}
