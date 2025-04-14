@@ -5,6 +5,8 @@ import 'package:dietician_app/client/components/setting/profile_info_card.dart';
 import 'package:dietician_app/client/components/setting/profile_info_tile.dart';
 import 'package:dietician_app/client/components/setting/loading_indicator.dart';
 import 'package:dietician_app/client/core/extension/context_extension.dart';
+import 'package:dietician_app/client/core/theme/textstyle.dart';
+import 'package:dietician_app/client/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -180,6 +182,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
                 SizedBox(height: context.normalValue),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom( 
+                    backgroundColor: AppColor.primary, 
+                    foregroundColor: AppColor.grey
+                  ),
+                  onPressed: (){  
+                  AuthStorage.clearClientid(); 
+                  AuthStorage.clearToken(); 
+                  AuthStorage.clearid();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),)); 
+                }, child: Text("Çıkış Yap",style: AppTextStyles.body1Medium,))
               ],
             ),
           ),

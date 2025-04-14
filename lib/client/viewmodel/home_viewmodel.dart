@@ -6,6 +6,7 @@ import 'package:dietician_app/client/models/compare_diet_plan_model.dart';
 import 'package:dietician_app/client/models/diet_plan_model.dart';
 import 'package:dietician_app/client/models/food_model.dart';
 import 'package:dietician_app/client/models/goal_model.dart';
+import 'package:dietician_app/client/services/api/api_client.dart';
 import 'package:dietician_app/client/services/diet_plan/diet_plan_service.dart';
 import 'package:dietician_app/client/services/food/food_service.dart';
 import 'package:dietician_app/client/services/food_log/food_log_service.dart';
@@ -156,38 +157,74 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchDailyComparison() async {
-    _comparisonErrorMessage = null;
+Future<void> fetchDailyComparison() async {
+    _isLoadingComparison = true;
+    _comparisonErrorMessage = null; 
+    notifyListeners();
 
-    final token = await AuthStorage.getToken();
-    if (token == null) {
-      _isLoadingComparison = false;
-      _comparisonErrorMessage = "Oturum bulunamadı.";
-      notifyListeners();
-      return;
-    }
-    final int? clientId = await AuthStorage.getId();
-    if (clientId == null || clientId == 0) {
-      _isLoadingComparison = false;
-      _comparisonErrorMessage = "Kullanıcı ID bulunamadı.";
-      notifyListeners();
-      return;
-    }
+    String? token;
+    int? clientId;
 
     try {
+      token = await AuthStorage.getToken();
+      clientId = await AuthStorage.getClientId();
+
+      if (token == null) {
+        throw Exception("Oturum bulunamadı.");
+      }
+      if (clientId == null || clientId == 0) {
+        throw Exception("Kullanıcı ID bulunamadı.");
+      }
+    } catch (e) {
+      log("AuthStorage Hatası (Özet): $e");
+      _comparisonErrorMessage = e.toString(); 
+      _isLoadingComparison = false;
+      notifyListeners();
+      return;
+    }
+    try {
       final today = DateTime.now();
-      final response = await _foodLogService.getDietComparison(
+      final DietComparisonResponse response = await _foodLogService.getDietComparison(
         token: token,
         clientId: clientId,
         date: today,
       );
 
-      if (response.success && response.data != null) {
-        _dailyComparisonData = response.data;
+      if (response.success) {
+        if (response.data != null) {
+          _dailyComparisonData = response.data;
+          _comparisonErrorMessage = null; 
+           log("Günlük özet başarıyla alındı.");
+        } else {
+          _dailyComparisonData = null;
+          _comparisonErrorMessage = null; 
+          log("Günlük özet için veri bulunamadı (API success: true, data: null).");
+        }
       } else {
-        _comparisonErrorMessage = response.message;
+        String message = response.message.isNotEmpty ? response.message : "Bilinmeyen bir API hatası.";
+        if (message.toLowerCase().contains('bulunamadı') || message.toLowerCase().contains('mevcut değil')) {
+            log("Günlük özet için veri bulunamadı (API success: false, mesaj: $message).");
+             _dailyComparisonData = null;
+             _comparisonErrorMessage = null; 
+        } else {
+           log("API Başarısız (Özet): $message");
+           _dailyComparisonData = null;
+           _comparisonErrorMessage = message; 
+        }
+      }
+    } on ApiException catch (e) {
+      log("ApiException (Özet): $e");
+      if (e.statusCode == 404) {
+        log("Günlük özet bulunamadı (ApiException 404), hata olarak sayılmıyor.");
+        _dailyComparisonData = null;
+        _comparisonErrorMessage = null; 
+      } else {
+        _dailyComparisonData = null;
+        _comparisonErrorMessage = "API Hatası (${e.statusCode}): ${e.message}";
       }
     } catch (e) {
+      log("Genel Hata (Özet): $e");
+      _dailyComparisonData = null;
       _comparisonErrorMessage = "Günlük özet alınamadı: ${e.toString()}";
     } finally {
       _isLoadingComparison = false;

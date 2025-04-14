@@ -59,10 +59,15 @@ class GoalsSection extends StatelessWidget {
             ),
           )
         else if (goalErrorMessage != null)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text("Hedefler yüklenemedi.", style: TextStyle(color: Colors.redAccent)),
+          Container( 
+            decoration: BoxDecoration( 
+              color: Colors.white, 
+              borderRadius: BorderRadius.circular(10)            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("Şu anda aktif bir hedefiniz bulunmuyor", style: AppTextStyles.body1Regular),
+              ),
             ),
           )
         else if (goals.isEmpty)
