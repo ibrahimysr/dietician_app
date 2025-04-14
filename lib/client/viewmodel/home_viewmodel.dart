@@ -39,7 +39,6 @@ class HomeViewModel with ChangeNotifier {
   late DateTime _currentDate;
   late String _greeting;
 
-  // Getter'lar
   bool get isDietPlanLoading => _isDietPlanLoading;
   String? get dietPlanErrorMessage => _dietPlanErrorMessage;
   List<DietPlan> get allDietPlans => _allDietPlans;

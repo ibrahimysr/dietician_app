@@ -133,7 +133,7 @@ class TodaysMealsSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       decoration: BoxDecoration(
-        color: AppColor.greyLight,
+        color: AppColor.grey,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(

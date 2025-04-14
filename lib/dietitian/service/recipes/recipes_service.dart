@@ -15,8 +15,6 @@ class DietitiansRecipeService {
     XFile? photo,
   }) async {
     const String endpoint = 'recipes-add';
-    log("Tarif Ekleme Servisi Çağrıldı: Endpoint: $endpoint");
-    log("Gönderilecek Ham Veri: $recipeData");
     if (photo != null) {
       log("Seçilen Fotoğraf: ${photo.name}");
     }

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
 import 'package:dietician_app/dietitian/components/diet_plan/plan_card.dart';
 import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
+import 'package:dietician_app/dietitian/screens/diet_plan/add_diet_plan_screen.dart';
 import 'package:dietician_app/dietitian/service/diet_plan/diet_plan_service.dart';
 import 'package:flutter/material.dart';
 
@@ -93,8 +94,16 @@ class _ClientDietPlansScreenState extends State<ClientDietPlansScreen> {
     return Scaffold(
       backgroundColor: AppColor.white,
       appBar: CustomAppBar(title: "Danışan Diyet Planları"), 
-      body: _buildBody(),
-    );
+      body: _buildBody(), 
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColor.primary,
+        onPressed: (){
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddDietPlanScreen(),));
+         },child: Icon(Icons.add, color: Colors.white,),),
+    ); 
+
+    
   }
 
   Widget _buildBody() {
