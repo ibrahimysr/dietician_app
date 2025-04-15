@@ -1,33 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:dietician_app/client/models/food_log_model.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
-import 'package:dietician_app/client/models/food_log_model.dart';
-import 'package:flutter/material.dart';
 import 'food_log_item.dart';
 
 class FoodLogSection extends StatelessWidget {
+  final String title;
   final List<FoodLog> mealLogs;
   final bool isLoadingLogs;
   final String? logErrorMessage;
-  final VoidCallback onRefresh;
-  final Function(FoodLog, int) onEdit;
-  final Function(int, int) onDelete;
+  final VoidCallback? onRefresh;
+  final Function(FoodLog, int)? onEdit;
+  final Function(int, int)? onDelete;
+  final bool isReadOnly;
 
   const FoodLogSection({
     super.key,
+    this.title = "Kaydedilenler (Danışanın Girdikleri)",
     required this.mealLogs,
     required this.isLoadingLogs,
     required this.logErrorMessage,
-    required this.onRefresh,
-    required this.onEdit,
-    required this.onDelete,
+    this.onRefresh,
+    this.onEdit,
+    this.onDelete,
+    this.isReadOnly = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2.0,
+      elevation: 1.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color: AppColor.grey,
+      margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -37,12 +42,21 @@ class FoodLogSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Kaydedilenler (Yedikleriniz)",
+                  title,
                   style: AppTextStyles.heading4.copyWith(color: AppColor.black),
                 ),
+                if (onRefresh != null)
+                  IconButton(
+                    icon: Icon(Icons.refresh, color: AppColor.secondary, size: 22),
+                    onPressed: onRefresh,
+                    tooltip: 'Kayıtları Yenile',
+                    splashRadius: 20,
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(),
+                  ),
               ],
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             _buildLogContent(context),
           ],
         ),
@@ -61,6 +75,42 @@ class FoodLogSection extends StatelessWidget {
     }
 
     if (logErrorMessage != null) {
+      bool isNoLogsError = logErrorMessage!.contains("belirtilen tarihte") ||
+          logErrorMessage!.contains("log bulunamadı") ||
+          logErrorMessage!.contains("no logs found");
+
+      if (isNoLogsError) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.no_food_outlined, color: AppColor.greyLight, size: 35),
+                const SizedBox(height: 10),
+                Text(
+                  "Danışan bu tarih için henüz\nbir kayıt girmemiş.",
+                  style: AppTextStyles.body1Regular.copyWith(color: AppColor.grey),
+                  textAlign: TextAlign.center,
+                ),
+                if (onRefresh != null) ...[
+                  const SizedBox(height: 15),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.refresh, size: 18),
+                    label: const Text('Yenile'),
+                    onPressed: onRefresh,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: AppColor.white,
+                      backgroundColor: AppColor.secondary,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      }
+
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -68,22 +118,24 @@ class FoodLogSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.error_outline, color: Colors.redAccent, size: 30),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 'Hata: $logErrorMessage',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.body1Regular.copyWith(color: Colors.redAccent),
               ),
-              SizedBox(height: 15),
-              ElevatedButton.icon(
-                icon: Icon(Icons.refresh, size: 18),
-                label: Text('Tekrar Dene'),
-                onPressed: onRefresh,
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: AppColor.white,
-                  backgroundColor: AppColor.secondary,
+              if (onRefresh != null) ...[
+                const SizedBox(height: 15),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.refresh, size: 18),
+                  label: const Text('Tekrar Dene'),
+                  onPressed: onRefresh,
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: AppColor.white,
+                    backgroundColor: AppColor.secondary,
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),
@@ -98,9 +150,9 @@ class FoodLogSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.no_food_outlined, color: AppColor.greyLight, size: 35),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
-                "Bu öğün için henüz bir kayıt\neklenmemiş.",
+                "Danışan bu öğün için henüz\nbir kayıt girmemiş.",
                 style: AppTextStyles.body1Regular.copyWith(color: AppColor.grey),
                 textAlign: TextAlign.center,
               ),
@@ -112,18 +164,19 @@ class FoodLogSection extends StatelessWidget {
 
     return ListView.separated(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: mealLogs.length,
       itemBuilder: (context, index) {
         return FoodLogItem(
           log: mealLogs[index],
           index: index,
-          onEdit: onEdit,
-          onDelete: onDelete,
+          onEdit: isReadOnly ? null : onEdit,
+          onDelete: isReadOnly ? null : onDelete,
+          isReadOnly: isReadOnly,
         );
       },
       separatorBuilder: (context, index) => Divider(
-        color: AppColor.grey?.withValues(alpha: 0.3),
+        color: AppColor.greyLight.withValues(alpha: 0.4),
         height: 25,
         thickness: 1,
       ),

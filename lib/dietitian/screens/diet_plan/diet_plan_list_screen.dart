@@ -94,7 +94,9 @@ class _ClientDietPlansScreenState extends State<ClientDietPlansScreen> {
     return Scaffold(
       backgroundColor: AppColor.white,
       appBar: CustomAppBar(title: "Danışan Diyet Planları"), 
-      body: _buildBody(), 
+      body: RefreshIndicator(
+        onRefresh: _fetchPlans,
+        child: _buildBody()), 
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColor.primary,
         onPressed: (){

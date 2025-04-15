@@ -5,6 +5,7 @@ import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/client/screens/auth/login_screen.dart';
 import 'package:dietician_app/dietitian/model/dietitian_model.dart';
 import 'package:dietician_app/dietitian/service/dietitian/dietitian_service.dart';
 import 'package:flutter/material.dart';
@@ -147,6 +148,17 @@ class _DietitianSettingScreenState extends State<DietitianSettingScreen> {
               _buildBioCard(context, _dietitianData!),
               const SizedBox(height: 16),
             ],
+            ElevatedButton(
+                  style: ElevatedButton.styleFrom( 
+                    backgroundColor: AppColor.primary, 
+                    foregroundColor: AppColor.grey
+                  ),
+                  onPressed: (){  
+                  AuthStorage.clearClientid(); 
+                  AuthStorage.clearToken(); 
+                  AuthStorage.clearid();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),)); 
+                }, child: Text("Çıkış Yap",style: AppTextStyles.body1Medium,))
           ],
         ),
       ),
