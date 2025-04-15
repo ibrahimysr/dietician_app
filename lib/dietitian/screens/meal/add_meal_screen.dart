@@ -38,33 +38,43 @@ class AddMealScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       ErrorMessageDisplay(errorMessage: viewModel.errorMessage),
-                      DropdownButtonFormField<String>(
-                        value: viewModel.selectedMealType,
-                        decoration: InputDecoration(
-                          labelText: "Öğün Türü",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                      Container( 
+                       decoration: BoxDecoration( 
+                        color: AppColor.grey
+                       ), 
+                        child: DropdownButtonFormField<String>(
+                          dropdownColor: AppColor.grey,
+                          focusColor: AppColor.primary,
+                          
+                          value: viewModel.selectedMealType,
+                          decoration: InputDecoration( 
+                           iconColor: Colors.black,
+                            labelText: "Öğün Türü",
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.primary),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 16.0,
+                            ),
                           ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12.0,
-                            vertical: 16.0,
-                          ),
+                          items: viewModel.mealTypeOptions.map((String mealType) {
+                            return DropdownMenuItem<String>(
+                              value: mealType,
+                              child: Text(mealType),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            viewModel.setMealType(newValue);
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Lütfen bir öğün türü seçin";
+                            }
+                            return null;
+                          },
                         ),
-                        items: viewModel.mealTypeOptions.map((String mealType) {
-                          return DropdownMenuItem<String>(
-                            value: mealType,
-                            child: Text(mealType),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          viewModel.setMealType(newValue);
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Lütfen bir öğün türü seçin";
-                          }
-                          return null;
-                        },
                       ),
                       const SizedBox(height: 16),
                       buildTextField(

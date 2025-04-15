@@ -102,11 +102,11 @@ class AddMealScreenViewModel extends ChangeNotifier {
     try {
       Map<String, dynamic>? response;
       if (_isEditMode && _dietPlanId != null) {
-        // response = await _dietPlanService.updateDietPlan(
-        //   token: token,
-        //   data: dietPlanData,
-        //   dietplanid: _dietPlanId!
-        // );
+        response = await _mealService.updateMeal(
+          token: token,
+          data: dietPlanData,
+          mealId: _dietPlanId!
+        );
       } else {
         response = await _mealService.addMeal(
           token: token,

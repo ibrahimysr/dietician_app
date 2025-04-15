@@ -3,6 +3,8 @@ import 'package:dietician_app/client/components/food_log/comparison_section.dart
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
 import 'package:dietician_app/dietitian/components/meal/food_log_section.dart';
 import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
+import 'package:dietician_app/dietitian/screens/meal/add_meal_screen.dart';
+import 'package:dietician_app/dietitian/service/meal/meal_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dietician_app/client/models/food_log_model.dart';
@@ -33,6 +35,7 @@ class MealDetailScreen extends StatefulWidget {
 
 class _MealDetailScreenState extends State<MealDetailScreen> {
   final FoodLogService _foodLogService = FoodLogService();
+  final MealService _mealService = MealService();
 
   List<FoodLog> _mealLogs = [];
   bool _isLoadingLogs = true;
@@ -222,19 +225,58 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(mealTypeIcon, color: AppColor.secondary, size: 24),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  mealTypeName, 
-                                  style: AppTextStyles.heading3.copyWith(color: AppColor.secondary),
-                                ),
+                              Row(
+                                children: [
+                                  Icon(mealTypeIcon, color: AppColor.secondary, size: 24),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    mealTypeName, 
+                                    style: AppTextStyles.heading3.copyWith(color: AppColor.secondary),
+                                  ),
+                                  Text(
+                                    "Gün ${widget.meal.dayNumber}", 
+                                    style: AppTextStyles.body1Regular.copyWith(color: AppColor.grey),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Gün ${widget.meal.dayNumber}", 
-                                style: AppTextStyles.body1Regular.copyWith(color: AppColor.grey),
-                              ),
+                               PopupMenuButton<String>( 
+
+                  color: AppColor.primary,
+                  iconColor: AppColor.black,
+                  onSelected: (String result) async {
+                  if (result == 'Edit') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddMealScreen(
+                           meal: widget.meal, 
+                           dietPlanId: widget.plan.id
+                          ),
+                        ),
+                      );
+                    } else if (result == 'Delete') {
+                      
+                    final String? token =await AuthStorage.getToken();
+                     var response = _mealService.deleteMeal(token: token!,dietplanid: widget.meal.id);
+                     print(response); 
+                     Navigator.pop(context);
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: 'Edit',
+                      child: Text('✏️ Düzenle',style: TextStyle(color: Colors.white),),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'Delete',
+                      child: Text('🗑️ Sil',style: TextStyle(color: Colors.white),),
+                    ),
+                   
+                  ],
+                )
                             ],
                           ),
                           Divider(height: 25, color: AppColor.greyLight.withValues(alpha:0.6)),
