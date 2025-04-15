@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:dietician_app/dietitian/components/diet_plan/details_day_meals_card.dart';
 import 'package:dietician_app/dietitian/components/diet_plan/details_general_info_card.dart';
 import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
+import 'package:dietician_app/dietitian/screens/meal/add_meal_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -50,6 +51,15 @@ class DietPlanDetailScreen extends StatelessWidget {
 
           SizedBox(height: context.getDynamicHeight(2)), 
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColor.primary,
+        onPressed: (){ 
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddMealScreen(dietPlanId: plan.id,),));
+        } 
+      
+     , 
+      child: Icon(Icons.add,color:Colors.white,),
       ),
     );
   }
