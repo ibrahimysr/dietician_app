@@ -8,13 +8,19 @@ class AddMealScreenViewModel extends ChangeNotifier {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _dayNumber = TextEditingController();
-  final TextEditingController _mealType = TextEditingController();
   final TextEditingController _description = TextEditingController();
-
   final TextEditingController _calories = TextEditingController();
   final TextEditingController _protein = TextEditingController();
   final TextEditingController _fat = TextEditingController();
   final TextEditingController _carbs = TextEditingController();
+
+  String? _selectedMealType; 
+  static const Map<String, String> _mealTypeMapping = {
+    "Kahvaltı": "breakfast",
+    "Öğle Yemeği": "lunch",
+    "Akşam Yemeği": "dinner",
+    "Ara Öğün": "snack",
+  };
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -23,31 +29,39 @@ class AddMealScreenViewModel extends ChangeNotifier {
 
   GlobalKey<FormState> get formKey => _formKey;
   TextEditingController get dayNumber => _dayNumber;
-  TextEditingController get mealType => _mealType;
   TextEditingController get description => _description;
   TextEditingController get calories => _calories;
   TextEditingController get protein => _protein;
   TextEditingController get fat => _fat;
   TextEditingController get carbs => _carbs;
+  String? get selectedMealType => _selectedMealType;
+  List<String> get mealTypeOptions => _mealTypeMapping.keys.toList();
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get isEditMode => _isEditMode;
 
-  AddMealScreenViewModel({ClientMeal? meal,required dietPlanId}) {
-   
-     _dietPlanId = dietPlanId;
+  AddMealScreenViewModel({ClientMeal? meal, required dietPlanId}) {
+    _dietPlanId = dietPlanId;
     if (meal != null) {
       _isEditMode = true;
-    
       dayNumber.text = meal.dayNumber.toString();
-      mealType.text = meal.mealType;
       description.text = meal.description;
       calories.text = meal.calories.toString();
-      protein.text = meal.protein;
-      fat.text = meal.fat;
-      carbs.text = meal.carbs;
+      protein.text = meal.protein.toString();
+      fat.text = meal.fat.toString();
+      carbs.text = meal.carbs.toString();
+
+      _selectedMealType = _mealTypeMapping.entries
+          .firstWhere((entry) => entry.value == meal.mealType,
+              orElse: () => _mealTypeMapping.entries.first)
+          .key;
     }
+  }
+
+  void setMealType(String? newValue) {
+    _selectedMealType = newValue;
+    notifyListeners();
   }
 
   Future<bool> submitForm() async {
@@ -77,12 +91,12 @@ class AddMealScreenViewModel extends ChangeNotifier {
     Map<String, dynamic> dietPlanData = {
       "diet_plan_id": _dietPlanId,
       "day_number": int.tryParse(dayNumber.text) ?? 0,
-      "meal_type": mealType.text,
+      "meal_type": _mealTypeMapping[_selectedMealType] ?? "breakfast", 
       "description": description.text,
       "calories": int.tryParse(calories.text) ?? 0,
       "protein": int.tryParse(protein.text) ?? 0,
       "fat": int.tryParse(fat.text) ?? 0,
-      "carbs": int.tryParse(carbs.text) ?? 0
+      "carbs": int.tryParse(carbs.text) ?? 0,
     };
 
     try {
@@ -120,7 +134,6 @@ class AddMealScreenViewModel extends ChangeNotifier {
     _fat.dispose();
     _description.dispose();
     _dayNumber.dispose();
-    _mealType.dispose();
     _protein.dispose();
     super.dispose();
   }

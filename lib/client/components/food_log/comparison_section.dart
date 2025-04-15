@@ -30,13 +30,44 @@ class ComparisonSection extends StatelessWidget {
     }
 
     if (comparisonErrorMessage != null) {
+      bool isNoDataError = comparisonErrorMessage!.contains("aktif bir diyet planı bulunamadı") ||
+                           comparisonErrorMessage!.contains("no active diet plan") ||
+                           comparisonErrorMessage!.contains("belirtilen tarihte"); 
+
+      if (isNoDataError) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.info_outline, color: AppColor.greyLight, size: 35),
+                const SizedBox(height: 10),
+                Text(
+                  "Bu tarih için diyet planı veya kayıtlı öğün bulunamadı.\nKarşılaştırma yapılamıyor.",
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body1Regular.copyWith(color: AppColor.black),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         child: Center(
-          child: Text(
-            "Karşılaştırma yüklenemedi: $comparisonErrorMessage",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.redAccent),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 30),
+              const SizedBox(height: 10),
+              Text(
+                "Karşılaştırma yüklenemedi:\n$comparisonErrorMessage",
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body1Regular.copyWith(color: Colors.redAccent),
+              ),
+            ],
           ),
         ),
       );
@@ -45,7 +76,20 @@ class ComparisonSection extends StatelessWidget {
     if (comparisonData == null) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
-        child: Center(child: Text("Karşılaştırma verisi bulunamadı.")),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.info_outline, color: AppColor.greyLight, size: 35),
+              const SizedBox(height: 10),
+              Text(
+                "Karşılaştırma verisi bulunamadı.",
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body1Regular.copyWith(color: AppColor.black),
+              ),
+            ],
+          ),
+        ),
       );
     }
 
@@ -81,6 +125,4 @@ class ComparisonSection extends StatelessWidget {
       ],
     );
   }
-
-  
 }

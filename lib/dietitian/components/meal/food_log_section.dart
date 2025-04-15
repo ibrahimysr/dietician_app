@@ -65,34 +65,41 @@ class FoodLogSection extends StatelessWidget {
   }
 
   Widget _buildLogContent(BuildContext context) {
-    if (isLoadingLogs) {
-      return  Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          child: CircularProgressIndicator(color: AppColor.secondary),
-        ),
-      );
-    }
+  if (isLoadingLogs) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20.0),
+        child: CircularProgressIndicator(color: AppColor.secondary),
+      ),
+    );
+  }
 
-    if (logErrorMessage != null) {
+  // Check if the error message indicates no logs were found
+  if (logErrorMessage != null) {
+    // Customize this condition based on the exact error message from your backend
+    bool isNoLogsError = logErrorMessage!.contains("belirtilen tarihte") || 
+                         logErrorMessage!.contains("log bulunamadı") || 
+                         logErrorMessage!.contains("no logs found"); // Adjust based on actual error message
+
+    if (isNoLogsError) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          padding: const EdgeInsets.symmetric(vertical: 30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 30),
+              Icon(Icons.info_outline, color: AppColor.greyLight, size: 35),
               const SizedBox(height: 10),
               Text(
-                'Kayıtlar yüklenemedi:\n$logErrorMessage', 
+                "Danışan bu tarih için henüz\nbir kayıt girmemiş.", 
+                style: AppTextStyles.body1Regular.copyWith(color: AppColor.black),
                 textAlign: TextAlign.center,
-                style: AppTextStyles.body1Regular.copyWith(color: Colors.redAccent),
               ),
               if (onRefresh != null) ...[
                 const SizedBox(height: 15),
                 ElevatedButton.icon(
                   icon: const Icon(Icons.refresh, size: 18),
-                  label: const Text('Tekrar Dene'),
+                  label: const Text('Yenile'),
                   onPressed: onRefresh,
                   style: ElevatedButton.styleFrom(
                     foregroundColor: AppColor.white,
@@ -106,44 +113,76 @@ class FoodLogSection extends StatelessWidget {
       );
     }
 
-    if (mealLogs.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.playlist_add, color: AppColor.greyLight, size: 35),
-              const SizedBox(height: 10),
-              Text(
-                "Danışan bu öğün için henüz\nbir kayıt girmemiş.", 
-                style: AppTextStyles.body1Regular.copyWith(color: AppColor.black),
-                textAlign: TextAlign.center,
+    // For other errors, show the error message
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 30),
+            const SizedBox(height: 10),
+            Text(
+              'Kayıtlar yüklenemedi:\n$logErrorMessage', 
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body1Regular.copyWith(color: Colors.redAccent),
+            ),
+            if (onRefresh != null) ...[
+              const SizedBox(height: 15),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.refresh, size: 18),
+                label: const Text('Tekrar Dene'),
+                onPressed: onRefresh,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: AppColor.white,
+                  backgroundColor: AppColor.secondary,
+                ),
               ),
-            ],
-          ),
+            ]
+          ],
         ),
-      );
-    }
-
-    return ListView.separated(
-      shrinkWrap: true, 
-      physics: const NeverScrollableScrollPhysics(), 
-      itemCount: mealLogs.length,
-      itemBuilder: (context, index) {
-        return FoodLogItem(
-          log: mealLogs[index],
-          index: index,
-          onEdit: isReadOnly ? null : onEdit, 
-          onDelete: isReadOnly ? null : onDelete, 
-          isReadOnly: isReadOnly, 
-        );
-      },
-      separatorBuilder: (context, index) => Divider( 
-        color: AppColor.greyLight.withValues(alpha:0.4), 
-        height: 25, 
-        thickness: 1, 
       ),
     );
   }
+
+  if (mealLogs.isEmpty) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.playlist_add, color: AppColor.greyLight, size: 35),
+            const SizedBox(height: 10),
+            Text(
+              "Danışan bu öğün için henüz\nbir kayıt girmemiş.", 
+              style: AppTextStyles.body1Regular.copyWith(color: AppColor.black),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  return ListView.separated(
+    shrinkWrap: true, 
+    physics: const NeverScrollableScrollPhysics(), 
+    itemCount: mealLogs.length,
+    itemBuilder: (context, index) {
+      return FoodLogItem(
+        log: mealLogs[index],
+        index: index,
+        onEdit: isReadOnly ? null : onEdit, 
+        onDelete: isReadOnly ? null : onDelete, 
+        isReadOnly: isReadOnly, 
+      );
+    },
+    separatorBuilder: (context, index) => Divider( 
+      color: AppColor.greyLight.withValues(alpha:0.4), 
+      height: 25, 
+      thickness: 1, 
+    ),
+  );
+}
 }
