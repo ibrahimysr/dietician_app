@@ -5,6 +5,7 @@ import 'package:dietician_app/client/core/extension/context_extension.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
 import 'package:dietician_app/client/core/utils/select_date.dart';
+import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
 import 'package:dietician_app/dietitian/viewmodel/diet_plan_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,19 +15,29 @@ import '../../components/recipes/recipes_add/error_message.dart';
 
 class AddDietPlanScreen extends StatelessWidget {
   final int clientId;
-  const AddDietPlanScreen({super.key, required this.clientId});
+  final ClientDietPlan? dietPlan; 
+
+  const AddDietPlanScreen({
+    super.key,
+    required this.clientId,
+    this.dietPlan,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => AddDietPlanScreenViewModel(),
+      create: (_) => AddDietPlanScreenViewModel(dietPlan: dietPlan),
       child: Consumer<AddDietPlanScreenViewModel>(
         builder: (context, viewModel, child) {
           return Form(
             key: viewModel.formKey,
             child: Scaffold(
               backgroundColor: AppColor.white,
-              appBar: CustomAppBar(title: "Yeni Diyet Planı Oluştur"),
+              appBar: CustomAppBar(
+                title: viewModel.isEditMode
+                    ? "Diyet Planını Düzenle"
+                    : "Yeni Diyet Planı Oluştur",
+              ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SingleChildScrollView(
@@ -131,8 +142,9 @@ class AddDietPlanScreen extends StatelessWidget {
                                   if (success) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(
-                                            'Diyet planı başarıyla eklendi!'),
+                                        content: Text(viewModel.isEditMode
+                                            ? "Diyet planı başarıyla güncellendi!"
+                                            : "Diyet planı başarıyla eklendi!"),
                                         backgroundColor: Colors.green.shade700,
                                       ),
                                     );
@@ -140,7 +152,13 @@ class AddDietPlanScreen extends StatelessWidget {
                                   }
                                 },
                           child: Text(
-                            viewModel.isLoading ? "Kaydediliyor " : "Kaydet",
+                            viewModel.isLoading
+                                ? viewModel.isEditMode
+                                    ? "Güncelleniyor..."
+                                    : "Kaydediliyor..."
+                                : viewModel.isEditMode
+                                    ? "Güncelle"
+                                    : "Kaydet",
                             style: AppTextStyles.body1Medium,
                           ),
                         ),

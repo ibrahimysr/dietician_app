@@ -1,4 +1,5 @@
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/dietitian/model/diet_plan_model.dart';
 import 'package:dietician_app/dietitian/service/diet_plan/diet_plan_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,8 @@ class AddDietPlanScreenViewModel extends ChangeNotifier {
   bool _isPublic = false;
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isEditMode = false;
+  int? _dietPlanId;
 
   static final DateFormat _formatter = DateFormat('yyyy-MM-dd');
 
@@ -29,6 +32,22 @@ class AddDietPlanScreenViewModel extends ChangeNotifier {
   bool get isPublic => _isPublic;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  bool get isEditMode => _isEditMode;
+
+  AddDietPlanScreenViewModel({ClientDietPlan? dietPlan}) {
+    if (dietPlan != null) {
+      _isEditMode = true;
+      _dietPlanId = dietPlan.id;
+      _titleController.text = dietPlan.title;
+      _caloriesController.text = dietPlan.dailyCalories.toString();
+      _notesController.text = dietPlan.notes;
+      _selectedStartDate =
+          dietPlan.startDate.isNotEmpty ? _formatter.parse(dietPlan.startDate) : null;
+      _selectedFinishDate =
+          dietPlan.endDate.isNotEmpty ? _formatter.parse(dietPlan.endDate) : null;
+      _isPublic = dietPlan.status == 'active';
+    }
+  }
 
   void updateDates(DateTime? startDate, DateTime? finishDate) {
     _selectedStartDate = startDate;
@@ -104,16 +123,27 @@ class AddDietPlanScreenViewModel extends ChangeNotifier {
     };
 
     try {
-      final response = await _dietPlanService.addDietPlan(
-        token: token,
-        data: dietPlanData,
-      );
+      Map<String, dynamic>? response;
+      if (_isEditMode && _dietPlanId != null) {
+        response = await _dietPlanService.updateDietPlan(
+          token: token,
+          data: dietPlanData,
+          dietplanid: _dietPlanId!
+        );
+      } else {
+        response = await _dietPlanService.addDietPlan(
+          token: token,
+          data: dietPlanData,
+        );
+      }
       _isLoading = false;
       notifyListeners();
 
       return response?["success"] == true;
     } catch (e) {
-      _errorMessage = "Bir hata oluştu: ${e.toString()}";
+      _errorMessage = _isEditMode
+          ? "Diyet planı güncellenirken hata oluştu: ${e.toString()}"
+          : "Diyet planı eklenirken hata oluştu: ${e.toString()}";
       _isLoading = false;
       notifyListeners();
       return false;

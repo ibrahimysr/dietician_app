@@ -43,5 +43,41 @@ class DietPlanService {
       throw Exception(
           "Diyet Planı eklenirken beklenmedik bir hata oluştu: ${e.toString()}");
     }
+  } 
+
+   Future<Map<String, dynamic>?> updateDietPlan(
+      {required String token, required Map<String, dynamic> data,required int dietplanid}) async {
+    final String endpoint = "diet-plans-update/$dietplanid";
+    try {
+      final response =
+          await _apiClient.put(endpoint, token: token, body: data);
+
+      return response;
+    } on ApiException catch (e) {
+      log("API Hatası (ApiException): $e");
+      rethrow;
+    } catch (e) {
+      log("Diyet Planı Güncelleme Servis Genel Hata: $e");
+      throw Exception(
+          "Diyet Planı Güncellenirken beklenmedik bir hata oluştu: ${e.toString()}");
+    }
+  } 
+
+   Future<Map<String, dynamic>?> deleteDietPlan(
+      {required String token,required int dietplanid}) async {
+    final String endpoint = "diet-plans-deletes/$dietplanid";
+    try {
+      final response =
+          await _apiClient.delete(endpoint, token: token);
+
+      return response;
+    } on ApiException catch (e) {
+      log("API Hatası (ApiException): $e");
+      rethrow;
+    } catch (e) {
+      log("Diyet Planı Silerken Servis Genel Hata: $e");
+      throw Exception(
+          "Diyet Planı Silerken beklenmedik bir hata oluştu: ${e.toString()}");
+    }
   }
 }
