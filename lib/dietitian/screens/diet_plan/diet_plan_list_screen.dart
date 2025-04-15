@@ -99,7 +99,7 @@ class _ClientDietPlansScreenState extends State<ClientDietPlansScreen> {
         backgroundColor: AppColor.primary,
         onPressed: (){
 
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddDietPlanScreen(),));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddDietPlanScreen(clientId: widget.clientId,),));
          },child: Icon(Icons.add, color: Colors.white,),),
     ); 
 
