@@ -77,7 +77,7 @@ class _DietitianListScreenState extends State<DietitianListScreen> with TickerPr
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColor.white, AppColor.grey!.withValues(alpha: 0.3)],
+            colors: [AppColor.white, AppColor.grey.withValues(alpha: 0.3)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

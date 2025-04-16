@@ -32,7 +32,6 @@ class TodaysMealsSection extends StatelessWidget {
       final diff = today.difference(startOnly);
       return diff.inDays + 1; 
     } catch (e) {
-      print("Tarih parse hatası: $e"); 
       return -2; 
     }
   }

@@ -77,7 +77,7 @@ class GoalsSection extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColor.grey.withAlpha(50),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColor.grey!.withAlpha(100), width: 1),
+              border: Border.all(color: AppColor.grey.withAlpha(100), width: 1),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

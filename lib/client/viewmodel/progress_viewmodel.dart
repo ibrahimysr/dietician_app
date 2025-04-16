@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
 import 'package:dietician_app/client/models/progress_model.dart';
 import 'package:dietician_app/client/services/progress/progress_service.dart';
@@ -49,8 +51,8 @@ class ProgressViewmodel extends ChangeNotifier {
           await _progressService.getProgress(token: token, clientId: clientId!);
       if (response.success!) {
         _allProgres = response.data ?? [];
-         print("Veriler başarıyla yüklendi: ${_allProgres.length} ilerleme kaydı var");
-      print("İlk kayıt: ${_allProgres.isNotEmpty ? _allProgres[0].toJson() : 'Kayıt yok'}");
+         log("Veriler başarıyla yüklendi: ${_allProgres.length} ilerleme kaydı var");
+      log("İlk kayıt: ${_allProgres.isNotEmpty ? _allProgres[0].toJson() : 'Kayıt yok'}");
         _isProgressLoading = false;
       } else {
         _isProgressErrorMessage = response.message;

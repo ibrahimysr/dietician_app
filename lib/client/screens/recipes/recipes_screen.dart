@@ -30,6 +30,7 @@ class _RecipesPageState extends State<RecipesPage>
   String _searchQuery = '';
   late TabController _tabController;
 
+  @override
   void initState() {
     super.initState();
     _fetchRecipes();

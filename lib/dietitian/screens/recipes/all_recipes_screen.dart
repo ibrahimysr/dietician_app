@@ -159,7 +159,7 @@ class _AllRecipesScreenState extends State<AllRecipesScreen> {
               left: 0,
               right: 0,
               child: Container(
-                color: Colors.red.withOpacity(0.9),
+                color: Colors.red.withValues(alpha:0.9),
                 padding: const EdgeInsets.all(10),
                 child: Text(_errorMessage!,
                     style: const TextStyle(color: Colors.white),
@@ -168,7 +168,7 @@ class _AllRecipesScreenState extends State<AllRecipesScreen> {
             ),
           if (_isDeleting)
             Container(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha:0.3),
               child: const Center(child: CircularProgressIndicator()),
             ),
         ],

@@ -259,8 +259,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                     } else if (result == 'Delete') {
                       
                     final String? token =await AuthStorage.getToken();
-                     var response = _mealService.deleteMeal(token: token!,dietplanid: widget.meal.id);
-                     print(response); 
+                    _mealService.deleteMeal(token: token!,dietplanid: widget.meal.id);
                      Navigator.pop(context);
                     }
                   },

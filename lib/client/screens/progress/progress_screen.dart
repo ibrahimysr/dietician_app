@@ -1,5 +1,6 @@
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/models/progress_model.dart';
+import 'package:dietician_app/client/screens/progress/add_progress_screen.dart';
 import 'package:dietician_app/client/viewmodel/progress_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,9 +27,9 @@ class ProgressScreen extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.add, color: AppColor.white),
               onPressed: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(builder: (_) => const AddProgressScreen()),
-                // );
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) =>  AddProgressScreen()),
+                );
               },
             ),
           ],
@@ -50,7 +51,9 @@ class ProgressScreen extends StatelessWidget {
               return const EmptyProgressView();
             }
             
-            return ProgressContentView(progressList: viewmodel.allProgress);
+            return RefreshIndicator( 
+              onRefresh: viewmodel.fetchAllData,
+              child: ProgressContentView(progressList: viewmodel.allProgress));
           },
         ),
       ),
@@ -86,7 +89,7 @@ class EmptyProgressView extends StatelessWidget {
             "İlerlemenizi takip etmek için yeni bir kayıt ekleyin",
             style: TextStyle(
               fontSize: 14,
-              color: AppColor.black.withOpacity(0.6),
+              color: AppColor.black.withValues(alpha:0.6),
             ),
           ),
           const SizedBox(height: 30),
@@ -140,7 +143,7 @@ class ErrorView extends StatelessWidget {
             child: Text(
               message,
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColor.black.withOpacity(0.6)),
+              style: TextStyle(color: AppColor.black.withValues(alpha:0.6)),
             ),
           ),
           const SizedBox(height: 24),
@@ -258,7 +261,7 @@ class ProgressSummaryCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColor.primary.withOpacity(0.1),
+                    color: AppColor.primary.withValues(alpha:0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -312,7 +315,7 @@ class ProgressSummaryCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha:0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -326,7 +329,7 @@ class ProgressSummaryCard extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: 12,
-              color: AppColor.black.withOpacity(0.6),
+              color: AppColor.black.withValues(alpha:0.6),
             ),
           ),
           const SizedBox(height: 4),
@@ -374,7 +377,7 @@ class WeightChartCard extends StatelessWidget {
             SizedBox(
               height: 200,
               child: chartData.isEmpty
-                  ? Center(child: Text("Grafik için yeterli veri yok", style: TextStyle(color: AppColor.black.withOpacity(0.6))))
+                  ? Center(child: Text("Grafik için yeterli veri yok", style: TextStyle(color: AppColor.black.withValues(alpha:0.6))))
                   : LineChart(
                       LineChartData(
                         gridData: FlGridData(show: false),
@@ -387,7 +390,7 @@ class WeightChartCard extends StatelessWidget {
                                 return Text(
                                   value.toInt().toString(),
                                   style: TextStyle(
-                                    color: AppColor.black.withOpacity(0.6),
+                                    color: AppColor.black.withValues(alpha:0.6),
                                     fontSize: 10,
                                   ),
                                 );
@@ -404,7 +407,7 @@ class WeightChartCard extends StatelessWidget {
                                     padding: const EdgeInsets.only(top: 8.0),
                                     child: Text(
                                       DateFormat('dd/MM').format(date),
-                                      style: TextStyle(fontSize: 10, color: AppColor.black.withOpacity(0.6)),
+                                      style: TextStyle(fontSize: 10, color: AppColor.black.withValues(alpha:0.6)),
                                     ),
                                   );
                                 }
@@ -424,11 +427,11 @@ class WeightChartCard extends StatelessWidget {
                           show: true,
                           border: Border(
                             bottom: BorderSide(
-                              color: AppColor.black.withOpacity(0.2),
+                              color: AppColor.black.withValues(alpha:0.2),
                               width: 1,
                             ),
                             left: BorderSide(
-                              color: AppColor.black.withOpacity(0.2),
+                              color: AppColor.black.withValues(alpha:0.2),
                               width: 1,
                             ),
                           ),
@@ -459,7 +462,7 @@ class WeightChartCard extends StatelessWidget {
                             ),
                             belowBarData: BarAreaData(
                               show: true,
-                              color: AppColor.primary.withOpacity(0.1),
+                              color: AppColor.primary.withValues(alpha:0.1),
                             ),
                           ),
                         ],
@@ -539,7 +542,7 @@ class MeasurementsChartCard extends StatelessWidget {
                 AppColor.accent
               ),
             ] else
-              Center(child: Text("Henüz ölçüm kaydı bulunmuyor", style: TextStyle(color: AppColor.black.withOpacity(0.6)))),
+              Center(child: Text("Henüz ölçüm kaydı bulunmuyor", style: TextStyle(color: AppColor.black.withValues(alpha:0.6)))),
           ],
         ),
       ),
@@ -554,7 +557,7 @@ class MeasurementsChartCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -600,10 +603,10 @@ class ProgressListItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: isFirst ? AppColor.primary.withOpacity(0.05) : AppColor.grey,
+        color: isFirst ? AppColor.primary.withValues(alpha:0.05) : AppColor.grey,
         border: Border.all(
           color: isFirst 
-            ? AppColor.primary.withOpacity(0.3) 
+            ? AppColor.primary.withValues(alpha:0.3) 
             : AppColor.greyLight,
         ),
         borderRadius: BorderRadius.circular(12),
@@ -616,7 +619,7 @@ class ProgressListItem extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: isFirst ? AppColor.primary.withOpacity(0.1) : AppColor.greyLight,
+                color: isFirst ? AppColor.primary.withValues(alpha:0.1) : AppColor.greyLight,
                 shape: BoxShape.circle,
               ),
               child: Text(
@@ -690,7 +693,7 @@ class ProgressListItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(

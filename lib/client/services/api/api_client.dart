@@ -123,8 +123,7 @@ class ApiClient {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return jsonDecode(response.body) as Map<String, dynamic>;
       } else {
-        print('API Multipart Error: ${response.statusCode}');
-        print('API Response Body: ${response.body}');
+      
         Map<String, dynamic> errorData = {'message': 'Bilinmeyen bir hata oluştu.'};
         try {
            errorData = jsonDecode(response.body) as Map<String, dynamic>;

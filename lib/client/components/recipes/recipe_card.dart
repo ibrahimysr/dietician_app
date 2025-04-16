@@ -23,7 +23,7 @@ class RecipeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColor.black.withOpacity(0.05),
+            color: AppColor.black.withValues(alpha:0.05),
             offset: Offset(0, 4),
             blurRadius: 10,
           ),
@@ -35,7 +35,7 @@ class RecipeCard extends StatelessWidget {
           color: Colors.transparent, 
           child: InkWell(
             onTap: onTap,
-            splashColor: AppColor.primary.withOpacity(0.1),
+            splashColor: AppColor.primary.withValues(alpha:0.1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -71,8 +71,8 @@ class RecipeCard extends StatelessWidget {
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [
-                  AppColor.black.withOpacity(0.7),
-                  AppColor.black.withOpacity(0.0),
+                  AppColor.black.withValues(alpha:0.7),
+                  AppColor.black.withValues(alpha:0.0),
                 ],
               ),
             ),
@@ -112,7 +112,7 @@ class RecipeCard extends StatelessWidget {
               shadows: [
                 Shadow(
                   blurRadius: 3.0,
-                  color: AppColor.black.withOpacity(0.5),
+                  color: AppColor.black.withValues(alpha:0.5),
                   offset: const Offset(0.5, 0.5),
                 ),
               ],
@@ -141,7 +141,7 @@ class RecipeCard extends StatelessWidget {
               Container(
                 height: 20,
                 width: 1,
-                color: AppColor.greyLight.withOpacity(0.5),
+                color: AppColor.greyLight.withValues(alpha:0.5),
               ),
               RecipeIconText(
                 icon: Icons.local_fire_department_outlined,
@@ -156,7 +156,7 @@ class RecipeCard extends StatelessWidget {
           Container(
                 height: 10,
                 width: 1,
-                color: AppColor.greyLight.withOpacity(0.5),
+                color: AppColor.greyLight.withValues(alpha:0.5),
               ),
           RecipeIconText(
                 icon: Icons.people_outline,
@@ -171,7 +171,7 @@ class RecipeCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 12,
-                  backgroundColor: AppColor.primary.withOpacity(0.2),
+                  backgroundColor: AppColor.primary.withValues(alpha:0.2),
                   child: Text(
                     recipe.dietitian.user!.name[0].toUpperCase(),
                     style: TextStyle(
@@ -186,7 +186,7 @@ class RecipeCard extends StatelessWidget {
                   child: Text(
                     recipe.dietitian.user!.name,
                     style: AppTextStyles.body1Medium.copyWith(
-                      color: AppColor.black.withOpacity(0.7),
+                      color: AppColor.black.withValues(alpha:0.7),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

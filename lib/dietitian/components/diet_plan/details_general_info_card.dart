@@ -20,7 +20,7 @@ class DietitianDetailsGeneralInfoCard extends StatefulWidget {
 
 class _DietitianDetailsGeneralInfoCardState extends State<DietitianDetailsGeneralInfoCard> { 
 
-    DietPlanService _dietPlanService = DietPlanService();
+    final DietPlanService _dietPlanService = DietPlanService();
   String _formatDate(String? dateString) {
     if (dateString == null || dateString.isEmpty) return 'Belirtilmemiş';
     try {
@@ -70,8 +70,9 @@ class _DietitianDetailsGeneralInfoCardState extends State<DietitianDetailsGenera
                     } else if (result == 'Delete') {
                       
                     final String? token =await AuthStorage.getToken();
-                     var response = _dietPlanService.deleteDietPlan(token: token!,dietplanid: widget.plan.id);
-                     print(response); 
+                    _dietPlanService.deleteDietPlan(token: token!,dietplanid: widget.plan.id);
+                     
+                   
                      Navigator.pop(context);
                     }
                   },

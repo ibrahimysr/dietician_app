@@ -543,7 +543,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                             if (loadingProgress == null) return child;
                             return Container(
                               height: context.getDynamicHeight(25),
-                              color: AppColor.grey?.withValues(alpha: 0.5),
+                              color: AppColor.grey.withValues(alpha: 0.5),
                               child: Center(
                                 child: CircularProgressIndicator(
                                   value: loadingProgress.expectedTotalBytes != null
@@ -589,7 +589,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                               ),
                             ],
                           ),
-                          Divider(height: 25, color: AppColor.grey?.withValues(alpha: 0.5)),
+                          Divider(height: 25, color: AppColor.grey.withValues(alpha: 0.5)),
                           Text(
                             "Açıklama (Planlanan):",
                             style: AppTextStyles.body1Medium.copyWith(color: AppColor.black.withValues(alpha: 0.7)),

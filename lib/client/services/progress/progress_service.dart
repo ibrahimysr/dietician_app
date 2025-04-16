@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dietician_app/client/models/progress_model.dart';
 import 'package:dietician_app/client/services/api/api_client.dart';
 import 'package:dietician_app/client/models/simple_api_response.dart';
@@ -23,7 +25,7 @@ class ProgressService {
     }
   }
 
-  Future<ProgressResponse> addProgress({
+  Future<Map<String,dynamic>> addProgress({
     required String token,
     required Map<String, dynamic> progressData,
   }) async {
@@ -31,16 +33,19 @@ class ProgressService {
       final String path = 'progress-add';
       final response =
           await _apiClient.post(path, body: progressData, token: token);
-      return ProgressResponse.fromJson(response);
+          return response;
+
+    }on ApiException catch (e) {
+      log("API Hatası (ApiException): $e");
+      rethrow;
     } catch (e) {
-      return ProgressResponse(
-          success: false,
-          message: 'Hedef eklenemedi: ${e.toString()}',
-          data: []);
+      log("Diyet Planı Güncelleme Servis Genel Hata: $e");
+      throw Exception(
+          "Diyet Planı Güncellenirken beklenmedik bir hata oluştu: ${e.toString()}");
     }
   }
 
-  Future<ProgressResponse> updateProgress({
+  Future<Map<String,dynamic>> updateProgress({
     required String token,
     required int progressId,
     required Map<String, dynamic> updateData,
@@ -51,12 +56,14 @@ class ProgressService {
       final String path = 'progress-update/$progressId';
       final response =
           await _apiClient.put(path, body: updateData, token: token);
-      return ProgressResponse.fromJson(response);
+      return response;
+    } on ApiException catch (e) {
+      log("API Hatası (ApiException): $e");
+      rethrow;
     } catch (e) {
-      return ProgressResponse(
-          success: false,
-          message: 'Hedef güncellenemedi: ${e.toString()}',
-          data: []);
+      log("Diyet Planı Güncelleme Servis Genel Hata: $e");
+      throw Exception(
+          "Diyet Planı Güncellenirken beklenmedik bir hata oluştu: ${e.toString()}");
     }
   }
 

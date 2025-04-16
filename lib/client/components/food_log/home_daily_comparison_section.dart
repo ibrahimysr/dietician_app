@@ -24,7 +24,7 @@ class DailyComparisonSection extends StatelessWidget {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
-          child: CircularProgressIndicator(color: AppColor.primary.withOpacity(0.7)),
+          child: CircularProgressIndicator(color: AppColor.primary.withValues(alpha:0.7)),
         ),
       );
     }
@@ -139,7 +139,7 @@ class DailyComparisonSection extends StatelessWidget {
                         Text(
                           " / ${plannedCal.toInt()}", 
                           style: AppTextStyles.body1Regular.copyWith(
-                              color: AppColor.black.withOpacity(0.8)),
+                              color: AppColor.black.withValues(alpha:0.8)),
                         ),
                       ],
                     ),
@@ -173,13 +173,13 @@ class DailyComparisonSection extends StatelessWidget {
                     value: (loggedCal / plannedCal).clamp(0.0, 1.5),
                     minHeight: 8, 
                     valueColor: AlwaysStoppedAnimation<Color>(AppColor.primary), 
-                    backgroundColor: AppColor.primary.withOpacity(0.2), 
+                    backgroundColor: AppColor.primary.withValues(alpha:0.2), 
                   ),
                 ),
               ),
             if (plannedCal <= 0) const SizedBox(height: 15), 
 
-            Divider(color: AppColor.white.withOpacity(0.3), height: 20),
+            Divider(color: AppColor.white.withValues(alpha:0.3), height: 20),
             const SizedBox(height: 10),
 
             NutrientProgressRow(
@@ -254,7 +254,7 @@ class NutrientProgressRow extends StatelessWidget {
               value: progress,
               minHeight: 6, 
               valueColor: AlwaysStoppedAnimation<Color>(color), 
-              backgroundColor: color.withOpacity(0.2),
+              backgroundColor: color.withValues(alpha:0.2),
             ),
           ),
         ],
