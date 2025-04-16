@@ -11,15 +11,15 @@ class ProgressResponse {
     if (json['data'] != null) {
       data = <Progress>[];
       json['data'].forEach((v) {
-        data!.add(new Progress.fromJson(v));
+        data!.add(Progress.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
+    data['success'] = success;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -80,20 +80,20 @@ class Progress {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['client_id'] = this.clientId;
-    data['date'] = this.date;
-    data['weight'] = this.weight;
-    data['waist'] = this.waist;
-    data['arm'] = this.arm;
-    data['chest'] = this.chest;
-    data['hip'] = this.hip;
-    data['body_fat_percentage'] = this.bodyFatPercentage;
-    data['notes'] = this.notes;
-    data['photo_url'] = this.photoUrl;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
+    data['id'] = id;
+    data['client_id'] = clientId;
+    data['date'] = date;
+    data['weight'] = weight;
+    data['waist'] = waist;
+    data['arm'] = arm;
+    data['chest'] = chest;
+    data['hip'] = hip;
+    data['body_fat_percentage'] = bodyFatPercentage;
+    data['notes'] = notes;
+    data['photo_url'] = photoUrl;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['deleted_at'] = deletedAt;
     
     return data;
   }

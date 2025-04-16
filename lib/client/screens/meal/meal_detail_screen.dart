@@ -556,7 +556,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
                           },
                           errorBuilder: (context, error, stackTrace) => Container(
                             height: context.getDynamicHeight(25),
-                            color: AppColor.grey?.withValues(alpha: 0.5),
+                            color: AppColor.grey.withValues(alpha: 0.5),
                             child: Center(
                               child: Icon(Icons.broken_image_outlined, color: AppColor.greyLight, size: 40),
                             ),

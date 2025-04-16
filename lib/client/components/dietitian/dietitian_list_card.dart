@@ -88,7 +88,7 @@ class DietitianListCard extends StatelessWidget {
             Divider(
               height: 1,
               thickness: 1,
-              color: AppColor.grey?.withValues(alpha: 0.8),
+              color: AppColor.grey.withValues(alpha: 0.8),
               indent: 16,
               endIndent: 16,
             ),

@@ -36,7 +36,7 @@ class DetailsMealItem extends StatelessWidget {
               DetailsMacroInfo(label: "K", value: "${meal.carbs}g"),
             ],
           ),
-          Divider(color: AppColor.grey?.withValues(alpha: 0.3), height: 20),
+          Divider(color: AppColor.grey.withValues(alpha: 0.3), height: 20),
         ],
       ),
     );

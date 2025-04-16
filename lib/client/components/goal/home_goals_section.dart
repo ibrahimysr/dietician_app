@@ -75,7 +75,7 @@ class GoalsSection extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 16),
             decoration: BoxDecoration(
-              color: AppColor.grey?.withAlpha(50),
+              color: AppColor.grey.withAlpha(50),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: AppColor.grey!.withAlpha(100), width: 1),
             ),
