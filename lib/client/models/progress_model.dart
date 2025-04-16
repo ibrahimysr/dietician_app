@@ -1,112 +1,100 @@
-import 'package:dietician_app/client/models/client_model.dart';
-
 class ProgressResponse {
-  final bool success;
-  final String message;
-  final List<Progress> data;
+  bool? success;
+  String? message;
+  List<Progress>? data;
 
-  ProgressResponse(
-      {required this.success, required this.message, required this.data,});
+  ProgressResponse({this.success, this.message, this.data});
 
-  factory ProgressResponse.fromJson(Map<String, dynamic> json) {
-    var list = json['data'] as List?;
-    List<Progress> progressList = list != null
-        ? list
-            .map(
-              (i) => Progress.fromJson(i),
-            )
-            .toList()
-        : [];
-
-    return ProgressResponse(
-        success: json['succes'] ?? false,
-        message: json['message'] ?? '',
-        data: progressList);
+  ProgressResponse.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <Progress>[];
+      json['data'].forEach((v) {
+        data!.add(new Progress.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'succes': success,
-      'message': message,
-      'data': data
-          .map(
-            (e) => e.toJson(),
-          )
-          .toList()
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
 class Progress {
-  final int id;
-  final int clientId;
-  final String date;
-  final String weight;
-  final String waist;
-  final String arm;
-  final String chest;
-  final String hip;
-  final String bodyFatPercentage;
-  final String notes;
-  final String photoUrl;
-  final String createdAt;
-  final String updatedAt;
-  final String? deletedAt;
-  final ClientData client;
+  int? id;
+  int? clientId;
+  String? date;
+  String? weight;
+  String? waist;
+  String? arm;
+  String? chest;
+  String? hip;
+  String? bodyFatPercentage;
+  String? notes;
+  String? photoUrl;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
 
   Progress(
-      {required this.id,
-      required this.clientId,
-      required this.date,
-      required this.weight,
-      required this.waist,
-      required this.arm,
-      required this.chest,
-      required this.hip,
-      required this.bodyFatPercentage,
-      required this.notes,
-      required this.photoUrl,
-      required this.createdAt,
-      required this.updatedAt,
+      {this.id,
+      this.clientId,
+      this.date,
+      this.weight,
+      this.waist,
+      this.arm,
+      this.chest,
+      this.hip,
+      this.bodyFatPercentage,
+      this.notes,
+      this.photoUrl,
+      this.createdAt,
+      this.updatedAt,
       this.deletedAt,
-      required this.client});
+    });
 
-  factory Progress.fromJson(Map<String, dynamic> json) {
-    return Progress(
-        id: json['id'] ?? 0,
-        clientId: json['client_id'] ?? 0,
-        date: json['date'] ?? '',
-        weight: json['weight'] ?? '',
-        waist: json['waist'] ?? '',
-        arm: json['arm'] ?? '',
-        chest: json['chest'] ?? '',
-        hip: json['hip'] ?? '',
-        bodyFatPercentage: json['body_fat_percentage'] ?? '',
-        notes: json['notes'] ?? '',
-        photoUrl: json['photo_url'] ?? '',
-        createdAt: json['created_at'] ?? '',
-        updatedAt: json['updated_at'] ?? '',
-        deletedAt: json['deleted_at'],
-        client: json["client"] ?? '');
+  Progress.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    clientId = json['client_id'];
+    date = json['date'];
+    weight = json['weight'];
+    waist = json['waist'];
+    arm = json['arm'];
+    chest = json['chest'];
+    hip = json['hip'];
+    bodyFatPercentage = json['body_fat_percentage'];
+    notes = json['notes'];
+    photoUrl = json['photo_url'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    deletedAt = json['deleted_at'];
+   
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'client_id': clientId,
-      'date': date,
-      'weight': weight,
-      'waist': waist,
-      'arm': arm,
-      'chest': chest,
-      'hip': hip,
-      'body_fat_percentage': bodyFatPercentage,
-      'notes': notes,
-      'photo_url': photoUrl,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-      'deleted_at': deletedAt,
-      'client': client
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['client_id'] = this.clientId;
+    data['date'] = this.date;
+    data['weight'] = this.weight;
+    data['waist'] = this.waist;
+    data['arm'] = this.arm;
+    data['chest'] = this.chest;
+    data['hip'] = this.hip;
+    data['body_fat_percentage'] = this.bodyFatPercentage;
+    data['notes'] = this.notes;
+    data['photo_url'] = this.photoUrl;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['deleted_at'] = this.deletedAt;
+    
+    return data;
   }
 }

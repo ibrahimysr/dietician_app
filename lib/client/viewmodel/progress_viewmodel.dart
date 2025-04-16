@@ -47,8 +47,10 @@ class ProgressViewmodel extends ChangeNotifier {
     try {
       final response =
           await _progressService.getProgress(token: token, clientId: clientId!);
-      if (response.success) {
-        _allProgres = response.data;
+      if (response.success!) {
+        _allProgres = response.data ?? [];
+         print("Veriler başarıyla yüklendi: ${_allProgres.length} ilerleme kaydı var");
+      print("İlk kayıt: ${_allProgres.isNotEmpty ? _allProgres[0].toJson() : 'Kayıt yok'}");
         _isProgressLoading = false;
       } else {
         _isProgressErrorMessage = response.message;

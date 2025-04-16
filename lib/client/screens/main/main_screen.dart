@@ -2,6 +2,7 @@ import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
 import 'package:dietician_app/client/screens/dietitian/dietitian_screen.dart';
 import 'package:dietician_app/client/screens/home/home_screen.dart';
+import 'package:dietician_app/client/screens/progress/progress_screen.dart';
 import 'package:dietician_app/client/screens/recipes/recipes_screen.dart';
 import 'package:dietician_app/client/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +23,16 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   final List<Widget> _screens = [
     HomeScreen(),
     RecipesPage(),
+    ProgressScreen(),
     DietitianListScreen(),
     ProfileScreen()
   ];
 
   final List<BottomNavItem> items = [
     BottomNavItem(icon: Icons.home, activeIcon: Icons.home, label: "Ana Sayfa"),
-    BottomNavItem(icon: Icons.restaurant_menu_outlined, activeIcon: Icons.restaurant_menu, label: "Tarifler"),
+    BottomNavItem(icon: Icons.restaurant_menu_outlined, activeIcon: Icons.restaurant_menu, label: "Tarifler"), 
+    
+    BottomNavItem(icon: Icons.ssid_chart_outlined, activeIcon: Icons.restaurant_menu, label: "İlerlemeler"),
     BottomNavItem(icon: Icons.person, activeIcon: Icons.person, label: "Diyetisyenler"),
     BottomNavItem(icon: Icons.settings, activeIcon: Icons.settings, label: "Profil"),
   ];
