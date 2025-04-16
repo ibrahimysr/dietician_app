@@ -1,12 +1,12 @@
 import 'package:dietician_app/client/models/client_model.dart';
 
 class ProgressResponse {
-  final bool succes;
+  final bool success;
   final String message;
   final List<Progress> data;
 
   ProgressResponse(
-      {required this.succes, required this.message, required this.data});
+      {required this.success, required this.message, required this.data,});
 
   factory ProgressResponse.fromJson(Map<String, dynamic> json) {
     var list = json['data'] as List?;
@@ -19,14 +19,14 @@ class ProgressResponse {
         : [];
 
     return ProgressResponse(
-        succes: json['succes'] ?? false,
+        success: json['succes'] ?? false,
         message: json['message'] ?? '',
         data: progressList);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'succes': succes,
+      'succes': success,
       'message': message,
       'data': data
           .map(
