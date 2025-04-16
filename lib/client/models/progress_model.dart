@@ -1,3 +1,42 @@
+import 'package:dietician_app/client/models/client_model.dart';
+
+class ProgressResponse {
+  final bool succes;
+  final String message;
+  final List<Progress> data;
+
+  ProgressResponse(
+      {required this.succes, required this.message, required this.data});
+
+  factory ProgressResponse.fromJson(Map<String, dynamic> json) {
+    var list = json['data'] as List?;
+    List<Progress> progressList = list != null
+        ? list
+            .map(
+              (i) => Progress.fromJson(i),
+            )
+            .toList()
+        : [];
+
+    return ProgressResponse(
+        succes: json['succes'] ?? false,
+        message: json['message'] ?? '',
+        data: progressList);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'succes': succes,
+      'message': message,
+      'data': data
+          .map(
+            (e) => e.toJson(),
+          )
+          .toList()
+    };
+  }
+}
+
 class Progress {
   final int id;
   final int clientId;
@@ -13,41 +52,42 @@ class Progress {
   final String createdAt;
   final String updatedAt;
   final String? deletedAt;
+  final ClientData client;
 
-  Progress({
-    required this.id,
-    required this.clientId,
-    required this.date,
-    required this.weight,
-    required this.waist,
-    required this.arm,
-    required this.chest,
-    required this.hip,
-    required this.bodyFatPercentage,
-    required this.notes,
-    required this.photoUrl,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
-  });
+  Progress(
+      {required this.id,
+      required this.clientId,
+      required this.date,
+      required this.weight,
+      required this.waist,
+      required this.arm,
+      required this.chest,
+      required this.hip,
+      required this.bodyFatPercentage,
+      required this.notes,
+      required this.photoUrl,
+      required this.createdAt,
+      required this.updatedAt,
+      this.deletedAt,
+      required this.client});
 
   factory Progress.fromJson(Map<String, dynamic> json) {
     return Progress(
-      id: json['id'] ?? 0,
-      clientId: json['client_id'] ?? 0,
-      date: json['date'] ?? '',
-      weight: json['weight'] ?? '',
-      waist: json['waist'] ?? '',
-      arm: json['arm'] ?? '',
-      chest: json['chest'] ?? '',
-      hip: json['hip'] ?? '',
-      bodyFatPercentage: json['body_fat_percentage'] ?? '',
-      notes: json['notes'] ?? '',
-      photoUrl: json['photo_url'] ?? '',
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
-      deletedAt: json['deleted_at'],
-    );
+        id: json['id'] ?? 0,
+        clientId: json['client_id'] ?? 0,
+        date: json['date'] ?? '',
+        weight: json['weight'] ?? '',
+        waist: json['waist'] ?? '',
+        arm: json['arm'] ?? '',
+        chest: json['chest'] ?? '',
+        hip: json['hip'] ?? '',
+        bodyFatPercentage: json['body_fat_percentage'] ?? '',
+        notes: json['notes'] ?? '',
+        photoUrl: json['photo_url'] ?? '',
+        createdAt: json['created_at'] ?? '',
+        updatedAt: json['updated_at'] ?? '',
+        deletedAt: json['deleted_at'],
+        client: json["client"] ?? '');
   }
 
   Map<String, dynamic> toJson() {
@@ -66,6 +106,7 @@ class Progress {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'deleted_at': deletedAt,
+      'client': client
     };
   }
 }
