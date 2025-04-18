@@ -1,6 +1,6 @@
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
-import 'package:dietician_app/client/screens/food/all_food_screen.dart';
+import 'package:dietician_app/client/viewmodel/all_foods_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class FoodFilterChips extends StatelessWidget {
