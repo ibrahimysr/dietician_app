@@ -9,13 +9,12 @@ import 'package:dietician_app/client/components/user_information/weight_page.dar
 import 'package:dietician_app/client/core/extension/context_extension.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/theme/textstyle.dart';
-import 'package:dietician_app/client/core/utils/auth_storage.dart';
-import 'package:dietician_app/client/screens/auth/login_screen.dart';
-import 'package:dietician_app/client/services/auth/client_service.dart';
+import 'package:dietician_app/client/viewmodel/user_info_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserInfoScreen extends StatefulWidget {
-  final int userId; 
+  final int userId;
 
   const UserInfoScreen({super.key, required this.userId});
 
@@ -24,299 +23,160 @@ class UserInfoScreen extends StatefulWidget {
 }
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-
-  String? birthDate;
-  String? gender;
-  double height = 170;
-  double weight = 70;
-  String? activityLevel;
-  String? goal;
-  String? allergies;
-  String? preferences;
-  String? medicalConditions;
-
-  final _steps = 9;
-  bool _isLoading = false;
-
-  final _clientService = ClientService();
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _nextPage() {
-    if (_currentPage < _steps - 1) {
-      setState(() {
-        _currentPage++;
-      });
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _submitData();
-    }
-  }
-
-  void _previousPage() {
-    if (_currentPage > 0) {
-      setState(() {
-        _currentPage--;
-      });
-      _pageController.previousPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  Future<void> _submitData() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final token = await AuthStorage.getToken();
-      if (token == null) {
-        throw Exception("Token bulunamadı, lütfen tekrar giriş yapın.");
-      }
-
-      if (birthDate == null ||
-          gender == null ||
-          activityLevel == null ||
-          goal == null ||
-          allergies == null ||
-          preferences == null ||
-          medicalConditions == null) {
-        throw Exception("Lütfen tüm bilgileri doldurun.");
-      }
-
-      final response = await _clientService.addClient(
-        userId: widget.userId, 
-        dietitianId: null,
-        birthDate: birthDate!,
-        gender: gender!,
-        height: height,
-        weight: weight,
-        activityLevel: activityLevel!,
-        goal: goal!,
-        allergies: allergies!,
-        preferences: preferences!,
-        medicalConditions: medicalConditions!,
-        token: token,
-      );
-
-     if (response.success) { 
-  final userId = response.data.userId;
-
-  await AuthStorage.saveId(userId);
-
-  if (mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(response.message)),
-    );
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-    );
-  }
-}
-else {
-        throw Exception(response.message);
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Bilgiler kaydedilemedi: $e")),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBar(
-        backgroundColor: AppColor.white,
-        elevation: 0,
-        title: Text("Bilgilerinizi Girin", style: AppTextStyles.heading2),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: context.paddingLow,
-            child: LinearProgressIndicator(
-              value: (_currentPage + 1) / _steps,
-              backgroundColor: AppColor.greyLight,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColor.primary),
-              minHeight: 8,
+    return ChangeNotifierProvider(
+      create: (_) => UserInfoViewModel(),
+      child: Consumer<UserInfoViewModel>(
+        builder: (context, viewModel, child) {
+          return Scaffold(
+            backgroundColor: AppColor.white,
+            appBar: AppBar(
+              backgroundColor: AppColor.white,
+              elevation: 0,
+              title: Text("Bilgilerinizi Girin", style: AppTextStyles.heading2),
+              centerTitle: true,
             ),
-          ),
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
+            body: Column(
               children: [
-                _buildBirthDatePage(),
-                _buildGenderPage(),
-                _buildHeightPage(),
-                _buildWeightPage(),
-                _buildActivityLevelPage(),
-                _buildGoalPage(),
-                _buildAllergiesPage(),
-                _buildPreferencesPage(),
-                _buildMedicalConditionsPage(),
-              ],
-            ),
-          ),
-          Padding(
-            padding: context.paddingLow,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (_currentPage > 0)
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _previousPage,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      "Geri",
-                      style: AppTextStyles.body1Medium
-                          .copyWith(color: AppColor.black),
-                    ),
-                  )
-                else
-                  const SizedBox(),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _nextPage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                Padding(
+                  padding: context.paddingLow,
+                  child: LinearProgressIndicator(
+                    value: (viewModel.currentPage + 1) / viewModel.steps,
+                    backgroundColor: AppColor.greyLight,
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColor.primary),
+                    minHeight: 8,
                   ),
-                  child: _isLoading
-                      ?  CircularProgressIndicator(color: AppColor.white)
-                      : Text(
-                          _currentPage == _steps - 1 ? "Kaydet" : "İleri",
-                          style: AppTextStyles.body1Medium
-                              .copyWith(color: AppColor.white),
+                ),
+                Expanded(
+                  child: PageView(
+                    controller: viewModel.pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      _buildBirthDatePage(viewModel),
+                      _buildGenderPage(viewModel),
+                      _buildHeightPage(viewModel),
+                      _buildWeightPage(viewModel),
+                      _buildActivityLevelPage(viewModel),
+                      _buildGoalPage(viewModel),
+                      _buildAllergiesPage(viewModel),
+                      _buildPreferencesPage(viewModel),
+                      _buildMedicalConditionsPage(viewModel),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: context.paddingLow,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (viewModel.currentPage > 0)
+                        ElevatedButton(
+                          onPressed: viewModel.isLoading ? null : viewModel.previousPage,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            "Geri",
+                            style: AppTextStyles.body1Medium.copyWith(color: AppColor.black),
+                          ),
+                        )
+                      else
+                        const SizedBox(),
+                      ElevatedButton(
+                        onPressed: viewModel.isLoading
+                            ? null
+                            : () {
+                                if (viewModel.currentPage == viewModel.steps - 1) {
+                                  viewModel.submitData(context, widget.userId);
+                                } else {
+                                  viewModel.nextPage();
+                                }
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
+                        child: viewModel.isLoading
+                            ? CircularProgressIndicator(color: AppColor.white)
+                            : Text(
+                                viewModel.currentPage == viewModel.steps - 1 ? "Kaydet" : "İleri",
+                                style: AppTextStyles.body1Medium.copyWith(color: AppColor.white),
+                              ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildBirthDatePage() {
+  Widget _buildBirthDatePage(UserInfoViewModel viewModel) {
     return BirthDatePicker(
-      initialDate: birthDate,
-      onDateSelected: (selectedDate) {
-        setState(() {
-          birthDate = selectedDate;
-        });
-      },
+      initialDate: viewModel.birthDate,
+      onDateSelected: viewModel.setBirthDate,
     );
   }
 
-  Widget _buildGenderPage() {
+  Widget _buildGenderPage(UserInfoViewModel viewModel) {
     return GenderPicker(
-      gender: gender,
-      onGenderSelected: (selectedGender) {
-        setState(() {
-          gender = selectedGender;
-        });
-      },
+      gender: viewModel.gender,
+      onGenderSelected: viewModel.setGender,
     );
   }
 
-  Widget _buildHeightPage() {
+  Widget _buildHeightPage(UserInfoViewModel viewModel) {
     return HeightPicker(
-      height: height,
-      onHeightSelected: (selectedHeight) {
-        setState(() {
-          height = selectedHeight;
-        });
-      },
+      height: viewModel.height,
+      onHeightSelected: viewModel.setHeight,
     );
   }
 
-  Widget _buildWeightPage() {
+  Widget _buildWeightPage(UserInfoViewModel viewModel) {
     return WeightPicker(
-      weight: weight,
-      onWeightSelected: (selectedWeight) {
-        setState(() {
-          weight = selectedWeight;
-        });
-      },
+      weight: viewModel.weight,
+      onWeightSelected: viewModel.setWeight,
     );
   }
 
-  Widget _buildActivityLevelPage() {
+  Widget _buildActivityLevelPage(UserInfoViewModel viewModel) {
     return ActivityLevelSelector(
-      activityLevel: activityLevel,
-      onActivityLevelSelected: (selectedLevel) {
-        setState(() {
-          activityLevel = selectedLevel;
-        });
-      },
+      activityLevel: viewModel.activityLevel,
+      onActivityLevelSelected: viewModel.setActivityLevel,
     );
   }
 
-  Widget _buildGoalPage() {
+  Widget _buildGoalPage(UserInfoViewModel viewModel) {
     return GoalSelector(
-      goal: goal,
-      onGoalSelected: (selectedGoal) {
-        setState(() {
-          goal = selectedGoal;
-        });
-      },
+      goal: viewModel.goal,
+      onGoalSelected: viewModel.setGoal,
     );
   }
 
-  Widget _buildAllergiesPage() {
+  Widget _buildAllergiesPage(UserInfoViewModel viewModel) {
     return AllergySelector(
-      allergies: allergies,
-      onAllergiesChanged: (allergy) {
-        setState(() {
-          allergies = allergy;
-        });
-      },
+      allergies: viewModel.allergies,
+      onAllergiesChanged: viewModel.setAllergies,
     );
   }
 
-  Widget _buildPreferencesPage() {
+  Widget _buildPreferencesPage(UserInfoViewModel viewModel) {
     return PreferenceSelector(
-      preferences: preferences,
-      onPreferenceSelected: (selectedPreference) {
-        setState(() {
-          preferences = selectedPreference;
-        });
-      },
+      preferences: viewModel.preferences,
+      onPreferenceSelected: viewModel.setPreferences,
     );
   }
 
-  Widget _buildMedicalConditionsPage() {
+  Widget _buildMedicalConditionsPage(UserInfoViewModel viewModel) {
     return Padding(
       padding: context.paddingLow,
       child: Column(
@@ -349,7 +209,7 @@ else {
                 ),
               ),
             ),
-            onChanged: (value) => medicalConditions = value,
+            onChanged: viewModel.setMedicalConditions,
           ),
         ],
       ),
