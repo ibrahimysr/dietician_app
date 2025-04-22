@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:dietician_app/client/components/ai_calories/results_section.dart';
 import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/services/gemini/gemini_service.dart';
@@ -105,7 +105,7 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
               const SizedBox(height: 24),
               if (_isLoading) _buildLoadingSection(),
               if (_errorMessage != null) _buildErrorSection(),
-              if (_foodDetails != null && !_isLoading) _buildResultsSection(),
+              if (_foodDetails != null && !_isLoading) buildResultsSection(_foodDetails),
             ],
           ),
         ),
@@ -247,142 +247,7 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
     );
   }
 
-  Widget _buildResultsSection() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            spreadRadius: 0,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            _foodDetails!['food_name'] ?? 'Bilinmeyen Yiyecek',
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 20),
-          _buildNutritionItem(
-            'Kalori',
-            '${_foodDetails!['calories']?.toStringAsFixed(0) ?? 'Bilinmiyor'} kcal',
-            Colors.orange,
-            Icons.local_fire_department,
-          ),
-          const Divider(height: 24),
-          _buildNutritionItem(
-            'Protein',
-            '${_foodDetails!['protein']?.toStringAsFixed(1) ?? '0'} g',
-            Colors.red,
-            Icons.fitness_center,
-          ),
-          const Divider(height: 24),
-          _buildNutritionItem(
-            'Yağ',
-            '${_foodDetails!['fat']?.toStringAsFixed(1) ?? '0'} g',
-            Colors.yellow[700]!,
-            Icons.opacity,
-          ),
-          const Divider(height: 24),
-          _buildNutritionItem(
-            'Karbonhidrat',
-            '${_foodDetails!['carbs']?.toStringAsFixed(1) ?? '0'} g',
-            Colors.green,
-            Icons.grain,
-          ),
-          const SizedBox(height: 24),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color:AppColor.primary,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children:  [
-                Icon(Icons.info_outline, color:AppColor.primary, size: 20),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Not: Kalori ve besin değerleri tahmini olup gerçek değerlerden farklı olabilir.',
-                    style: TextStyle(fontSize: 12, color:AppColor.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, _foodDetails);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor:AppColor.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                elevation: 0,
-              ),
-              child: const Text(
-                'Günlüğe Ekle',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  
 
-  Widget _buildNutritionItem(String label, String value, Color color, IconData icon) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(
-            icon,
-            color: color,
-            size: 24,
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-      ],
-    );
-  }
+  
 }
