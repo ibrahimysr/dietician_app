@@ -53,6 +53,8 @@ dependencies:
   shimmer:
   http_parser: 
   fl_chart:
+  google_generative_ai: 
+  flutter_ai_toolkit: 
 
   
 dev_dependencies:

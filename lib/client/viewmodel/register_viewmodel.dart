@@ -1,4 +1,5 @@
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/client/screens/auth/user_information_screen.dart';
 import 'package:dietician_app/client/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,11 @@ class RegisterViewModel extends ChangeNotifier {
         await AuthStorage.saveToken(response.data.token);
         final userId = response.data.user.id;
 
-        Navigator.pushReplacementNamed(context, '/user_info', arguments: userId);
+        Navigator.pushReplacement(context, 
+          MaterialPageRoute(
+            builder: (context) => UserInfoScreen(userId:  userId,),
+          ),
+        );
       } else {
         throw Exception(response.message);
       }

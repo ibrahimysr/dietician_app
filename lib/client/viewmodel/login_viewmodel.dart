@@ -1,6 +1,8 @@
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/client/screens/main/main_screen.dart';
 import 'package:dietician_app/client/services/auth/auth_service.dart';
 import 'package:dietician_app/client/services/auth/client_service.dart';
+import 'package:dietician_app/dietitian/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -37,11 +39,19 @@ class LoginViewModel extends ChangeNotifier {
         await AuthStorage.saveToken(response.data.token);
 
         if (userRole == 'dietitian') {
-          Navigator.pushReplacementNamed(context, '/dietitian_main');
+          Navigator.push(context, 
+            MaterialPageRoute(
+              builder: (context) => const DietitianMainScreen(),
+            ),
+          );
         } else {
           await _clientService.getUserClient(
               userId: userId, token: response.data.token);
-          Navigator.pushReplacementNamed(context, '/main');
+        Navigator.pushReplacement(context, 
+            MaterialPageRoute(
+              builder: (context) => const MainScreen(),
+            ),
+          );
         }
       } else {
         throw Exception(response.message);

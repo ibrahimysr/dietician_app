@@ -1,4 +1,5 @@
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/client/screens/auth/login_screen.dart';
 import 'package:dietician_app/client/services/auth/client_service.dart';
 import 'package:flutter/material.dart';
 
@@ -148,7 +149,11 @@ class UserInfoViewModel extends ChangeNotifier {
           SnackBar(content: Text(response.message)),
         );
 
-        Navigator.pushReplacementNamed(context, '/login');
+        Navigator.pushReplacement(context, 
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ),
+        );
       } else {
         throw Exception(response.message);
       }
