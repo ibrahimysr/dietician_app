@@ -39,7 +39,7 @@ class LoginViewModel extends ChangeNotifier {
         await AuthStorage.saveToken(response.data.token);
 
         if (userRole == 'dietitian') {
-          Navigator.push(context, 
+          Navigator.pushReplacement(context, 
             MaterialPageRoute(
               builder: (context) => const DietitianMainScreen(),
             ),

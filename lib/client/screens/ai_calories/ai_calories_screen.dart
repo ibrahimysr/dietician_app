@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
+import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/services/gemini/gemini_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,7 +10,7 @@ class FoodPhotoScreen extends StatefulWidget {
   const FoodPhotoScreen({super.key});
 
   @override
-  _FoodPhotoScreenState createState() => _FoodPhotoScreenState();
+  State<FoodPhotoScreen> createState() => _FoodPhotoScreenState();
 }
 
 class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
@@ -72,16 +74,16 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
               Navigator.pop(context);
               _pickImage(ImageSource.camera);
             },
-            icon: const Icon(Icons.camera_alt, color: Colors.blue),
-            label: const Text('Kamera', style: TextStyle(color: Colors.blue)),
+            icon:  Icon(Icons.camera_alt, color: AppColor.primary),
+            label:  Text('Kamera', style: TextStyle(color:AppColor.primary)),
           ),
           TextButton.icon(
             onPressed: () {
               Navigator.pop(context);
               _pickImage(ImageSource.gallery);
             },
-            icon: const Icon(Icons.photo_library, color: Colors.blue),
-            label: const Text('Galeri', style: TextStyle(color: Colors.blue)),
+            icon:  Icon(Icons.photo_library, color:AppColor.primary),
+            label:  Text('Galeri', style: TextStyle(color:AppColor.primary)),
           ),
         ],
       ),
@@ -92,19 +94,7 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Besin Değeri Hesaplama',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black87),
-      ),
+     appBar: CustomAppBar(title: "Kalori Hesapla"),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -157,11 +147,11 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children:  [
                   Icon(
                     Icons.add_a_photo,
                     size: 64,
-                    color: Colors.blue,
+                    color: AppColor.primary,
                   ),
                   SizedBox(height: 12),
                   Text(
@@ -169,7 +159,7 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.blue,
+                      color:  AppColor.primary,
                     ),
                   ),
                 ],
@@ -194,7 +184,7 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
                   child: FloatingActionButton.small(
                     onPressed: _showImageSourceDialog,
                     backgroundColor: Colors.white,
-                    child: const Icon(Icons.edit, color: Colors.blue),
+                    child:  Icon(Icons.edit, color:AppColor.primary),
                   ),
                 ),
               ],
@@ -207,8 +197,8 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
   Widget _buildLoadingSection() {
     return Center(
       child: Column(
-        children: const [
-          CircularProgressIndicator(color: Colors.blue),
+        children:  [
+          CircularProgressIndicator(color:AppColor.primary),
           SizedBox(height: 16),
           Text(
             'Yiyecek analiz ediliyor...',
@@ -315,17 +305,17 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.blue[50],
+              color:AppColor.primary,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
-              children: const [
-                Icon(Icons.info_outline, color: Colors.blue, size: 20),
+              children:  [
+                Icon(Icons.info_outline, color:AppColor.primary, size: 20),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Not: Kalori ve besin değerleri tahmini olup gerçek değerlerden farklı olabilir.',
-                    style: TextStyle(fontSize: 12, color: Colors.blue),
+                    style: TextStyle(fontSize: 12, color:AppColor.white),
                   ),
                 ),
               ],
@@ -339,7 +329,7 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
                 Navigator.pop(context, _foodDetails);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor:AppColor.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

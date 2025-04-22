@@ -2,7 +2,6 @@ import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
 import 'package:dietician_app/client/screens/ai_calories/ai_calories_screen.dart';
 import 'package:dietician_app/client/screens/chat_bot/chat_screen.dart';
-import 'package:dietician_app/client/screens/dietitian/dietitian_screen.dart';
 import 'package:dietician_app/client/screens/home/home_screen.dart';
 import 'package:dietician_app/client/screens/progress/progress_screen.dart';
 import 'package:dietician_app/client/screens/recipes/recipes_screen.dart';
@@ -43,7 +42,7 @@ class _MainScreenState extends State<MainScreen>
           BottomNavItem(
         icon: Icons.camera,
         activeIcon: Icons.camera,
-        label: "Kalori Hesapla"),
+        label: "Kalori"),
          BottomNavItem(
         icon: Icons.ssid_chart_outlined,
         activeIcon: Icons.ssid_chart_outlined,
