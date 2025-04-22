@@ -55,6 +55,7 @@ dependencies:
   fl_chart:
   google_generative_ai: 
   flutter_ai_toolkit: 
+  flutter_dotenv:
 
   
 dev_dependencies:

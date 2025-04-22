@@ -1,5 +1,6 @@
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/client/screens/chat_bot/chat_screen.dart';
 import 'package:dietician_app/client/screens/dietitian/dietitian_screen.dart';
 import 'package:dietician_app/client/screens/home/home_screen.dart';
 import 'package:dietician_app/client/screens/progress/progress_screen.dart';
@@ -8,18 +9,20 @@ import 'package:dietician_app/client/screens/setting/setting.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
-
-  const MainScreen({super.key, });
+  const MainScreen({
+    super.key,
+  });
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
+class _MainScreenState extends State<MainScreen>
+    with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   late AnimationController _animationController;
   int id = 0;
-  
+
   final List<Widget> _screens = [
     HomeScreen(),
     RecipesPage(),
@@ -30,16 +33,23 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   final List<BottomNavItem> items = [
     BottomNavItem(icon: Icons.home, activeIcon: Icons.home, label: "Ana Sayfa"),
-    BottomNavItem(icon: Icons.restaurant_menu_outlined, activeIcon: Icons.restaurant_menu, label: "Tarifler"), 
-    
-    BottomNavItem(icon: Icons.ssid_chart_outlined, activeIcon: Icons.restaurant_menu, label: "İlerlemeler"),
-    BottomNavItem(icon: Icons.person, activeIcon: Icons.person, label: "Diyetisyenler"),
-    BottomNavItem(icon: Icons.settings, activeIcon: Icons.settings, label: "Profil"),
+    BottomNavItem(
+        icon: Icons.restaurant_menu_outlined,
+        activeIcon: Icons.restaurant_menu,
+        label: "Tarifler"),
+    BottomNavItem(
+        icon: Icons.ssid_chart_outlined,
+        activeIcon: Icons.restaurant_menu,
+        label: "İlerlemeler"),
+    BottomNavItem(
+        icon: Icons.person, activeIcon: Icons.person, label: "Diyetisyenler"),
+    BottomNavItem(
+        icon: Icons.settings, activeIcon: Icons.settings, label: "Profil"),
   ];
 
-   Future getClientId() async {
+  Future getClientId() async {
     id = await AuthStorage.getId() ?? 0;
-   }
+  }
 
   @override
   void initState() {
@@ -70,7 +80,18 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, 
+            MaterialPageRoute(
+              builder: (context) => const ChatBotScreen(),
+            ),
+          );
+        },
+        backgroundColor: AppColor.primary,
+        child: Icon(Icons.chat_bubble_outline, color: AppColor.white),
+      ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
@@ -83,7 +104,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         color: AppColor.white,
         boxShadow: [
           BoxShadow(
-            color: AppColor.greyLight.withValues(alpha:  0.3),
+            color: AppColor.greyLight.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: Offset(0, -3),
           ),
@@ -101,7 +122,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   Widget _buildNavItem(int index) {
     bool isSelected = _selectedIndex == index;
-    
+
     return InkWell(
       onTap: () => _onItemTapped(index),
       child: Container(
@@ -114,9 +135,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               animation: _animationController,
               builder: (context, child) {
                 return Transform.scale(
-                  scale: isSelected ? 
-                    1.0 + (_animationController.value * 0.2) : 
-                    1.0,
+                  scale: isSelected
+                      ? 1.0 + (_animationController.value * 0.2)
+                      : 1.0,
                   child: Icon(
                     isSelected ? items[index].activeIcon : items[index].icon,
                     color: isSelected ? AppColor.secondary : AppColor.primary,
@@ -132,9 +153,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   height: 3,
-                  width: isSelected ? 
-                    30 * _animationController.value : 
-                    0,
+                  width: isSelected ? 30 * _animationController.value : 0,
                   decoration: BoxDecoration(
                     color: AppColor.primary,
                     borderRadius: BorderRadius.circular(10),
