@@ -1,5 +1,6 @@
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/core/utils/auth_storage.dart';
+import 'package:dietician_app/client/screens/ai_calories/ai_calories_screen.dart';
 import 'package:dietician_app/client/screens/chat_bot/chat_screen.dart';
 import 'package:dietician_app/client/screens/dietitian/dietitian_screen.dart';
 import 'package:dietician_app/client/screens/home/home_screen.dart';
@@ -26,8 +27,9 @@ class _MainScreenState extends State<MainScreen>
   final List<Widget> _screens = [
     HomeScreen(),
     RecipesPage(),
+        FoodPhotoScreen(),
+
     ProgressScreen(),
-    DietitianListScreen(),
     ProfileScreen()
   ];
 
@@ -37,12 +39,15 @@ class _MainScreenState extends State<MainScreen>
         icon: Icons.restaurant_menu_outlined,
         activeIcon: Icons.restaurant_menu,
         label: "Tarifler"),
-    BottomNavItem(
+    
+          BottomNavItem(
+        icon: Icons.camera,
+        activeIcon: Icons.camera,
+        label: "Kalori Hesapla"),
+         BottomNavItem(
         icon: Icons.ssid_chart_outlined,
-        activeIcon: Icons.restaurant_menu,
+        activeIcon: Icons.ssid_chart_outlined,
         label: "İlerlemeler"),
-    BottomNavItem(
-        icon: Icons.person, activeIcon: Icons.person, label: "Diyetisyenler"),
     BottomNavItem(
         icon: Icons.settings, activeIcon: Icons.settings, label: "Profil"),
   ];
@@ -80,10 +85,11 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, 
+          Navigator.push(
+            context,
             MaterialPageRoute(
               builder: (context) => const ChatBotScreen(),
             ),
