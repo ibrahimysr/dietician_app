@@ -1,6 +1,6 @@
 import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
-import 'package:dietician_app/env.dart';
+import 'package:dietician_app/client/core/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
