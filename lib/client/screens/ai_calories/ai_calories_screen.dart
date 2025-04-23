@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dietician_app/client/components/ai_calories/results_section.dart';
 import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
+import 'package:dietician_app/client/core/theme/textstyle.dart';
 import 'package:dietician_app/client/services/gemini/gemini_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -202,10 +203,10 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
           SizedBox(height: 16),
           Text(
             'Yiyecek analiz ediliyor...',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.black87,
-            ),
+            style: AppTextStyles.body1Medium.copyWith(
+              fontSize: 14,
+           
+            )
           ),
         ],
       ),
@@ -224,30 +225,28 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
+            children:  [
               Icon(Icons.error_outline, color: Colors.red),
               SizedBox(width: 8),
               Text(
                 'Hata',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
+                style: AppTextStyles.body1Medium.copyWith(
+              fontSize: 14,
+              color: Colors.red[800],
+            )
               ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
             _errorMessage!,
-            style: const TextStyle(color: Colors.red),
+            style:AppTextStyles.body1Medium.copyWith(
+              fontSize: 14,
+              color: Colors.red[800],
+            )
           ),
         ],
       ),
     );
   }
-
-  
-
-  
 }
