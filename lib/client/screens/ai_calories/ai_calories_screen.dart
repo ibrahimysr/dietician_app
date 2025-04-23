@@ -127,12 +127,9 @@ class _FoodPhotoScreenState extends State<FoodPhotoScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        const Text(
+         Text(
           'Besin değerlerini hesaplamak için bir yiyecek fotoğrafı yükleyin',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.black54,
-          ),
+          style: AppTextStyles.body1Medium
         ),
         const SizedBox(height: 20),
         if (_image == null)
