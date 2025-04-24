@@ -39,6 +39,9 @@ class HomeViewModel with ChangeNotifier {
   late DateTime _currentDate;
   late String _greeting;
 
+
+int? _dietitianId; 
+int? get dietitianId => _dietitianId; 
   bool get isDietPlanLoading => _isDietPlanLoading;
   String? get dietPlanErrorMessage => _dietPlanErrorMessage;
   List<DietPlan> get allDietPlans => _allDietPlans;
@@ -93,6 +96,7 @@ class HomeViewModel with ChangeNotifier {
       _fetchFoods(),
       fetchDailyComparison(),
       fetchGoals(),
+      getDietitianId()
     ]);
 
     notifyListeners();
@@ -115,21 +119,36 @@ class HomeViewModel with ChangeNotifier {
     }
 
     try {
-      final response = await _dietPlanService.getDietPlan(id: clientId, token: token);
+      final response =
+          await _dietPlanService.getDietPlan(id: clientId, token: token);
       if (response.success) {
         _allDietPlans = response.data;
-        _activeDietPlan = _allDietPlans.firstWhereOrNull((plan) => plan.status.toLowerCase() == 'active');
+        _activeDietPlan = _allDietPlans
+            .firstWhereOrNull((plan) => plan.status.toLowerCase() == 'active');
         _isDietPlanLoading = false;
       } else {
         _dietPlanErrorMessage = response.message;
         _isDietPlanLoading = false;
       }
     } catch (e) {
-      _dietPlanErrorMessage = "Diyet planları yüklenirken bir hata oluştu: ${e.toString()}";
+      _dietPlanErrorMessage =
+          "Diyet planları yüklenirken bir hata oluştu: ${e.toString()}";
       _isDietPlanLoading = false;
     }
     notifyListeners();
   }
+
+Future<void> getDietitianId() async {
+  try {
+    final fetchedDietitianId = await AuthStorage.getDietitianId();
+    _dietitianId = fetchedDietitianId;
+    log("Fetched Dietitian ID: $_dietitianId");
+  } catch (e) {
+    log("Error fetching Dietitian ID: $e");
+    _dietitianId = null; 
+  }
+
+}
 
   Future<void> _fetchFoods() async {
     final token = await AuthStorage.getToken();
@@ -150,15 +169,16 @@ class HomeViewModel with ChangeNotifier {
         _isFoodLoading = false;
       }
     } catch (e) {
-      _foodErrorMessage = "Besinler yüklenirken bir hata oluştu: ${e.toString()}";
+      _foodErrorMessage =
+          "Besinler yüklenirken bir hata oluştu: ${e.toString()}";
       _isFoodLoading = false;
     }
     notifyListeners();
   }
 
-Future<void> fetchDailyComparison() async {
+  Future<void> fetchDailyComparison() async {
     _isLoadingComparison = true;
-    _comparisonErrorMessage = null; 
+    _comparisonErrorMessage = null;
     notifyListeners();
 
     String? token;
@@ -176,14 +196,15 @@ Future<void> fetchDailyComparison() async {
       }
     } catch (e) {
       log("AuthStorage Hatası (Özet): $e");
-      _comparisonErrorMessage = e.toString(); 
+      _comparisonErrorMessage = e.toString();
       _isLoadingComparison = false;
       notifyListeners();
       return;
     }
     try {
       final today = DateTime.now();
-      final DietComparisonResponse response = await _foodLogService.getDietComparison(
+      final DietComparisonResponse response =
+          await _foodLogService.getDietComparison(
         token: token,
         clientId: clientId,
         date: today,
@@ -192,23 +213,26 @@ Future<void> fetchDailyComparison() async {
       if (response.success) {
         if (response.data != null) {
           _dailyComparisonData = response.data;
-          _comparisonErrorMessage = null; 
-           log("Günlük özet başarıyla alındı.");
+          _comparisonErrorMessage = null;
+          log("Günlük özet başarıyla alındı.");
         } else {
           _dailyComparisonData = null;
-          _comparisonErrorMessage = null; 
+          _comparisonErrorMessage = null;
           log("Günlük özet için veri bulunamadı (API success: true, data: null).");
         }
       } else {
-        String message = response.message.isNotEmpty ? response.message : "Bilinmeyen bir API hatası.";
-        if (message.toLowerCase().contains('bulunamadı') || message.toLowerCase().contains('mevcut değil')) {
-            log("Günlük özet için veri bulunamadı (API success: false, mesaj: $message).");
-             _dailyComparisonData = null;
-             _comparisonErrorMessage = null; 
+        String message = response.message.isNotEmpty
+            ? response.message
+            : "Bilinmeyen bir API hatası.";
+        if (message.toLowerCase().contains('bulunamadı') ||
+            message.toLowerCase().contains('mevcut değil')) {
+          log("Günlük özet için veri bulunamadı (API success: false, mesaj: $message).");
+          _dailyComparisonData = null;
+          _comparisonErrorMessage = null;
         } else {
-           log("API Başarısız (Özet): $message");
-           _dailyComparisonData = null;
-           _comparisonErrorMessage = message; 
+          log("API Başarısız (Özet): $message");
+          _dailyComparisonData = null;
+          _comparisonErrorMessage = message;
         }
       }
     } on ApiException catch (e) {
@@ -216,7 +240,7 @@ Future<void> fetchDailyComparison() async {
       if (e.statusCode == 404) {
         log("Günlük özet bulunamadı (ApiException 404), hata olarak sayılmıyor.");
         _dailyComparisonData = null;
-        _comparisonErrorMessage = null; 
+        _comparisonErrorMessage = null;
       } else {
         _dailyComparisonData = null;
         _comparisonErrorMessage = "API Hatası (${e.statusCode}): ${e.message}";
@@ -250,7 +274,8 @@ Future<void> fetchDailyComparison() async {
     }
 
     try {
-      final response = await _goalService.getGoals(token: token, clientId: clientId);
+      final response =
+          await _goalService.getGoals(token: token, clientId: clientId);
       if (response.success) {
         _goals = response.data;
       } else {
@@ -299,14 +324,18 @@ Future<void> fetchDailyComparison() async {
       if (updateResponse.success) {
         Goal? updatedGoal = updateResponse.data;
         bool shouldMarkCompleted = false;
-        if (updatedGoal != null && updatedGoal.calculatedProgress >= 1.0 && updatedGoal.status.toLowerCase() == 'in_progress') {
+        if (updatedGoal != null &&
+            updatedGoal.calculatedProgress >= 1.0 &&
+            updatedGoal.status.toLowerCase() == 'in_progress') {
           shouldMarkCompleted = true;
         } else if (updatedGoal == null) {
           final goal = _goals.firstWhere((g) => g.id == goalId);
-          double tempProgress = goal.targetValue != null && goal.targetValue != 0
-              ? (newValue / goal.targetValue!).clamp(0.0, 1.0)
-              : (newValue >= (goal.targetValue ?? 0) ? 1.0 : 0.0);
-          if (tempProgress >= 1.0 && goal.status.toLowerCase() == 'in_progress') {
+          double tempProgress =
+              goal.targetValue != null && goal.targetValue != 0
+                  ? (newValue / goal.targetValue!).clamp(0.0, 1.0)
+                  : (newValue >= (goal.targetValue ?? 0) ? 1.0 : 0.0);
+          if (tempProgress >= 1.0 &&
+              goal.status.toLowerCase() == 'in_progress') {
             shouldMarkCompleted = true;
           }
         }

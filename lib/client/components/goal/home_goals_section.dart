@@ -10,7 +10,7 @@ class GoalsSection extends StatelessWidget {
   final bool isLoadingGoals;
   final String? goalErrorMessage;
   final List<Goal> goals;
-  final int dietitianId;
+  final int? dietitianId;
   final VoidCallback onRefresh;
   final Function(Goal) onUpdateProgress;
 
@@ -27,7 +27,6 @@ class GoalsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final activeGoals = goals.where((g) => g.status.toLowerCase() == 'in_progress').take(3).toList();
-    final hasMoreGoals = goals.isNotEmpty || goals.any((g) => g.status.toLowerCase() != 'in_progress');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,10 +35,9 @@ class GoalsSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Aktif Hedefler", style: AppTextStyles.heading4),
-            if (hasMoreGoals)
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => AllGoalsScreen(dietitianId: dietitianId)))
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => AllGoalsScreen(dietitianId: dietitianId!)))
                       .then((_) => onRefresh());
                 },
                 style: TextButton.styleFrom(padding: EdgeInsets.zero, visualDensity: VisualDensity.compact),

@@ -51,6 +51,7 @@ class ClientService {
      final data =  ClientResponse.fromJson(response); 
       await AuthStorage.saveId(data.data.userId);
       await AuthStorage.saveClientId(data.data.id);
+      await AuthStorage.saveDietitianId(data.data.dietitianId!= null ? data.data.dietitianId! : 0);
   } 
 
   Future<ClientResponse> updateDietitian({

@@ -112,7 +112,7 @@ class AnimatedAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.greeting,
     required this.currentDate,
     required this.onMenuPressed,
-    required this.onNotificationsPressed,
+    required this.onNotificationsPressed, required TickerProvider vsync,
   });
 
   @override
