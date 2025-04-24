@@ -63,6 +63,7 @@ class DietitianDetailViewModel extends ChangeNotifier {
     try {
       final token = await AuthStorage.getToken();
       final clientId = await AuthStorage.getClientId();
+     await AuthStorage.saveDietitianId(dietitianId);
 
       if (token == null || token.isEmpty) {
         throw Exception("Oturumunuz bulunamadı. Lütfen tekrar giriş yapın.");

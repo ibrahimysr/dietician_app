@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
 abstract class BaseService {
-  static const String baseUrl ='http://192.168.8.131:8000/api';
+  static const String baseUrl ='http://192.168.0.127:8000/api';
   
   http.Client get httpClient;
   

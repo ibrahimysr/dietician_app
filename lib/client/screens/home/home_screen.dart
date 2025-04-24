@@ -10,9 +10,9 @@ import 'package:dietician_app/client/components/shared/custom_app_bar.dart';
 import 'package:dietician_app/client/core/extension/context_extension.dart';
 import 'package:dietician_app/client/core/theme/color.dart';
 import 'package:dietician_app/client/models/goal_model.dart';
+import 'package:dietician_app/client/screens/dietitian/dietitian_screen.dart';
 import 'package:dietician_app/client/viewmodel/home_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -63,9 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(height: 20),
                       ElevatedButton.icon(
-                        icon: Icon(Icons.refresh),
-                        label: Text('Tekrar Dene'),
-                        onPressed: viewModel.fetchAllData,
+                        label: Text('Diyetisyen Seç'),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DietitianListScreen(),
+                              ));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primary,
                           foregroundColor: AppColor.white,
@@ -89,26 +94,17 @@ class _HomeScreenState extends State<HomeScreen> {
               if (viewModel.goalErrorMessage != null)
                 "Hedefler: ${viewModel.goalErrorMessage}",
             ].join('\n');
-            if (errorMessages.isNotEmpty && context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Bazı veriler yüklenemedi:\n$errorMessages'),
-                backgroundColor: Colors.orange.shade800,
-              ));
-            }
+            if (errorMessages.isNotEmpty && context.mounted) {}
           });
 
           return Scaffold(
             backgroundColor: AppColor.white,
             appBar: AnimatedAppBar(
-              vsync: Scaffold.of(context).widget is StatefulWidget
-                  ? Scaffold.of(context) as TickerProviderStateMixin
-                  : _DefaultTickerProvider(),
+              vsync: Scaffold.of(context) as TickerProviderStateMixin,
               fadeAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
                 CurvedAnimation(
                   parent: AnimationController(
-                    vsync: Scaffold.of(context).widget is StatefulWidget
-                        ? Scaffold.of(context) as TickerProviderStateMixin
-                        : _DefaultTickerProvider(),
+                    vsync: Scaffold.of(context) as TickerProviderStateMixin,
                     duration: const Duration(milliseconds: 800),
                   )..forward(),
                   curve: Curves.easeIn,
@@ -198,7 +194,5 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _DefaultTickerProvider extends TickerProvider {
-  @override
-  Ticker createTicker(TickerCallback onTick) => Ticker(onTick);
-}
+
+
